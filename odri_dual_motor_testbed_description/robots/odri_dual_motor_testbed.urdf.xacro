@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- 
+  Copyright (c) 2023 LAAS/CNRS All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<robot  xmlns:xacro="http://ros.org/wiki/xacro"
+        name="odri_dual_motor_testbed" >
+
+  <xacro:arg name="use_sim" default="true"/>
+  
+  <!-- Generic simulator_gazebo plugins -->
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/gazebo/gazebo.urdf.xacro" />
+
+  <!-- ros2_control -->
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_dual_motor_testbed.ros2_control.xacro" />
+  <xacro:odri_dual_motor_testbed_ros2_control
+    use_sim="$(arg use_sim)" name="odri_dm_tb_kt"/>
+
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/base.urdf.xacro" />
+  <xacro:odri_dual_motor_testbed_kin_tree
+    name="odri_dm_tb_kt" parent="world" />
+</robot>

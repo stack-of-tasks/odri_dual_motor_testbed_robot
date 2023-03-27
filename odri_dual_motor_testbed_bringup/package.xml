@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>odri_dual_motor_testbed_bringup</name>
+  <version>1.0.0</version>
+  <description>Package starting the ODRI dual motor testbed robot</description>
+  <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
+  <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- We need the xacro package to build the urdf model -->
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>odri_dual_motor_testbed_description</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>launch_param_builder</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <test_depend>launch_testing_ament_cmake</test_depend>
+  <export>
+  </export>
+</package>

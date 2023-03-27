@@ -1,0 +1,18 @@
+robot:
+    interface: enp6s0f0  #enp3s0(?)
+    joint_modules:
+        motor_numbers: [0, 1]
+        motor_constants: 0.025
+        gear_ratios: 9.
+        max_currents: 12.                       #UPDATE with bolt_driver.yaml
+        reverse_polarities: [
+            true, true     #UPDATE with bolt_driver.yaml
+        ]
+        lower_joint_limits: [
+            -3.14, -3.1   #UPDATE with test on robot
+        ]
+        upper_joint_limits: [
+            +3.14, +3.14    #UPDATE with test on robot
+        ]
+        max_joint_velocities: 80.
+        safety_damping: 0.3                         #UPDATE with bolt_driver.yaml

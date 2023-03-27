@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <name>odri_dual_motor_testbed_robot</name>
+  <version>1.0.0</version>
+  <description>Meta package describing the ODRI dual motor testbed robot</description>
+  <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
+  <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- We need the xacro package to build the urdf model -->
+  <build_depend> xacro </build_depend>
+  <run_depend>   xacro </run_depend>
+
+  <depend>odri_dual_motor_testbed_description</depend>
+  <depend>odri_dual_motor_testbed_bringup</depend>
+  <export>
+  </export>
+</package>
