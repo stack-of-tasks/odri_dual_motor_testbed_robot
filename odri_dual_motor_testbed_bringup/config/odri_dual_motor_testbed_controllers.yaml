@@ -4,7 +4,7 @@ robot:
         motor_numbers: [0, 1]
         motor_constants: 0.025
         gear_ratios: 9.
-        max_currents: 12.                       #UPDATE with bolt_driver.yaml
+        max_currents: 12.
         reverse_polarities: [
             true, true     #UPDATE with bolt_driver.yaml
         ]
@@ -15,4 +15,4 @@ robot:
             +3.14, +3.14    #UPDATE with test on robot
         ]
         max_joint_velocities: 80.
-        safety_damping: 0.3                         #UPDATE with bolt_driver.yaml
+        safety_damping: 0.3
