@@ -13,8 +13,8 @@
   <build_depend> xacro </build_depend>
   <run_depend>   xacro </run_depend>
 
-  <depend>odri_dual_motor_testbed_description</depend>
-  <depend>odri_dual_motor_testbed_bringup</depend>
+  <exec_depend>odri_dual_motor_testbed_description</exec_depend>
+  <exec_depend>odri_dual_motor_testbed_bringup</exec_depend>
   <export>
   </export>
 </package>
