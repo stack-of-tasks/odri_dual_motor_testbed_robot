@@ -13,9 +13,9 @@ repositories:
     version: main
   src/odri_dual_motor_testbed_robot:
     type: git
-    url: git@github.com:stack-of-tasks/odri_dual_motor_testbed_robot.git
+    url: https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
     version: main
   src/ros2_hardware_interface_odri:
     type: git
-    url: git@github.com:stack-of-tasks/ros2_hardware_interface_odri.git
+    url: https://github.com/stack-of-tasks/ros2_hardware_interface_odri.git
     version: humble
