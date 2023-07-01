@@ -6,7 +6,7 @@
     <ros2_control name="${name}" type="system">
 
       <xacro:if value="$(arg use_sim)">
-        <hardware> 
+        <hardware>
           <plugin>gazebo_ros2_control/GazeboSystem</plugin>
         </hardware>
       </xacro:if>
@@ -21,9 +21,9 @@
             <plugin>ros2_control_odri/SystemOdriHardware</plugin>
             <xacro:property name="prop_dual_motor_testbed_config_yaml" value="$(find odri_dual_motor_testbed_description)/config/odri_dual_motor_testbed_config.yaml" />
             <param name="odri_config_yaml">${prop_dual_motor_testbed_config_yaml}</param>
-            <param name="desired_starting_position">0.0 0.0 0.0 0.0 0.0 0.0</param>
-            <param name="default_joint_cmd">left_1_joint 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05 FL_KFE 0.0 0.0 0.0 3.0 0.05 FL_HFE 0.0 0.0 0.0 3.0 0.05 FR_KFE 0.0 0.0 0.0 3.0 0.05 FR_HFE 0.0 0.0 0.0 3.0 0.05</param>
-            <param name="default_joint_state">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05 FL_KFE 0.0 0.0 0.0 3.0 0.05 FL_HFE 0.0 0.0 0.0 3.0 0.05 FR_KFE 0.0 0.0 0.0 3.0 0.05 FR_HFE 0.0 0.0 0.0 3.0 0.05</param>            
+            <param name="desired_starting_position">0.0 0.0 </param>
+            <param name="default_joint_cmd">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
+            <param name="default_joint_state">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
             </xacro:unless>
         </hardware>
       </xacro:unless>
@@ -55,7 +55,7 @@
         <state_interface name="gain_kp"/>
         <state_interface name="gain_kd"/>
       </joint>
-      
+
       <joint name="FR_HAA">
         <command_interface name="position">
           <param name="min">-0.9</param>
@@ -89,4 +89,3 @@
   </xacro:macro>
 
 </robot>
-

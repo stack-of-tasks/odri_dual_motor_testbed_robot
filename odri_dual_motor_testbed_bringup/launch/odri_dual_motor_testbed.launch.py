@@ -22,7 +22,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
-def generate_launch_description():        
+def generate_launch_description():
     # Declare arguments
     declared_arguments = []
     declared_arguments.append(
@@ -91,13 +91,6 @@ def generate_launch_description():
             "slowdown", default_value="3.0", description="Slowdown factor of ODRI dual motor testbed."
         )
     )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "robot_controller",
-            default_value="forward_position_controller",
-            description="Robot controller to start.",
-        )
-    )
 
     # Initialize Arguments
     runtime_config_package = LaunchConfiguration("runtime_config_package")
@@ -113,7 +106,7 @@ def generate_launch_description():
 
     # Get URDF via xacro
     robot_description_content_expr = [
-            
+
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
@@ -146,14 +139,14 @@ def generate_launch_description():
             controllers_file,
         ]
     )
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare(description_package), "config",
-         "odri_dual_motor_testbed.rviz"]
-    )
+    # rviz_config_file = PathJoinSubstitution(
+    #     [FindPackageShare(description_package), "config",
+    #      "odri_dual_motor_testbed.rviz"]
+    # )
 
     control_node = Node(
         package="controller_manager",
-        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time 
+        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time
             'sudo -E env PATH=',
             EnvironmentVariable("PATH", default_value='${PATH}'),
             " LD_LIBRARY_PATH=",
@@ -176,50 +169,36 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments = ["-d", rviz_config_file],
-    )
+    # rviz_node = Node(
+    #     package="rviz2",
+    #     executable="rviz2",
+    #     name="rviz2",
+    #     output="log",
+    #     arguments = ["-d", rviz_config_file],
+    # )
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        executable="spawner",
-        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time 
+        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time
             'sudo -E env PATH=',
             EnvironmentVariable("PATH", default_value='${PATH}'),
             " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH", default_value='${LD_LIBRARY_PATH}'),
+            EnvironmentVariable("LD_LIBRARY_PATH",
+                                default_value='${LD_LIBRARY_PATH}'),
             " PYTHONPATH=",
             EnvironmentVariable("PYTHONPATH", default_value='${PYTHONPATH}'),
             " HOME=/tmp "
             ],
+        executable="spawner",
         arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
     )
 
-    robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time 
-            'sudo -E env PATH=',
-            EnvironmentVariable("PATH", default_value='${PATH}'),
-            " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH", default_value='${LD_LIBRARY_PATH}'),
-            " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value='${PYTHONPATH}'),
-            " HOME=/tmp "
-            ],
-        arguments=[robot_controller, "-c", "/controller_manager"],
-    )
 
     nodes = [
         control_node,
         robot_state_pub_node,
-        rviz_node,
+        #        rviz_node,
         joint_state_broadcaster_spawner,
-        robot_controller_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
