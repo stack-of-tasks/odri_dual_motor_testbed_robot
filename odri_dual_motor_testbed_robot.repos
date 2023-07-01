@@ -1,0 +1,21 @@
+repositories:
+  build/master_board_sdk/_deps/catch2-src:
+    type: git
+    url: https://github.com/catchorg/Catch2.git
+    version: 97c48e0c343d26d50764fafdc90b1e630fbd10ce
+  src/master-board:
+    type: git
+    url: https://github.com/open-dynamic-robot-initiative/master-board.git
+    version: master
+  src/odri_control_interface:
+    type: git
+    url: https://github.com/open-dynamic-robot-initiative/odri_control_interface.git
+    version: main
+  src/odri_dual_motor_testbed_robot:
+    type: git
+    url: git@github.com:stack-of-tasks/odri_dual_motor_testbed_robot.git
+    version: main
+  src/ros2_hardware_interface_odri:
+    type: git
+    url: git@github.com:stack-of-tasks/ros2_hardware_interface_odri.git
+    version: humble
