@@ -6,10 +6,9 @@ find_package(odri_dual_motor_testbed_description)
 
 ament_auto_find_build_dependencies()
 
-
-#############
-## Testing ##
-#############
+# ##############################################################################
+# Testing ##
+# ##############################################################################
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -17,8 +16,6 @@ if(BUILD_TESTING)
 
 endif()
 
-install(DIRECTORY
-  launch config
-  DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 
 ament_package()

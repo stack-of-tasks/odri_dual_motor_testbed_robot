@@ -3,13 +3,11 @@ project(odri_dual_motor_testbed_description)
 
 find_package(ament_cmake_auto REQUIRED)
 
-
 ament_auto_find_build_dependencies()
 
-
-#############
-## Testing ##
-#############
+# ##############################################################################
+# Testing ##
+# ##############################################################################
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -17,8 +15,14 @@ if(BUILD_TESTING)
 
 endif()
 
-install(DIRECTORY
-  launch  meshes robots ros2_control urdf gazebo config
+install(
+  DIRECTORY launch
+            meshes
+            robots
+            ros2_control
+            urdf
+            gazebo
+            config
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
