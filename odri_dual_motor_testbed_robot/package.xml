@@ -12,6 +12,7 @@
   <!-- We need the xacro package to build the urdf model -->
   <build_depend> xacro </build_depend>
   <exec_depend>   xacro </exec_depend>
+  <depend>controller_manager</depend>
 
   <exec_depend>odri_dual_motor_testbed_description</exec_depend>
   <exec_depend>odri_dual_motor_testbed_bringup</exec_depend>
