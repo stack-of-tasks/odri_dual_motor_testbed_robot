@@ -18,7 +18,7 @@ if(BUILD_TESTING)
 endif()
 
 install(DIRECTORY
-  launch  meshes robots ros2_control urdf
+  launch  meshes robots ros2_control urdf gazebo
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
