@@ -14,10 +14,16 @@
 # limitations under the License.
 
 from inspect import Parameter
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution, EnvironmentVariable
-
+from launch.substitutions import (
+    Command,
+    EnvironmentVariable,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+)
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -88,7 +94,9 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "slowdown", default_value="3.0", description="Slowdown factor of ODRI dual motor testbed."
+            "slowdown",
+            default_value="3.0",
+            description="Slowdown factor of ODRI dual motor testbed.",
         )
     )
 
@@ -106,28 +114,27 @@ def generate_launch_description():
 
     # Get URDF via xacro
     robot_description_content_expr = [
-
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [FindPackageShare(description_package), "robots", description_file]
-            ),
-            " ",
-            "prefix:=",
-            prefix,
-            " ",
-            "use_sim:=",
-            use_sim,
-            " ",
-            "use_fake_hardware:=",
-            use_fake_hardware,
-            " ",
-            "fake_sensor_commands:=",
-            fake_sensor_commands,
-            " ",
-            "slowdown:=",
-            slowdown,
-        ]
+        PathJoinSubstitution([FindExecutable(name="xacro")]),
+        " ",
+        PathJoinSubstitution(
+            [FindPackageShare(description_package), "robots", description_file]
+        ),
+        " ",
+        "prefix:=",
+        prefix,
+        " ",
+        "use_sim:=",
+        use_sim,
+        " ",
+        "use_fake_hardware:=",
+        use_fake_hardware,
+        " ",
+        "fake_sensor_commands:=",
+        fake_sensor_commands,
+        " ",
+        "slowdown:=",
+        slowdown,
+    ]
     robot_description_content = Command(robot_description_content_expr)
     robot_description = {"robot_description": robot_description_content}
 
@@ -145,16 +152,15 @@ def generate_launch_description():
 
     control_node = Node(
         package="controller_manager",
-        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time
-            'sudo -E env PATH=',
-            EnvironmentVariable("PATH", default_value='${PATH}'),
+        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
+            "sudo -E env PATH=",
+            EnvironmentVariable("PATH", default_value="${PATH}"),
             " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH",
-                                default_value='${LD_LIBRARY_PATH}'),
+            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
             " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value='${PYTHONPATH}'),
-            " HOME=/tmp "
-            ],
+            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
+            " HOME=/tmp ",
+        ],
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output={
@@ -178,20 +184,22 @@ def generate_launch_description():
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        prefix = [# Sudo command cause need to be sudoer when we do this node cause it real time
-            'sudo -E env PATH=',
-            EnvironmentVariable("PATH", default_value='${PATH}'),
+        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
+            "sudo -E env PATH=",
+            EnvironmentVariable("PATH", default_value="${PATH}"),
             " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH",
-                                default_value='${LD_LIBRARY_PATH}'),
+            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
             " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value='${PYTHONPATH}'),
-            " HOME=/tmp "
-            ],
+            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
+            " HOME=/tmp ",
+        ],
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
     )
-
 
     nodes = [
         control_node,

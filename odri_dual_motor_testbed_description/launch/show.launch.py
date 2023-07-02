@@ -13,34 +13,34 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-
-    pkg_name='odri_dual_motor_testbed_description'
+    pkg_name = "odri_dual_motor_testbed_description"
     pkg_dir = FindPackageShare(pkg_name)
-    paths = ['launch', 'robot_state_publisher.launch.py']
+    paths = ["launch", "robot_state_publisher.launch.py"]
     full_path = PathJoinSubstitution([pkg_dir] + paths)
-    robot_state_publisher = IncludeLaunchDescription(
-        full_path )
+    robot_state_publisher = IncludeLaunchDescription(full_path)
 
     start_joint_pub_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        output='screen')
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        name="joint_state_publisher_gui",
+        output="screen",
+    )
 
     start_rviz_cmd = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
         #       arguments=['-d', rviz_config_file],
-        output='screen')
+        output="screen",
+    )
 
     ld = LaunchDescription()
 

@@ -48,8 +48,9 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "slowdown", default_value="3.0",
-            description="Slowdown factor of ODRI Dual Motor Testbed."
+            "slowdown",
+            default_value="3.0",
+            description="Slowdown factor of ODRI Dual Motor Testbed.",
         )
     )
     declared_arguments.append(
@@ -68,8 +69,9 @@ def generate_launch_description():
     robot_controller = LaunchConfiguration("robot_controller")
 
     base_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([ThisLaunchFileDir(),
-                                       "/odri_dual_motor_testbed.launch.py"]),
+        PythonLaunchDescriptionSource(
+            [ThisLaunchFileDir(), "/odri_dual_motor_testbed.launch.py"]
+        ),
         launch_arguments={
             "description_file": "odri_dual_motor_testbed.urdf.xacro",
             "prefix": prefix,

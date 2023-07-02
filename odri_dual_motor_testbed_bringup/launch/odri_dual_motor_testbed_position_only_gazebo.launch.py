@@ -1,8 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -10,9 +9,13 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            [PathJoinSubstitution([FindPackageShare("gazebo_ros"), "launch", "gazebo.launch.py"])]
+            [
+                PathJoinSubstitution(
+                    [FindPackageShare("gazebo_ros"), "launch", "gazebo.launch.py"]
+                )
+            ]
         ),
-        launch_arguments={"verbose": "false", "pause":  "true"}.items(),
+        launch_arguments={"verbose": "false", "pause": "true"}.items(),
     )
 
     # Get URDF via xacro
@@ -42,7 +45,15 @@ def generate_launch_description():
     spawn_entity = Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
-        arguments=["-topic", "robot_description", "-entity", "bolt", "-x 0", "-y 0", "-z 0.5"],
+        arguments=[
+            "-topic",
+            "robot_description",
+            "-entity",
+            "bolt",
+            "-x 0",
+            "-y 0",
+            "-z 0.5",
+        ],
         output="screen",
     )
     spawn_controller = Node(

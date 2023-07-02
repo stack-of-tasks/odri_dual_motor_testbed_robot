@@ -16,35 +16,36 @@ import os
 from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import OpaqueFunction
-
 from launch_param_builder import load_xacro
 from launch_ros.actions import Node
 
 
-
-
 def launch_setup(context, *args, **kwargs):
+    parameters = {
+        "robot_description": load_xacro(
+            Path(
+                os.path.join(
+                    get_package_share_directory("odri_dual_motor_testbed_description"),
+                    "robots",
+                    "odri_dual_motor_testbed.urdf.xacro",
+                )
+            ),
+        )
+    }
 
-    parameters = {'robot_description': load_xacro(
-        Path(os.path.join(
-            get_package_share_directory('odri_dual_motor_testbed_description'),
-            'robots',
-            'odri_dual_motor_testbed.urdf.xacro')),
-    )}
-
-    rsp = Node(package='robot_state_publisher',
-               executable='robot_state_publisher',
-               output='both',
-               parameters=[parameters])
+    rsp = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="both",
+        parameters=[parameters],
+    )
 
     return [rsp]
 
 
 def generate_launch_description():
-
     ld = LaunchDescription()
 
     # we use OpaqueFunction so the callbacks have access to the context
