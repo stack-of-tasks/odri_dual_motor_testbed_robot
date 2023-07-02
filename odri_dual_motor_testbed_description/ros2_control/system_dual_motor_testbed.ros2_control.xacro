@@ -12,16 +12,16 @@
       </xacro:if>
       <xacro:unless value="$(arg use_sim)">
         <hardware>
-          <xacro:if value="${use_fake_hardware}">
+          <xacro:if value="$(arg use_fake_hardware)">
             <plugin>fake_components/GenericSystem</plugin>
             <param name="fake_sensor_commands">${fake_sensor_commands}</param>
             <param name="state_following_offset">0.0</param>
           </xacro:if>
-          <xacro:unless value="${use_fake_hardware}">
+          <xacro:unless value="$(arg use_fake_hardware)">
             <plugin>ros2_control_odri/SystemOdriHardware</plugin>
             <xacro:property name="prop_dual_motor_testbed_config_yaml" value="$(find odri_dual_motor_testbed_description)/config/odri_dual_motor_testbed_config.yaml" />
             <param name="odri_config_yaml">${prop_dual_motor_testbed_config_yaml}</param>
-            <param name="desired_starting_position">0.0 0.0 </param>
+            <param name="desired_starting_position">0.0 0.0</param>
             <param name="default_joint_cmd">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
             <param name="default_joint_state">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
             </xacro:unless>
