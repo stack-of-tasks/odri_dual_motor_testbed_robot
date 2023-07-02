@@ -1,18 +1,35 @@
 robot:
-    interface: enp6s0f0  #enp3s0(?)
+    interface: eno1
     joint_modules:
         motor_numbers: [0, 1]
         motor_constants: 0.025
-        gear_ratios: 9.
-        max_currents: 12.
+        gear_ratios: 1.
+        max_currents: 1.
         reverse_polarities: [
-            true, true     #UPDATE with bolt_driver.yaml
+            false, false
         ]
         lower_joint_limits: [
-            -3.14, -3.1   #UPDATE with test on robot
+            -3.4, -3.4
         ]
         upper_joint_limits: [
-            +3.14, +3.14    #UPDATE with test on robot
+            +3.4, +3.4
         ]
         max_joint_velocities: 80.
-        safety_damping: 0.3
+        safety_damping: 0.5
+    imu:
+        rotate_vector: [1, 2, 3]
+        orientation_vector: [1, 2, 3, 4]
+joint_calibrator:
+    # Can be either POS, NEG, ALT or AUTO
+    search_methods: [
+      AUTO, AUTO
+    ]
+    position_offsets: [
+        2.18667, -0.889898
+    ]
+    calib_order: [1, 1]
+    calib_pos: [0.78, 0.78]
+    Kp: 0.25
+    Kd: 0.0025
+    T: 2.5
+    dt: 0.001
