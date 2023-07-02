@@ -74,7 +74,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
-            default_value="true",
+            default_value="False",
             description="Start robot with fake hardware mirroring command to its states.",
         )
     )
@@ -128,7 +128,6 @@ def generate_launch_description():
             "slowdown:=",
             slowdown,
         ]
-
     robot_description_content = Command(robot_description_content_expr)
     robot_description = {"robot_description": robot_description_content}
 
