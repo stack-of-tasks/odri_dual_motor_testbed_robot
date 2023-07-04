@@ -16,7 +16,9 @@
 from inspect import Parameter
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler
+from launch.conditions import IfCondition
+from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.substitutions import (
     Command,
     EnvironmentVariable,
@@ -145,10 +147,13 @@ def generate_launch_description():
             controllers_file,
         ]
     )
-    # rviz_config_file = PathJoinSubstitution(
-    #     [FindPackageShare(description_package), "config",
-    #      "odri_dual_motor_testbed.rviz"]
-    # )
+    rviz_config_file = PathJoinSubstitution(
+        [
+            FindPackageShare(description_package),
+            "config",
+            "odri_dual_motor_testbed.rviz",
+        ]
+    )
 
     control_node = Node(
         package="controller_manager",
@@ -174,13 +179,13 @@ def generate_launch_description():
         output="both",
         parameters=[robot_description],
     )
-    # rviz_node = Node(
-    #     package="rviz2",
-    #     executable="rviz2",
-    #     name="rviz2",
-    #     output="log",
-    #     arguments = ["-d", rviz_config_file],
-    # )
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
+    )
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
@@ -201,11 +206,32 @@ def generate_launch_description():
         ],
     )
 
+    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[rviz_node],
+        )
+    )
+
+    delay_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=control_node,
+            on_start=[joint_state_broadcaster_spawner],
+        )
+    )
+
+    delay_robot_state_pub_node_spawner = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=joint_state_broadcaster_spawner,
+            on_start=[robot_state_pub_node],
+        )
+    )
+
     nodes = [
         control_node,
-        robot_state_pub_node,
-        #        rviz_node,
-        joint_state_broadcaster_spawner,
+        #        joint_state_broadcaster_spawner,
+        #        robot_state_pub_node,
+        #        delay_rviz_after_joint_state_broadcaster_spawner
     ]
 
     return LaunchDescription(declared_arguments + nodes)

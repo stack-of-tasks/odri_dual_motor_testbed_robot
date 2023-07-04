@@ -22,13 +22,13 @@
             <xacro:property name="prop_dual_motor_testbed_config_yaml" value="$(find odri_dual_motor_testbed_description)/config/odri_dual_motor_testbed_config.yaml" />
             <param name="odri_config_yaml">${prop_dual_motor_testbed_config_yaml}</param>
             <param name="desired_starting_position">0.0 0.0</param>
-            <param name="default_joint_cmd">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
-            <param name="default_joint_state">FL_HAA 0.0 0.0 0.0 3.0 0.05 FR_HAA 0.0 0.0 0.0 3.0 0.05</param>
+            <param name="default_joint_cmd">odri_dm_tb_kt_left_joint 0.0 0.0 0.0 3.0 0.05 odri_dm_tb_kt_right_joint 0.0 0.0 0.0 3.0 0.05</param>
+            <param name="default_joint_state">odri_dm_tb_kt_left_joint 0.0 0.0 0.0 3.0 0.05 odri_dm_tb_kt_right_joint 0.0 0.0 0.0 3.0 0.05</param>
             </xacro:unless>
         </hardware>
       </xacro:unless>
 
-      <joint name="FL_HAA">
+      <joint name="odri_dm_tb_kt_left_joint">
         <command_interface name="position">
           <param name="min">-0.9</param>
           <param name="max">0.9</param>
@@ -56,7 +56,7 @@
         <state_interface name="gain_kd"/>
       </joint>
 
-      <joint name="FR_HAA">
+      <joint name="odri_dm_tb_kt_right_joint">
         <command_interface name="position">
           <param name="min">-0.9</param>
           <param name="max">0.9</param>

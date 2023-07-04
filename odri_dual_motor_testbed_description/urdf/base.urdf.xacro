@@ -18,7 +18,7 @@
 
   <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/wheel.urdf.xacro" />
   
-  <xacro:macro name="odri_dual_motor_testbed_kin_tree" params="name parent ">
+  <xacro:macro name="odri_dual_motor_testbed_kin_tree" params="name parent">
     
     <!--************************-->
     <!--   BASE    -->

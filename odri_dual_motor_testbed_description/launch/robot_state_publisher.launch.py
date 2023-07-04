@@ -32,6 +32,13 @@ def launch_setup(context, *args, **kwargs):
                     "odri_dual_motor_testbed.urdf.xacro",
                 )
             ),
+            mappings={
+                "prefix": "",
+                "use_sim": "false",
+                "use_fake_hardware": "false",
+                "fake_sensor_commands": "false",
+                "slowdown": "3.0",
+            },
         )
     }
 
