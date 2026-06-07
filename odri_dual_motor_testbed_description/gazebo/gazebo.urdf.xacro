@@ -15,9 +15,9 @@
   limitations under the License.
  -->
 
-<robot name="tiago" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="odri_dual_motor_testbed" xmlns:xacro="http://ros.org/wiki/xacro">
   <gazebo>
-    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+    <plugin filename="libodri_gz_ros2_control.so" name="gazebo_ros2_control">
       <!-- in the future move this param file somewhere else -->
       <!-- <parameters>$(find odri_dual_motor_testbed_controller_configuration)/config/gazebo_controller_manager_cfg.yaml</parameters> -->
     </plugin>
