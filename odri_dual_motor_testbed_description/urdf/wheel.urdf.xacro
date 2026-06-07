@@ -28,11 +28,11 @@
 
     <link name="${name}_${prefix}_3_link">
       <inertial>
-        <origin xyz="0.0 0.0 0.0" rpy="0.00000 0.00000 0.00000"/>
+        <origin xyz="0.0 0.0 -0.001346" rpy="0.00000 0.00000 0.00000"/>
         <mass value="0.050"/>
-        <inertia ixx="0.002471" ixy="-0.001809" ixz="-0.001202"
-                 iyy="0.006132" iyz="0.000494"
-                 izz="0.006704"/>
+        <inertia ixx="1.517e-06" ixy="0.0" ixz="0.0"
+                 iyy="1.469e-06" iyz="0.0"
+                 izz="9.870e-07"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -60,11 +60,11 @@
     
     <link name="${name}_${prefix}_4_link">
       <inertial>
-        <origin xyz="0.0 0.0 0.0" rpy="0.00000 0.00000 0.00000"/>
+        <origin xyz="0.0 0.0 0.002973" rpy="0.00000 0.00000 0.00000"/>
         <mass value="0.050"/>
-        <inertia ixx="0.002471" ixy="-0.001809" ixz="-0.001202"
-                 iyy="0.006132" iyz="0.000494"
-                 izz="0.006704"/>
+        <inertia ixx="1.558e-05" ixy="0.0" ixz="0.0"
+                 iyy="1.574e-05" iyz="0.0"
+                 izz="3.099e-05"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
