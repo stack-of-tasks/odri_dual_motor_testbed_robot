@@ -25,11 +25,11 @@
     <!--************************-->
     <link name="base_footprint">
       <inertial>
-        <origin xyz="0.0 0.0 0.0" rpy="0.00000 0.00000 0.00000"/>
+        <origin xyz="0.0 0.0 0.011447" rpy="0.00000 0.00000 0.00000"/>
         <mass value="0.250"/>
-        <inertia ixx="0.002471" ixy="-0.001809" ixz="-0.001202"
-                 iyy="0.006132" iyz="0.000494"
-                 izz="0.006704"/>
+        <inertia ixx="0.000147" ixy="0.0" ixz="0.0"
+                 iyy="0.000948" iyz="0.0"
+                 izz="0.001064"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -57,11 +57,11 @@
 
     <link name="${name}_2_link">
       <inertial>
-        <origin xyz="0.0 0.0 0.0" rpy="0.00000 0.00000 0.00000"/>
+        <origin xyz="0.0 0.0 0.029025" rpy="0.00000 0.00000 0.00000"/>
         <mass value="1.563428"/>
-        <inertia ixx="0.002471" ixy="-0.001809" ixz="-0.001202"
-                 iyy="0.006132" iyz="0.000494"
-                 izz="0.006704"/>
+        <inertia ixx="0.000870" ixy="0.0" ixz="0.0"
+                 iyy="0.005844" iyz="0.0"
+                 izz="0.006705"/>
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
