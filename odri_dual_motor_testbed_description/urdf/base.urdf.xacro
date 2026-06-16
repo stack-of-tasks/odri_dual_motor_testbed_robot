@@ -49,6 +49,12 @@
       </collision>
     </link>
 
+    <joint name="${name}_in_${parent}" type="fixed">
+      <parent link="${parent}" />
+      <child link="base_footprint" />
+      <origin xyz="0.0 0.0 0.01" rpy ="0.0 0.0 0.0"/>
+    </joint>
+    
     <joint name="${name}_1_joint" type="fixed">
       <parent link="base_footprint" />
       <child link="${name}_2_link" />

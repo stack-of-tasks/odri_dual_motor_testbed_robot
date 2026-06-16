@@ -23,7 +23,7 @@ from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
 from dataclasses import dataclass
-
+from launch.logging import get_logger
 
 def generate_launch_description():
 
@@ -38,16 +38,25 @@ def generate_launch_description():
 def declare_actions(
     launch_description: LaunchDescription
 ):
+
+    logger = get_logger('robot_spawn - gazebo')
+
+    arguments=[
+            "-model odri_dual_motor_testbed",
+            "-topic",
+            "robot_description",
+            "-x","0.1",
+            "-y","0.0",
+            "-z","0.1", 
+        ]
     gazebo_spawn_robot = Node(
         package="ros_gz_sim",
         executable="create",
         output="screen",
-        arguments=[
-            "-model odri_dual_motor_testbed",
-            "-topic",
-            "robot_description",
-        ],
+        arguments=arguments,
     )
+
+    logger.info("arguments:" + str(arguments))
 
     launch_description.add_action(gazebo_spawn_robot)
     return

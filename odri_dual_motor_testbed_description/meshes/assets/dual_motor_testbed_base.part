@@ -1,0 +1,13 @@
+{
+    "configuration": "default",
+    "documentId": "dd3abe9e9c2b991f8b4c543e",
+    "documentMicroversion": "9e05adb4cb784c5cd7c60704",
+    "elementId": "4ca1a56473e67634416fd617",
+    "fullConfiguration": "default",
+    "id": "M8SmZHzx89/puVT45",
+    "isStandardContent": false,
+    "name": "dual_motor_testbed_base <1>",
+    "partId": "JFD",
+    "suppressed": false,
+    "type": "Part"
+}

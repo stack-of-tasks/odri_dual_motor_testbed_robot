@@ -9,7 +9,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-
+from launch.logging import get_logger
 
 def generate_launch_description():
 
@@ -29,12 +29,20 @@ def generate_launch_description():
         launch_arguments={'gz_args': ['-r -s empty.sdf']}.items()
     )
 
+    gui_config_path = PathJoinSubstitution([
+        FindPackageShare('odri_dual_motor_testbed_gazebo'),
+        'config', 'gui.config'
+    ])
+
+    logger = get_logger('odri_dual_motor_testbed_description')
+    logger.info("gui_config_path:" + str(gui_config_path))
+
     gz_sim_client = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('ros_gz_sim'),
             'launch'),
                                        '/gz_sim.launch.py']),
-        launch_arguments={'gz_args': ['-g']}.items()
+        launch_arguments={'gz_args': ['-g --gui-config ', gui_config_path]}.items()
     )
 
     
@@ -47,7 +55,8 @@ def generate_launch_description():
                 [
                     FindPackageShare("odri_dual_motor_testbed_description"),
                     "robots",
-                    "odri_dual_motor_testbed.urdf.xacro",
+                    #"odri_dual_motor_testbed.urdf.xacro",
+                    "fivebar_2dof.urdf.xacro",                    
                 ]
             ),
             " use_sim:=true",

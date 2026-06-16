@@ -29,7 +29,8 @@ def launch_setup(context, *args, **kwargs):
                 os.path.join(
                     get_package_share_directory("odri_dual_motor_testbed_description"),
                     "robots",
-                    "odri_dual_motor_testbed.urdf.xacro",
+                    # "odri_dual_motor_testbed.urdf.xacro",
+                    "fivebar_2dof.urdf.xacro",
                 )
             ),
             mappings={
