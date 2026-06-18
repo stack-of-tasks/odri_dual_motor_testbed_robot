@@ -12,51 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-from pathlib import Path
-
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-
 from launch_ros.actions import Node
-from dataclasses import dataclass
-from launch.logging import get_logger
+
 
 def generate_launch_description():
+    robot_name = LaunchConfiguration('robot_name', default='fivebar_2dof')
+    robot_description = LaunchConfiguration('robot_description', default='')
 
-    # Create the launch description and populate
-    ld = LaunchDescription()
-
-    declare_actions(ld)
-
-    return ld
-
-
-def declare_actions(
-    launch_description: LaunchDescription
-):
-
-    logger = get_logger('robot_spawn - gazebo')
-
-    arguments=[
-            "-model odri_dual_motor_testbed",
-            "-topic",
-            "robot_description",
-            "-x","0.1",
-            "-y","0.0",
-            "-z","0.1", 
-        ]
+    # Spawn via -string to avoid a timing race with the robot_description topic:
+    # ros_gz_sim create -topic would miss a message already published before the
+    # subscriber was set up.  Passing the URDF directly is reliable.
     gazebo_spawn_robot = Node(
-        package="ros_gz_sim",
-        executable="create",
-        output="screen",
-        arguments=arguments,
+        package='ros_gz_sim',
+        executable='create',
+        output='screen',
+        arguments=[
+            '-model', robot_name,
+            '-string', robot_description,
+            '-x', '0.1',
+            '-y', '0.0',
+            '-z', '0.1',
+        ],
     )
 
-    logger.info("arguments:" + str(arguments))
-
-    launch_description.add_action(gazebo_spawn_robot)
-    return
+    return LaunchDescription([
+        DeclareLaunchArgument('robot_name', default_value='fivebar_2dof'),
+        DeclareLaunchArgument('robot_description', default_value=''),
+        gazebo_spawn_robot,
+    ])
