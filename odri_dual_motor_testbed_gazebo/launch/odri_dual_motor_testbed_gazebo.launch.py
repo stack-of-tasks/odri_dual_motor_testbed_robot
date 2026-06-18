@@ -1,3 +1,4 @@
+
 import os
 from os import environ, pathsep
 
@@ -19,6 +20,10 @@ def generate_launch_description():
     gz_model_path_env_var = SetEnvironmentVariable(
         'GZ_SIM_RESOURCE_PATH', model_path)
     robot_name = 'odri_dual_motor_testbed'
+
+    gz_sim_sys_plugin_path = SetEnvironmentVariable('GZ_SIM_SYSTEM_PLUGIN_PATH',
+                                                    os.path.join(get_package_prefix
+                                                                 ('odri_dual_motor_testbed_gazebo'), 'lib'))
 
     # Start Gazebo
     gz_sim_server = IncludeLaunchDescription(
@@ -62,6 +67,8 @@ def generate_launch_description():
             " use_sim:=true",
         ]
     )
+
+    logger.info("robot_description:" + str(robot_description_content))
     robot_description = {"robot_description": robot_description_content}
 
     node_robot_state_publisher = Node(
@@ -77,7 +84,10 @@ def generate_launch_description():
             get_package_share_directory('odri_dual_motor_testbed_gazebo'),
             'launch'),
                                        '/robot_spawn.launch.py']),
-        launch_arguments={'robot_name': robot_name}.items()
+        launch_arguments={
+            'robot_name': robot_name,
+            'robot_description': robot_description_content,
+        }.items()
     )
     
     spawn_controller = Node(
@@ -94,9 +104,11 @@ def generate_launch_description():
         output="screen",
     )
 
+    print("gz_model_path_env_var;" + str(gz_model_path_env_var))
     return LaunchDescription(
         [
             gz_model_path_env_var,
+            gz_sim_sys_plugin_path,
             gz_sim_server,
             gz_sim_client,
             node_robot_state_publisher,
