@@ -34,7 +34,8 @@ def generate_launch_description():
             '-string', robot_description,
             '-x', '0.1',
             '-y', '0.0',
-            '-z', '0.1',
+            '-z', '0.2',
+            '-R', '-1.5707963267948966',
         ],
     )
 

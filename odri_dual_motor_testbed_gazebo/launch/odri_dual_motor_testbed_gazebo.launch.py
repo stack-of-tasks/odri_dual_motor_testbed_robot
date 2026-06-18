@@ -9,6 +9,7 @@ from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, SetLau
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 from launch.logging import get_logger
 
@@ -69,7 +70,9 @@ def generate_launch_description():
     )
 
     logger.info("robot_description:" + str(robot_description_content))
-    robot_description = {"robot_description": robot_description_content}
+    robot_description = {
+        "robot_description": ParameterValue(robot_description_content, value_type=str)
+    }
 
     node_robot_state_publisher = Node(
         package="robot_state_publisher",
