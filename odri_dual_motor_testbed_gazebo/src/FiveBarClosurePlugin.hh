@@ -19,8 +19,7 @@
 
 #include <gz/sim/System.hh>
 
-namespace odri_gz
-{
+namespace odri_gz {
 
 class FiveBarClosurePluginPrivate;
 
@@ -49,24 +48,22 @@ class FiveBarClosurePluginPrivate;
 ///   <kp>50000.0</kp>                - Position error gain  [N/m]
 ///   <kd>500.0</kd>                  - Velocity error gain  [N·s/m]
 ///   <max_force>20.0</max_force>     - Per-step force clamp [N]
-class FiveBarClosurePlugin
-  : public gz::sim::System,
-    public gz::sim::ISystemConfigure,
-    public gz::sim::ISystemPreUpdate
-{
-public:
+class FiveBarClosurePlugin : public gz::sim::System,
+                             public gz::sim::ISystemConfigure,
+                             public gz::sim::ISystemPreUpdate {
+ public:
   FiveBarClosurePlugin();
   ~FiveBarClosurePlugin() override;
 
-  void Configure(const gz::sim::Entity &_entity,
-                 const std::shared_ptr<const sdf::Element> &_sdf,
-                 gz::sim::EntityComponentManager &_ecm,
-                 gz::sim::EventManager &_eventMgr) override;
+  void Configure(const gz::sim::Entity& _entity,
+                 const std::shared_ptr<const sdf::Element>& _sdf,
+                 gz::sim::EntityComponentManager& _ecm,
+                 gz::sim::EventManager& _eventMgr) override;
 
-  void PreUpdate(const gz::sim::UpdateInfo &_info,
-                 gz::sim::EntityComponentManager &_ecm) override;
+  void PreUpdate(const gz::sim::UpdateInfo& _info,
+                 gz::sim::EntityComponentManager& _ecm) override;
 
-private:
+ private:
   std::unique_ptr<FiveBarClosurePluginPrivate> dataPtr;
 };
 

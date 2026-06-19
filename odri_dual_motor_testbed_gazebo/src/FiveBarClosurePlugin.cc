@@ -28,8 +28,7 @@
 #include <gz/sim/components/Pose.hh>
 #include <sdf/Element.hh>
 
-namespace odri_gz
-{
+namespace odri_gz {
 
 // ---------------------------------------------------------------------------
 // Data for one constraint endpoint.
@@ -53,21 +52,19 @@ namespace odri_gz
 // every step (elbow revolute joint between forceLink and posLink), so it is
 // recomputed from WorldPoses each PreUpdate call.
 // ---------------------------------------------------------------------------
-struct ConstraintPoint
-{
-  gz::sim::Entity  posLinkEntity{gz::sim::kNullEntity};
-  gz::sim::Link    posLink{gz::sim::kNullEntity};
-  gz::math::Vector3d offset;          // constant, in posLink frame
+struct ConstraintPoint {
+  gz::sim::Entity posLinkEntity{gz::sim::kNullEntity};
+  gz::sim::Link posLink{gz::sim::kNullEntity};
+  gz::math::Vector3d offset;  // constant, in posLink frame
 
-  gz::sim::Entity  forceLinkEntity{gz::sim::kNullEntity};
-  gz::sim::Link    forceLink{gz::sim::kNullEntity};
+  gz::sim::Entity forceLinkEntity{gz::sim::kNullEntity};
+  gz::sim::Link forceLink{gz::sim::kNullEntity};
 
-  bool             ready{false};
+  bool ready{false};
 };
 
-class FiveBarClosurePluginPrivate
-{
-public:
+class FiveBarClosurePluginPrivate {
+ public:
   gz::sim::Model model{gz::sim::kNullEntity};
 
   // Position link names (real ECM links, children of revolute joints).
@@ -98,18 +95,16 @@ public:
 
 // ---------------------------------------------------------------------------
 FiveBarClosurePlugin::FiveBarClosurePlugin()
-: dataPtr(std::make_unique<FiveBarClosurePluginPrivate>())
-{}
+    : dataPtr(std::make_unique<FiveBarClosurePluginPrivate>()) {}
 
 FiveBarClosurePlugin::~FiveBarClosurePlugin() = default;
 
 // ---------------------------------------------------------------------------
 void FiveBarClosurePlugin::Configure(
-  const gz::sim::Entity &_entity,
-  const std::shared_ptr<const sdf::Element> &_sdf,
-  gz::sim::EntityComponentManager &_ecm,
-  gz::sim::EventManager & /*_eventMgr*/)
-{
+    const gz::sim::Entity& _entity,
+    const std::shared_ptr<const sdf::Element>& _sdf,
+    gz::sim::EntityComponentManager& _ecm,
+    gz::sim::EventManager& /*_eventMgr*/) {
   this->dataPtr->model = gz::sim::Model(_entity);
   if (!this->dataPtr->model.Valid(_ecm)) {
     gzerr << "[FiveBarClosurePlugin] Plugin must be attached to a model.\n";
@@ -128,34 +123,30 @@ void FiveBarClosurePlugin::Configure(
     this->dataPtr->forceLinkName1 = _sdf->Get<std::string>("parent_link1");
   if (_sdf->HasElement("parent_link2"))
     this->dataPtr->forceLinkName2 = _sdf->Get<std::string>("parent_link2");
-  if (_sdf->HasElement("kp"))
-    this->dataPtr->kp = _sdf->Get<double>("kp");
-  if (_sdf->HasElement("kd"))
-    this->dataPtr->kd = _sdf->Get<double>("kd");
+  if (_sdf->HasElement("kp")) this->dataPtr->kp = _sdf->Get<double>("kp");
+  if (_sdf->HasElement("kd")) this->dataPtr->kd = _sdf->Get<double>("kd");
   if (_sdf->HasElement("max_force"))
     this->dataPtr->maxForce = _sdf->Get<double>("max_force");
 
-  gzmsg << "[FiveBarClosurePlugin] Model='" << this->dataPtr->model.Name(_ecm) << "'"
+  gzmsg << "[FiveBarClosurePlugin] Model='" << this->dataPtr->model.Name(_ecm)
+        << "'"
         << "  pos_link1=" << this->dataPtr->posLinkName1
         << "  offset1=" << this->dataPtr->offset1
         << "  pos_link2=" << this->dataPtr->posLinkName2
         << "  offset2=" << this->dataPtr->offset2
         << "  parent_link1=" << this->dataPtr->forceLinkName1
         << "  parent_link2=" << this->dataPtr->forceLinkName2
-        << "  kp=" << this->dataPtr->kp
-        << "  kd=" << this->dataPtr->kd
+        << "  kp=" << this->dataPtr->kp << "  kd=" << this->dataPtr->kd
         << "  max_force=" << this->dataPtr->maxForce << "\n";
 }
 
 // ---------------------------------------------------------------------------
-static bool initConstraintPoint(
-  ConstraintPoint &cp,
-  const std::string &posLinkName,
-  const gz::math::Vector3d &offset,
-  const std::string &forceLinkName,
-  const gz::sim::Model &model,
-  gz::sim::EntityComponentManager &ecm)
-{
+static bool initConstraintPoint(ConstraintPoint& cp,
+                                const std::string& posLinkName,
+                                const gz::math::Vector3d& offset,
+                                const std::string& forceLinkName,
+                                const gz::sim::Model& model,
+                                gz::sim::EntityComponentManager& ecm) {
   if (cp.ready) return true;
 
   cp.posLinkEntity = model.LinkByName(ecm, posLinkName);
@@ -164,8 +155,8 @@ static bool initConstraintPoint(
           << "' not yet in ECM, retrying.\n";
     return false;
   }
-  cp.posLink   = gz::sim::Link(cp.posLinkEntity);
-  cp.offset    = offset;
+  cp.posLink = gz::sim::Link(cp.posLinkEntity);
+  cp.offset = offset;
   cp.posLink.EnableVelocityChecks(ecm);
 
   cp.forceLinkEntity = model.LinkByName(ecm, forceLinkName);
@@ -179,36 +170,32 @@ static bool initConstraintPoint(
   auto n1 = ecm.Component<gz::sim::components::Name>(cp.posLinkEntity);
   auto n2 = ecm.Component<gz::sim::components::Name>(cp.forceLinkEntity);
   gzmsg << "[FiveBarClosurePlugin] pos_link='" << (n1 ? n1->Data() : "?")
-        << "'  offset=" << offset
-        << "  force_link='" << (n2 ? n2->Data() : "?") << "'.\n";
+        << "'  offset=" << offset << "  force_link='" << (n2 ? n2->Data() : "?")
+        << "'.\n";
 
   cp.ready = true;
   return true;
 }
 
 // ---------------------------------------------------------------------------
-void FiveBarClosurePlugin::PreUpdate(
-  const gz::sim::UpdateInfo &_info,
-  gz::sim::EntityComponentManager &_ecm)
-{
+void FiveBarClosurePlugin::PreUpdate(const gz::sim::UpdateInfo& _info,
+                                     gz::sim::EntityComponentManager& _ecm) {
   if (_info.paused) return;
 
   if (!this->dataPtr->initialized) {
     bool ok1 = initConstraintPoint(
-      this->dataPtr->cp1,
-      this->dataPtr->posLinkName1, this->dataPtr->offset1,
-      this->dataPtr->forceLinkName1, this->dataPtr->model, _ecm);
+        this->dataPtr->cp1, this->dataPtr->posLinkName1, this->dataPtr->offset1,
+        this->dataPtr->forceLinkName1, this->dataPtr->model, _ecm);
     bool ok2 = initConstraintPoint(
-      this->dataPtr->cp2,
-      this->dataPtr->posLinkName2, this->dataPtr->offset2,
-      this->dataPtr->forceLinkName2, this->dataPtr->model, _ecm);
+        this->dataPtr->cp2, this->dataPtr->posLinkName2, this->dataPtr->offset2,
+        this->dataPtr->forceLinkName2, this->dataPtr->model, _ecm);
     if (!ok1 || !ok2) return;
     this->dataPtr->initialized = true;
     gzmsg << "[FiveBarClosurePlugin] Loop-closure enforcement active.\n";
   }
 
-  auto &cp1 = this->dataPtr->cp1;
-  auto &cp2 = this->dataPtr->cp2;
+  auto& cp1 = this->dataPtr->cp1;
+  auto& cp2 = this->dataPtr->cp2;
 
   // World positions of the two constraint points:
   //   p_world = R_world_posLink * offset + p_world_posLink
@@ -227,11 +214,11 @@ void FiveBarClosurePlugin::PreUpdate(
     velError = (posError - this->dataPtr->prevPosError) / dtSec;
   }
   this->dataPtr->prevPosError = posError;
-  this->dataPtr->firstUpdate  = false;
+  this->dataPtr->firstUpdate = false;
 
   // Penalty spring-damper force.
   gz::math::Vector3d force =
-    -(this->dataPtr->kp * posError + this->dataPtr->kd * velError);
+      -(this->dataPtr->kp * posError + this->dataPtr->kd * velError);
 
   // Clamp magnitude to prevent ODE AABB overflow on startup.
   double fLen = force.Length();
@@ -247,23 +234,20 @@ void FiveBarClosurePlugin::PreUpdate(
   // Local offset from forceLink origin to constraint point, in forceLink frame.
   // Recomputed every step because the elbow joint rotates this vector.
   gz::math::Vector3d off1 =
-    optFL1->Rot().Inverse().RotateVector(pos1 - optFL1->Pos());
+      optFL1->Rot().Inverse().RotateVector(pos1 - optFL1->Pos());
   gz::math::Vector3d off2 =
-    optFL2->Rot().Inverse().RotateVector(pos2 - optFL2->Pos());
+      optFL2->Rot().Inverse().RotateVector(pos2 - optFL2->Pos());
 
-  cp1.forceLink.AddWorldForce(_ecm,  force, off1);
+  cp1.forceLink.AddWorldForce(_ecm, force, off1);
   cp2.forceLink.AddWorldForce(_ecm, -force, off2);
 }
 
 }  // namespace odri_gz
 
 // ---------------------------------------------------------------------------
-GZ_ADD_PLUGIN(
-  odri_gz::FiveBarClosurePlugin,
-  gz::sim::System,
-  odri_gz::FiveBarClosurePlugin::ISystemConfigure,
-  odri_gz::FiveBarClosurePlugin::ISystemPreUpdate)
+GZ_ADD_PLUGIN(odri_gz::FiveBarClosurePlugin, gz::sim::System,
+              odri_gz::FiveBarClosurePlugin::ISystemConfigure,
+              odri_gz::FiveBarClosurePlugin::ISystemPreUpdate)
 
-GZ_ADD_PLUGIN_ALIAS(
-  odri_gz::FiveBarClosurePlugin,
-  "odri_gz::FiveBarClosurePlugin")
+GZ_ADD_PLUGIN_ALIAS(odri_gz::FiveBarClosurePlugin,
+                    "odri_gz::FiveBarClosurePlugin")
