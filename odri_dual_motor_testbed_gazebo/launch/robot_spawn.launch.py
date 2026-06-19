@@ -19,28 +19,36 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    robot_name = LaunchConfiguration('robot_name', default='fivebar_2dof')
-    robot_description = LaunchConfiguration('robot_description', default='')
+    robot_name = LaunchConfiguration("robot_name", default="fivebar_2dof")
+    robot_description = LaunchConfiguration("robot_description", default="")
 
     # Spawn via -string to avoid a timing race with the robot_description topic:
     # ros_gz_sim create -topic would miss a message already published before the
     # subscriber was set up.  Passing the URDF directly is reliable.
     gazebo_spawn_robot = Node(
-        package='ros_gz_sim',
-        executable='create',
-        output='screen',
+        package="ros_gz_sim",
+        executable="create",
+        output="screen",
         arguments=[
-            '-model', robot_name,
-            '-string', robot_description,
-            '-x', '0.1',
-            '-y', '0.0',
-            '-z', '0.05',
-            '-R', '-1.5707963267948966',
+            "-model",
+            robot_name,
+            "-string",
+            robot_description,
+            "-x",
+            "0.1",
+            "-y",
+            "0.0",
+            "-z",
+            "0.05",
+            "-R",
+            "-1.5707963267948966",
         ],
     )
 
-    return LaunchDescription([
-        DeclareLaunchArgument('robot_name', default_value='fivebar_2dof'),
-        DeclareLaunchArgument('robot_description', default_value=''),
-        gazebo_spawn_robot,
-    ])
+    return LaunchDescription(
+        [
+            DeclareLaunchArgument("robot_name", default_value="fivebar_2dof"),
+            DeclareLaunchArgument("robot_description", default_value=""),
+            gazebo_spawn_robot,
+        ]
+    )
