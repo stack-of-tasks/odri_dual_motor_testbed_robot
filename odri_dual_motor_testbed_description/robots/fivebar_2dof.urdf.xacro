@@ -2,6 +2,7 @@
 <!-- Generated using onshape-to-robot -->
 <!-- Onshape https://cad.onshape.com/documents/dd3abe9e9c2b991f8b4c543e/w/cd0ed4dbbed8ef5fec1acda2/e/cef9e1cc3745d261afba2600 -->
 <robot name="fivebar_2dof">
+  <link name="world"/>
   <!-- Link base_asm -->
   <link name="base_asm">
     <inertial>
@@ -74,6 +75,13 @@
       </geometry>
     </collision>
   </link>
+  
+  <joint name="base_asm_in_world" type="fixed">
+    <parent link="world" />
+    <child link="base_asm" />
+    <origin xyz="0.0 0.0 0.001" rpy ="0.0 0.0 0.0"/>
+  </joint>
+  
   <!-- Link rotor_asm -->
   <link name="rotor_asm">
     <inertial>
@@ -480,35 +488,35 @@
     <limit effort="1" velocity="1" lower="-3.141592653589793" upper="3.141592653589793"/>
   </joint>
 
-  <!-- ================================================================
-       Gazebo Harmonic (gz-sim8) system plugin for five-bar loop closure.
-       A penalty-based spring-damper drives closing_ee_1 and closing_ee_2
-       together each simulation step.
-       ================================================================ -->
-  <gazebo>
-    <plugin filename="libFiveBarClosurePlugin.so"
-            name="odri_gz::FiveBarClosurePlugin">
-      <!-- Real ECM link names (l2r/l2l are children of revolute joints so
-           they survive URDF→SDF conversion as actual link entities).
-           closing_ee_1/2 become SDF frames and do NOT exist in the ECM. -->
-      <pos_link1>l2r</pos_link1>
-      <pos_link2>l2l</pos_link2>
-      <!-- Fixed offset from pos_link origin to constraint point in pos_link
-           frame.  Values come from the closing_ee_*_frame joint xyz. -->
-      <offset1>0 -0.125 -0.002</offset1>
-      <offset2>0 -0.125 -0.0015</offset2>
-      <!-- Links with real mass (~0.03 kg) used for force application.
-           l2r/l2l have mass 1e-9 kg: kp=50000 with 1 mm error → 50 N →
-           a ≈ 5×10¹⁰ m/s² → ODE AABB overflow in one step. -->
-      <parent_link1>rotor_asm</parent_link1>
-      <parent_link2>rotor_asm_2</parent_link2>
-      <!-- Position error gain [N/m]. -->
-      <kp>50000.0</kp>
-      <!-- Velocity error gain [N·s/m]. -->
-      <kd>500.0</kd>
-      <!-- Per-step force clamp [N]. Prevents ODE divergence when the initial
-           joint configuration does not satisfy loop closure. -->
-      <max_force>20.0</max_force>
-    </plugin>
-  </gazebo>
+  <!-- <!-\- ================================================================ -->
+  <!--      Gazebo Harmonic (gz-sim8) system plugin for five-bar loop closure. -->
+  <!--      A penalty-based spring-damper drives closing_ee_1 and closing_ee_2 -->
+  <!--      together each simulation step. -->
+  <!--      ================================================================ -\-> -->
+  <!-- <gazebo> -->
+  <!--   <plugin filename="libFiveBarClosurePlugin.so" -->
+  <!--           name="odri_gz::FiveBarClosurePlugin"> -->
+  <!--     <!-\- Real ECM link names (l2r/l2l are children of revolute joints so -->
+  <!--          they survive URDF→SDF conversion as actual link entities). -->
+  <!--          closing_ee_1/2 become SDF frames and do NOT exist in the ECM. -\-> -->
+  <!--     <pos_link1>l2r</pos_link1> -->
+  <!--     <pos_link2>l2l</pos_link2> -->
+  <!--     <!-\- Fixed offset from pos_link origin to constraint point in pos_link -->
+  <!--          frame.  Values come from the closing_ee_*_frame joint xyz. -\-> -->
+  <!--     <offset1>0 -0.125 -0.002</offset1> -->
+  <!--     <offset2>0 -0.125 -0.0015</offset2> -->
+  <!--     <!-\- Links with real mass (~0.03 kg) used for force application. -->
+  <!--          l2r/l2l have mass 1e-9 kg: kp=50000 with 1 mm error → 50 N → -->
+  <!--          a ≈ 5×10¹⁰ m/s² → ODE AABB overflow in one step. -\-> -->
+  <!--     <parent_link1>rotor_asm</parent_link1> -->
+  <!--     <parent_link2>rotor_asm_2</parent_link2> -->
+  <!--     <!-\- Position error gain [N/m]. -\-> -->
+  <!--     <kp>50000.0</kp> -->
+  <!--     <!-\- Velocity error gain [N·s/m]. -\-> -->
+  <!--     <kd>500.0</kd> -->
+  <!--     <!-\- Per-step force clamp [N]. Prevents ODE divergence when the initial -->
+  <!--          joint configuration does not satisfy loop closure. -\-> -->
+  <!--     <max_force>20.0</max_force> -->
+  <!--   </plugin> -->
+  <!-- </gazebo> -->
 </robot>

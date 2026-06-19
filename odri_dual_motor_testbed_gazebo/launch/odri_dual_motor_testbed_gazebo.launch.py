@@ -69,7 +69,7 @@ def generate_launch_description():
         ]
     )
 
-    logger.info("robot_description:" + str(robot_description_content))
+    #logger.info("robot_description:" + str(robot_description_content))
     robot_description = {
         "robot_description": ParameterValue(robot_description_content, value_type=str)
     }
