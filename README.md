@@ -10,5 +10,22 @@ This repositor relies on [ros2_control](https://github.com/ros-controls/ros2_con
 It relies more specifically on the [ros2_hardware_interface_odri](https://github.com/stack-of-tasks/ros2_hardware_interface_odri) to handle the relationship with the [master-board](https://github.com/open-dynamic-robot-initiative/master-board)
 developped by the Open Dynamic Robot Initiative.
 
+However the packages can be compiled without the ros2_hardware_interface_odri library. But the drivers will not be compiled either.
+It is useful if you just want to use this package in simulation
 
+## Simulation
 
+```
+mkdir -p odri_testbed_ws/src
+cd odri_testbed_ws/src
+git clone https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
+cd ..
+source /opt/ros/jazzy/setup.bash
+colcon build
+source ./install/setup.bash
+```
+
+Launching a test without the closed loop for the 5 bar linkage:
+```
+ros2 launch  odri_dual_motor_testbed_gazebo odri_dual_motor_testbed_gazebo.launch.py
+```
