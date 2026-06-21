@@ -60,22 +60,22 @@ buildRosPackage {
     ament-cmake-copyright
     ament-cmake-cppcheck
     ament-cmake-cpplint
-    ament-cmake-pep257
     ament-cmake-lint-cmake
-    ament-cmake-xmllint
+    ament-cmake-pep257
     ament-cmake-uncrustify
+    ament-cmake-xmllint
     ament-lint-auto
     ament-lint-common
     # keep-sorted end
   ];
   nativeCheckInputs = [
     # keep-sorted start
-    ament-pep257
-    ament-uncrustify
     ament-copyright
     ament-cppcheck
     ament-cpplint
     ament-lint-cmake
+    ament-pep257
+    ament-uncrustify
     ament-xmllint
     # keep-sorted end
   ];
