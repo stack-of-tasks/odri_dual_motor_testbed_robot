@@ -1,0 +1,13 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    odri_fcc:
+      type: odri_forward_command_controller/OdriForwardCommandController
+      joints:
+        - motorL
+        - motorR
+          
