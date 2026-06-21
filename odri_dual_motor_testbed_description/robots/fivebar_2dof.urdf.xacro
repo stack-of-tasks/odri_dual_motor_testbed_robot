@@ -488,6 +488,39 @@
     <limit effort="1" velocity="1" lower="-3.141592653589793" upper="3.141592653589793"/>
   </joint>
 
+
+  <ros2_control name="GazeboOdriSimSystem" type="system">
+    <hardware>
+      <plugin>odri_gz_ros2_control/GazeboOdriSimSystem</plugin>
+    </hardware>
+    <joint name="motorL">
+      <command_interface name="position" />
+      <command_interface name="velocity" />
+      <command_interface name="effort" />
+      <command_interface name="gain_kp" />
+      <command_interface name="gain_kd" />
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="motorR">
+      <command_interface name="position" />
+      <command_interface name="velocity" />
+      <command_interface name="effort" />
+      <command_interface name="gain_kp" />
+      <command_interface name="gain_kd" />
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="odri_gz_ros2_control-system" name="odri_gz_ros2_control::GazeboOdriSimROS2ControlPlugin">
+      <parameters>$(find odri_dual_motor_testbed_gazebo)/config/forward_command_controller.yaml</parameters>
+    </plugin>
+  </gazebo>
+  
   <!-- <!-\- ================================================================ -->
   <!--      Gazebo Harmonic (gz-sim8) system plugin for five-bar loop closure. -->
   <!--      A penalty-based spring-damper drives closing_ee_1 and closing_ee_2 -->
@@ -519,4 +552,5 @@
   <!--     <max_force>20.0</max_force> -->
   <!--   </plugin> -->
   <!-- </gazebo> -->
+
 </robot>
