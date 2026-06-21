@@ -12,6 +12,9 @@ jobs:
           - {ROS_DISTRO: jazzy}
           # - {ROS_DISTRO: kilted}
           # - {ROS_DISTRO: rolling}
+    env:
+      UPSTREAM_WORKSPACE: |
+        github:stack-of-tasks/odri_gz_ros2_control/#main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
