@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.22)
 project(odri_dual_motor_testbed_bringup)
 
 find_package(ament_cmake_auto REQUIRED)
