@@ -120,11 +120,7 @@ def generate_launch_description():
         }.items(),
     )
 
-<<<<<<< HEAD
     spawn_controller = Node(
-=======
-    spawn_joint_state_broadcaster = Node(
->>>>>>> eb6aaa6 (Use use_sim_time)
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
