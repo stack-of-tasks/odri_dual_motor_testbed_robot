@@ -132,10 +132,15 @@ def generate_launch_description():
         output="screen",
     )
 
+    controller_params = PathJoinSubstitution([
+        FindPackageShare("odri_dual_motor_testbed_gazebo"),
+        "config", "forward_command_controller.yaml"
+    ])
+
     spawn_odri_fcc = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["odri_fcc"],
+        arguments=["odri_fcc", "--param-file", controller_params],
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         output="screen",
     )

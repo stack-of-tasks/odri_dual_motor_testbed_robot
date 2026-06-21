@@ -7,7 +7,10 @@ controller_manager:
 
     odri_fcc:
       type: odri_forward_command_controller/OdriForwardCommandController
-      joints:
-        - motorL
-        - motorR
-          
+
+odri_fcc:
+  ros__parameters:
+    joints:
+      - motorL
+      - motorR
+         
