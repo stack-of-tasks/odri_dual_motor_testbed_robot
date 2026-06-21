@@ -8,7 +8,6 @@
   ament-cmake-cppcheck,
   ament-cmake-cpplint,
   ament-cmake-copyright,
-  ament-cmake-flake8,
   ament-cmake-lint-cmake,
   ament-cmake-pep257,
   ament-cmake-uncrustify,
@@ -16,7 +15,6 @@
   ament-cpplint,
   ament-cppcheck,
   ament-copyright,
-  ament-flake8,
   ament-lint-auto,
   ament-lint-cmake,
   ament-pep257,
@@ -57,7 +55,6 @@ buildRosPackage {
   checkInputs = [
     # keep-sorted start
     ament-cmake-copyright
-    ament-cmake-flake8
     ament-cmake-cppcheck
     ament-cmake-cpplint
     ament-cmake-lint-cmake
@@ -71,7 +68,6 @@ buildRosPackage {
   nativeCheckInputs = [
     # keep-sorted start
     ament-copyright
-    ament-flake8
     ament-cppcheck
     ament-cpplint
     ament-lint-cmake
@@ -81,7 +77,7 @@ buildRosPackage {
     # keep-sorted end
   ];
 
-  doCheck = false; # TODO: cppcheck + cpplint + flake8 + uncrustify
+  doCheck = false; # TODO: cppcheck + cpplint + uncrustify
 
   meta = {
     description = "{{ pkg.description }}";

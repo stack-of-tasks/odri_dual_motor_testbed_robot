@@ -9,14 +9,12 @@
   ament-cmake-cpplint,
   ament-cmake-copyright,
   ament-cmake-pep257,
-  ament-cmake-flake8,
   ament-cmake-lint-cmake,
   ament-cmake-xmllint,
   ament-cmake-uncrustify,
   ament-cpplint,
   ament-cppcheck,
   ament-copyright,
-  ament-flake8,
   ament-lint-auto,
   ament-pep257,
   ament-uncrustify,
@@ -62,7 +60,6 @@ buildRosPackage {
     ament-cmake-copyright
     ament-cmake-cppcheck
     ament-cmake-cpplint
-    ament-cmake-flake8
     ament-cmake-pep257
     ament-cmake-lint-cmake
     ament-cmake-xmllint
@@ -73,7 +70,6 @@ buildRosPackage {
   ];
   nativeCheckInputs = [
     # keep-sorted start
-    ament-flake8
     ament-pep257
     ament-uncrustify
     ament-copyright
@@ -84,7 +80,7 @@ buildRosPackage {
     # keep-sorted end
   ];
 
-  doCheck = false; # TODO: cppcheck + cpplint + flake8 + uncrustify
+  doCheck = false; # TODO: cppcheck + cpplint + uncrustify
 
   meta = {
     description = "Package describing the ODRI dual motor testbed robot";

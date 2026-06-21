@@ -5,7 +5,7 @@
   <description>Meta package describing the ODRI dual motor testbed robot</description>
   <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
   <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -16,6 +16,18 @@
 
   <exec_depend>odri_dual_motor_testbed_description</exec_depend>
   <exec_depend>odri_dual_motor_testbed_bringup</exec_depend>
+
+  <!-- keep-sorted start -->
+  <test_depend>ament_cmake_copyright</test_depend>
+  <test_depend>ament_cmake_cppcheck</test_depend>
+  <test_depend>ament_cmake_cpplint</test_depend>
+  <test_depend>ament_cmake_lint_cmake</test_depend>
+  <test_depend>ament_cmake_xmllint</test_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <!-- keep-sorted end -->
+
   <export>
+      <build_type>ament_cmake</build_type>
   </export>
 </package>
