@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 project(odri_dual_motor_testbed_gazebo)
 
 find_package(ament_cmake_auto REQUIRED)
