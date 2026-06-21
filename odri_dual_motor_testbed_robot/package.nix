@@ -3,29 +3,6 @@
   buildRosPackage,
 
   ament-cmake,
-
-  ament-index-cpp,
-  gz-sim,
-  gz-plugin,
-  pluginlib,
-  rclcpp,
-  yaml-cpp-vendor,
-  rclcpp-lifecycle,
-  hardware-interface,
-  controller-manager,
-
-  ament-cmake-cppcheck,
-  ament-cmake-cpplint,
-  ament-cmake-copyright,
-  ament-cmake-lint-cmake,
-  ament-cmake-xmllint,
-  ament-cpplint,
-  ament-cppcheck,
-  ament-copyright,
-  ament-lint-auto,
-  ament-lint-cmake,
-  ament-lint-common,
-  ament-xmllint,
 }:
 buildRosPackage {
   pname = "odri-dual-motor-testbed-robot";
