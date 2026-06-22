@@ -6,15 +6,35 @@
   outputs =
     inputs:
     inputs.gepetto.lib.mkFlakoboros inputs (
-      { ... }:
+      { lib, ... }:
       {
         rosDistros = [ "jazzy" ];
         rosShellDistro = "jazzy";
-        rosPackages = {
-          odri-dual-motor-testbed-bringup = ./odri_dual_motor_testbed_bringup/package.nix;
-          odri-dual-motor-testbed-description = ./odri_dual_motor_testbed_description/package.nix;
-          odri-dual-motor-testbed-gazebo = ./odri_dual_motor_testbed_gazebo/package.nix;
-          odri-dual-motor-testbed-robot = ./odri_dual_motor_testbed_robot/package.nix;
+        rosOverrideAttrs = {
+          odri-dual-motor-testbed-bringup = {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = ./odri_dual_motor_testbed_bringup;
+            };
+          };
+          odri-dual-motor-testbed-description = {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = ./odri_dual_motor_testbed_description;
+            };
+          };
+          odri-dual-motor-testbed-gazebo = {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = ./odri_dual_motor_testbed_gazebo;
+            };
+          };
+          odri-dual-motor-testbed-robot = {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = ./odri_dual_motor_testbed_robot;
+            };
+          };
         };
       }
     );
