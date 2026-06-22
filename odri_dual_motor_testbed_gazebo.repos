@@ -1,0 +1,13 @@
+repositories:
+  src/odri_dual_motor_testbed_robot:
+    type: git
+    url: https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
+    version: main
+  src/odri_gz_ros2_control:
+    type: git
+    url: https://github.com/stack-of-tasks/odri_gz_ros2_control.git
+    version: main
+  src/odri_forward_command_controller:
+    type: git
+    url: https://github.com/stack-of-tasks/odri_forward_command_controller.git
+    version: main
