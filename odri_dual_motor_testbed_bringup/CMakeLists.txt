@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.22)
 project(odri_dual_motor_testbed_bringup)
 
 find_package(ament_cmake_auto REQUIRED)
@@ -12,6 +12,7 @@ ament_auto_find_build_dependencies()
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
+  list(APPEND AMENT_LINT_AUTO_EXCLUDE ament_cmake_flake8)
   ament_lint_auto_find_test_dependencies()
 
 endif()
