@@ -10,7 +10,6 @@ from launch.actions import (
     SetLaunchConfiguration,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
 from launch.logging import get_logger
 from launch.substitutions import (
     Command,
@@ -18,7 +17,6 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
 )
-
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
@@ -90,18 +88,21 @@ def generate_launch_description():
     set_sim_time = SetLaunchConfiguration("use_sim_time", "True")
 
     clock_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
-        name='clock_bridge',
-        output='screen',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        name="clock_bridge",
+        output="screen",
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
     )
 
     node_robot_state_publisher = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="screen",
-        parameters=[robot_description, {"use_sim_time": LaunchConfiguration("use_sim_time")}],
+        parameters=[
+            robot_description,
+            {"use_sim_time": LaunchConfiguration("use_sim_time")},
+        ],
     )
 
     robot_spawn = IncludeLaunchDescription(
@@ -120,11 +121,7 @@ def generate_launch_description():
         }.items(),
     )
 
-<<<<<<< HEAD
-    spawn_controller = Node(
-=======
     spawn_joint_state_broadcaster = Node(
->>>>>>> eb6aaa6 (Use use_sim_time)
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster"],
@@ -132,10 +129,13 @@ def generate_launch_description():
         output="screen",
     )
 
-    controller_params = PathJoinSubstitution([
-        FindPackageShare("odri_dual_motor_testbed_gazebo"),
-        "config", "forward_command_controller.yaml"
-    ])
+    controller_params = PathJoinSubstitution(
+        [
+            FindPackageShare("odri_dual_motor_testbed_gazebo"),
+            "config",
+            "forward_command_controller.yaml",
+        ]
+    )
 
     spawn_odri_fcc = Node(
         package="controller_manager",

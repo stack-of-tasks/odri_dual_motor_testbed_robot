@@ -24,30 +24,33 @@ namespace odri_gz {
 class FiveBarClosurePluginPrivate;
 
 /// \brief Gz-Sim System plugin that enforces the kinematic loop closure of a
-/// five-bar parallel robot using a penalty-based (spring-damper) method.
+/// five-bar parallel robot using its exact direct geometric model (no
+/// integration, no gains, no penalty force).
 ///
-/// The URDF→SDF conversion demotes zero-inertia dummy links (closing_ee_1,
-/// closing_ee_2) to SDF frames that have no ECM entity.  The plugin therefore
-/// references the real parent links (l2r, l2l) directly by name and adds a
-/// constant offset (taken from the URDF fixed-joint xyz) to reach the actual
-/// constraint point.
-///
-/// Forces are applied to a separate set of "force links" (rotor_asm,
-/// rotor_asm_2, mass ~0.03 kg) rather than to l2r/l2l (mass 1e-9 kg),
-/// which would cause ODE divergence.  The local offset to the force link is
-/// recomputed each step because the elbow revolute joint between the force
-/// link and the position link rotates that vector.
+/// The five-bar mechanism has two actuated revolute joints (motorL, motorR)
+/// and two passive revolute joints (elbowL, elbowR) whose positions are
+/// entirely determined by the actuated joint positions through the
+/// loop-closure constraint. Each PreUpdate step this plugin reads
+/// theta1 = motorL and theta2 = motorR from the ECM, computes the two crank
+/// tips E_L(theta1) / E_R(theta2), intersects the two length-L2 circles
+/// centered on them to find the closure point P, derives beta1 / beta2 and
+/// writes them to elbowL / elbowR via Joint::ResetPosition. See
+/// five_bar_mgd_spec.md at the repository root for the full derivation and
+/// the numerical values of the geometry parameters below.
 ///
 /// SDF parameters (all optional, shown with defaults):
-///   <pos_link1>l2r</pos_link1>      - Link whose WorldPose anchors chain 1
-///   <pos_link2>l2l</pos_link2>      - Link whose WorldPose anchors chain 2
-///   <offset1>0 -0.125 -0.002</offset1>   - Offset in pos_link1 frame [m]
-///   <offset2>0 -0.125 -0.0015</offset2>  - Offset in pos_link2 frame [m]
-///   <parent_link1>rotor_asm</parent_link1>   - Force application link 1
-///   <parent_link2>rotor_asm_2</parent_link2> - Force application link 2
-///   <kp>50000.0</kp>                - Position error gain  [N/m]
-///   <kd>500.0</kd>                  - Velocity error gain  [N·s/m]
-///   <max_force>20.0</max_force>     - Per-step force clamp [N]
+///   <motor_joint1>motorL</motor_joint1>  - Actuated joint providing theta1
+///   <motor_joint2>motorR</motor_joint2>  - Actuated joint providing theta2
+///   <elbow_joint1>elbowL</elbow_joint1>  - Passive joint receiving beta1
+///   <elbow_joint2>elbowR</elbow_joint2>  - Passive joint receiving beta2
+///   <a_x>-0.065</a_x> <a_z>0</a_z>  - motorL axis position in base_asm (x,z)
+///   <b_x>0.065</b_x> <b_z>0</b_z>   - motorR axis position in base_asm (x,z)
+///   <l1>0.06</l1>              - Crank length (motor -> elbow)
+///   <l2>0.125</l2>             - Coupler length (elbow -> closure point)
+///   <phi1>pi</phi1>                  - Left crank angular offset [rad]
+///   <phi2>1.9504681943696776</phi2>  - Right crank angular offset [rad]
+///   <psi1>1.1061036468685321</psi1>  - Left coupler angular offset [rad]
+///   <psi2>2.6769066384729094</psi2>  - Right coupler angular offset [rad]
 class FiveBarClosurePlugin : public gz::sim::System,
                              public gz::sim::ISystemConfigure,
                              public gz::sim::ISystemPreUpdate {

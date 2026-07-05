@@ -513,6 +513,19 @@
       <state_interface name="position" />
       <state_interface name="effort" />
     </joint>
+
+    <joint name="elbowL">
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+
+    <joint name="elbowR">
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+    
   </ros2_control>
 
   <gazebo>
@@ -521,36 +534,34 @@
     </plugin>
   </gazebo>
   
-  <!-- <!-\- ================================================================ -->
+  <!-- ================================================================ -->
   <!--      Gazebo Harmonic (gz-sim8) system plugin for five-bar loop closure. -->
-  <!--      A penalty-based spring-damper drives closing_ee_1 and closing_ee_2 -->
-  <!--      together each simulation step. -->
-  <!--      ================================================================ -\-> -->
-  <!-- <gazebo> -->
-  <!--   <plugin filename="libFiveBarClosurePlugin.so" -->
-  <!--           name="odri_gz::FiveBarClosurePlugin"> -->
-  <!--     <!-\- Real ECM link names (l2r/l2l are children of revolute joints so -->
-  <!--          they survive URDF→SDF conversion as actual link entities). -->
-  <!--          closing_ee_1/2 become SDF frames and do NOT exist in the ECM. -\-> -->
-  <!--     <pos_link1>l2r</pos_link1> -->
-  <!--     <pos_link2>l2l</pos_link2> -->
-  <!--     <!-\- Fixed offset from pos_link origin to constraint point in pos_link -->
-  <!--          frame.  Values come from the closing_ee_*_frame joint xyz. -\-> -->
-  <!--     <offset1>0 -0.125 -0.002</offset1> -->
-  <!--     <offset2>0 -0.125 -0.0015</offset2> -->
-  <!--     <!-\- Links with real mass (~0.03 kg) used for force application. -->
-  <!--          l2r/l2l have mass 1e-9 kg: kp=50000 with 1 mm error → 50 N → -->
-  <!--          a ≈ 5×10¹⁰ m/s² → ODE AABB overflow in one step. -\-> -->
-  <!--     <parent_link1>rotor_asm</parent_link1> -->
-  <!--     <parent_link2>rotor_asm_2</parent_link2> -->
-  <!--     <!-\- Position error gain [N/m]. -\-> -->
-  <!--     <kp>50000.0</kp> -->
-  <!--     <!-\- Velocity error gain [N·s/m]. -\-> -->
-  <!--     <kd>500.0</kd> -->
-  <!--     <!-\- Per-step force clamp [N]. Prevents ODE divergence when the initial -->
-  <!--          joint configuration does not satisfy loop closure. -\-> -->
-  <!--     <max_force>20.0</max_force> -->
-  <!--   </plugin> -->
-  <!-- </gazebo> -->
+  <!--      Exact direct geometric model: reads motorL/motorR and imposes -->
+  <!--      elbowL/elbowR via Joint::ResetPosition every step. -->
+  <!--      See five_bar_mgd_spec.md at the repository root. -->
+  <!--      ================================================================ -->
+  <gazebo>
+    <plugin filename="libFiveBarClosurePlugin.so"
+            name="odri_gz::FiveBarClosurePlugin">
+      <!-- Actuated joints (inputs, theta1/theta2). -->
+      <motor_joint1>motorL</motor_joint1>
+      <motor_joint2>motorR</motor_joint2>
+      <!-- Passive joints (outputs, beta1/beta2), imposed exactly. -->
+      <elbow_joint1>elbowL</elbow_joint1>
+      <elbow_joint2>elbowR</elbow_joint2>
+      <!-- Geometry parameters (verified numerically, see
+           five_bar_mgd_spec.md section 2). -->
+      <a_x>-0.065</a_x>
+      <a_z>0</a_z>
+      <b_x>0.065</b_x>
+      <b_z>0</b_z>
+      <l1>0.06</l1>
+      <l2>0.125</l2>
+      <phi1>3.14159265358979323846</phi1>
+      <phi2>1.9504681943696776</phi2>
+      <psi1>1.1061036468685321</psi1>
+      <psi2>2.6769066384729094</psi2>
+    </plugin>
+  </gazebo>
 
 </robot>
