@@ -8,6 +8,9 @@ controller_manager:
     forward_position_controller:
       type: forward_command_controller/ForwardCommandController
 
+    odri_forward_command_controller:
+      type: odri_forward_command_controller/OdriForwardCommandController
+
 
 forward_position_controller:
   ros__parameters:
@@ -15,6 +18,25 @@ forward_position_controller:
       - joint1
       - joint2
     interface_name: position
+
+odri_forward_command_controller:
+  ros__parameters:
+    joints:
+      - odri_dm_tb_kt_left_joint
+      - odri_dm_tb_kt_right_joint
+    initial_command:
+      odri_dm_tb_kt_left_joint:
+        position: 0.0
+        velocity: 0.0
+        effort: 0.0
+        gain_kp: 0.0
+        gain_kd: 0.0
+      odri_dm_tb_kt_right_joint:
+        position: 0.0
+        velocity: 0.0
+        effort: 0.0
+        gain_kp: 0.0
+        gain_kd: 0.0
 
 publisher_forward_position_controller:
   ros__parameters:

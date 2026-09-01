@@ -206,6 +206,25 @@ def generate_launch_description():
         ],
     )
 
+    odri_forward_command_controller_spawner = Node(
+        package="controller_manager",
+        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
+            "sudo -E env PATH=",
+            EnvironmentVariable("PATH", default_value="${PATH}"),
+            " LD_LIBRARY_PATH=",
+            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
+            " PYTHONPATH=",
+            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
+            " HOME=/tmp ",
+        ],
+        executable="spawner",
+        arguments=[
+            "odri_forward_command_controller",
+            "--controller-manager",
+            "/controller_manager",
+        ],
+    )
+
     delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner,
@@ -227,9 +246,17 @@ def generate_launch_description():
         )
     )
 
+    delay_odri_forward_command_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[odri_forward_command_controller_spawner],
+        )
+    )
+
     nodes = [
         #        control_node,
         joint_state_broadcaster_spawner,
+        delay_odri_forward_command_controller_spawner_after_joint_state_broadcaster_spawner,
         #        robot_state_pub_node,
         #        rviz_node,
     ]
