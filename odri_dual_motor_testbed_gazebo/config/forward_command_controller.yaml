@@ -13,4 +13,16 @@ odri_fcc:
     joints:
       - motorL
       - motorR
-         
+    initial_command:
+      motorL:
+        position: 0.0
+        velocity: 0.0
+        effort: 0.0
+        gain_kp: 0.0
+        gain_kd: 0.0
+      motorR:
+        position: 0.0
+        velocity: 0.0
+        effort: 0.0
+        gain_kp: 0.0
+        gain_kd: 0.0
