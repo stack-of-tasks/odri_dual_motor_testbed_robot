@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<robot name="fivebar_2dof" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ROS namespace injected into the odri_gz_ros2_control plugin's <ros><namespace>
+       element, so that several instances of this robot can be spawned in the same
+       Gazebo world, each with its own controller_manager/topics (see
+       odri_dual_motor_testbed_haptic_pair). Empty by default: unnamespaced,
+       single-robot behaviour is unchanged. -->
+  <xacro:arg name="robot_namespace" default=""/>
+  <!-- Controller manager parameters file loaded by the odri_gz_ros2_control
+       plugin. Defaults to the single-robot forward-command-controller setup
+       used by odri_dual_motor_testbed_gazebo; override to load a different
+       controller set (e.g. odri_five_bar_force_velocity_controller for the
+       haptic pair). -->
+  <xacro:arg name="controller_params_file"
+             default="$(find odri_dual_motor_testbed_gazebo)/config/forward_command_controller.yaml"/>
+  <link name="world"/>
+
+  <!-- The ros2_control block, the odri_gz_ros2_control plugin and the
+       FiveBarClosurePlugin all live in fivebar_2dof.urdf.xacro, so this file
+       only anchors the robot to the world. -->
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/fivebar_2dof.urdf.xacro" />
+
+  <!-- base_link is the dummy root of the CAD export; `case` is rigidly
+       attached to it and carries the actual base mass. -->
+  <joint name="base_link_in_world" type="fixed">
+    <parent link="world" />
+    <child link="base_link" />
+    <origin xyz="0.0 0.0 0.001" rpy ="0.0 0.0 0.0"/>
+  </joint>
+
+</robot>
