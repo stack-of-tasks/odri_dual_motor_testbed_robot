@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!-- Generated using onshape-to-robot -->
+<!-- Onshape https://cad.onshape.com/documents/581c9cc37f21d16430f878db/w/71943bc1e21e09c7efc95c4d/e/49410196dd3c5908d31aecdb -->
+<robot name="dual_flywheel" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ROS namespace injected into the odri_gz_ros2_control plugin's <ros><namespace>
+       element, so that several instances of this robot can be spawned in the same
+       Gazebo world, each with its own controller_manager/topics (see
+       odri_dual_motor_testbed_haptic_pair). Empty by default: unnamespaced,
+       single-robot behaviour is unchanged. -->
+  <xacro:arg name="robot_namespace" default=""/>
+  <!-- Controller manager parameters file loaded by the odri_gz_ros2_control
+       plugin. Defaults to the single-robot forward-command-controller setup
+       used by odri_dual_motor_testbed_gazebo; override to load a different
+       controller set. -->
+  <xacro:arg name="controller_params_file"
+             default="$(find odri_dual_motor_testbed_gazebo)/config/forward_command_controller.yaml"/>
+
+  <link name="world"/>
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/dual_flywheel.urdf.xacro" />
+
+  <joint name="base_link_in_world" type="fixed">
+    <parent link="world" />
+    <child link="base_link" />
+    <origin xyz="0.0 0.0 0.001" rpy ="0.0 0.0 0.0"/>
+  </joint>
+
+  <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_dual_flywheel.ros2_control.xacro" />
+
+</robot>
