@@ -17,20 +17,30 @@ from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import OpaqueFunction
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from launch.substitutions import LaunchConfiguration
 from launch_param_builder import load_xacro
 from launch_ros.actions import Node
 
+# Maps the "robot_model" launch argument to its top-level xacro file under
+# robots/. Add an entry here when a new robot model is added.
+ROBOT_MODEL_XACRO_FILES = {
+    "fivebar_2dof": "fivebar_2dof_robot.urdf.xacro",
+    "dual_flywheel": "dual_flywheel_robot.urdf.xacro",
+}
+
 
 def launch_setup(context, *args, **kwargs):
+    robot_model = LaunchConfiguration("robot_model").perform(context)
+    xacro_file = ROBOT_MODEL_XACRO_FILES[robot_model]
+
     parameters = {
         "robot_description": load_xacro(
             Path(
                 os.path.join(
                     get_package_share_directory("odri_dual_motor_testbed_description"),
                     "robots",
-                    # "odri_dual_motor_testbed.urdf.xacro",
-                    "fivebar_2dof.urdf.xacro",
+                    xacro_file,
                 )
             ),
             mappings={
@@ -55,6 +65,15 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
     ld = LaunchDescription()
+
+    declare_robot_model_cmd = DeclareLaunchArgument(
+        "robot_model",
+        default_value="fivebar_2dof",
+        choices=list(ROBOT_MODEL_XACRO_FILES.keys()),
+        description="Which robot model to load the description for.",
+    )
+
+    ld.add_action(declare_robot_model_cmd)
 
     # we use OpaqueFunction so the callbacks have access to the context
 
