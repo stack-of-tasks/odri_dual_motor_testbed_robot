@@ -24,6 +24,7 @@ install(
             urdf
             gazebo
             config
+            rviz
   DESTINATION share/${PROJECT_NAME})
 
 ament_package()
