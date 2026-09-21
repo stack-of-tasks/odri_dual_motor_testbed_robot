@@ -11,16 +11,16 @@ controller_manager:
 odri_fcc:
   ros__parameters:
     joints:
-      - motorL
-      - motorR
+      - motor_1
+      - motor_2
     initial_command:
-      motorL:
+      motor_1:
         position: 0.0
         velocity: 0.0
         effort: 0.0
         gain_kp: 0.0
         gain_kd: 0.0
-      motorR:
+      motor_2:
         position: 0.0
         velocity: 0.0
         effort: 0.0

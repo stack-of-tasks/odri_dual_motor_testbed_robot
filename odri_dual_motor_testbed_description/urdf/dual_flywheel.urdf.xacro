@@ -14,7 +14,7 @@
      into the CAD assembly; 1e-9 mass, no visual, no collision) is dropped,
      same as for the five-bar model (see fivebar_2dof.urdf.xacro).
   3. The ros2_control block + odri_gz_ros2_control plugin live in
-     ros2_control/system_dual_flywheel.ros2_control.xacro, included
+     ros2_control/system_pico_dual_drv8316c.ros2_control.xacro, included
      separately by robots/dual_flywheel_robot.urdf.xacro.
 
   This mechanism has no closed kinematic loop: motor_1/motor_2 directly
