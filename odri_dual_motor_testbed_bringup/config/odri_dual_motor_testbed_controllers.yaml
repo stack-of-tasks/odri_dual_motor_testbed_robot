@@ -5,47 +5,25 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    forward_position_controller:
-      type: forward_command_controller/ForwardCommandController
-
     odri_forward_command_controller:
       type: odri_forward_command_controller/OdriForwardCommandController
 
 
-forward_position_controller:
-  ros__parameters:
-    joints:
-      - joint1
-      - joint2
-    interface_name: position
-
 odri_forward_command_controller:
   ros__parameters:
     joints:
-      - odri_dm_tb_kt_left_joint
-      - odri_dm_tb_kt_right_joint
+      - motor_1
+      - motor_2
     initial_command:
-      odri_dm_tb_kt_left_joint:
+      motor_1:
         position: 0.0
         velocity: 0.0
         effort: 0.0
         gain_kp: 0.0
         gain_kd: 0.0
-      odri_dm_tb_kt_right_joint:
+      motor_2:
         position: 0.0
         velocity: 0.0
         effort: 0.0
         gain_kp: 0.0
         gain_kd: 0.0
-
-publisher_forward_position_controller:
-  ros__parameters:
-
-    wait_sec_between_publish: 5
-    publish_topic: "/forward_position_controller/commands"
-
-    goal_names: ["pos1", "pos2", "pos3", "pos4"]
-    pos1: [0.785, 0.785]
-    pos2: [0, 0]
-    pos3: [-0.785, -0.785]
-    pos4: [0, 0]
