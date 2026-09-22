@@ -59,46 +59,8 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "description_file",
-            default_value="odri_dual_motor_testbed.urdf.xacro",
+            default_value="dual_flywheel_robot.urdf.xacro",
             description="URDF/XACRO description file with the robot.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "prefix",
-            default_value='""',
-            description="Prefix of the joint names, useful for \
-        multi-robot setup. If changed than also joint names in the controllers' configuration \
-        have to be updated.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_sim",
-            default_value="false",
-            description="Start robot in Gazebo simulation.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_fake_hardware",
-            default_value="False",
-            description="Start robot with fake hardware mirroring command to its states.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "fake_sensor_commands",
-            default_value="false",
-            description="Enable fake command interfaces for sensors used for simple simulations. \
-            Used only if 'use_fake_hardware' parameter is true.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "slowdown",
-            default_value="3.0",
-            description="Slowdown factor of ODRI dual motor testbed.",
         )
     )
 
@@ -107,11 +69,6 @@ def generate_launch_description():
     controllers_file = LaunchConfiguration("controllers_file")
     description_package = LaunchConfiguration("description_package")
     description_file = LaunchConfiguration("description_file")
-    prefix = LaunchConfiguration("prefix")
-    use_sim = LaunchConfiguration("use_sim")
-    use_fake_hardware = LaunchConfiguration("use_fake_hardware")
-    fake_sensor_commands = LaunchConfiguration("fake_sensor_commands")
-    slowdown = LaunchConfiguration("slowdown")
     robot_controller = LaunchConfiguration("robot_controller")
 
     # Get URDF via xacro
@@ -122,20 +79,6 @@ def generate_launch_description():
             [FindPackageShare(description_package), "robots", description_file]
         ),
         " ",
-        "prefix:=",
-        prefix,
-        " ",
-        "use_sim:=",
-        use_sim,
-        " ",
-        "use_fake_hardware:=",
-        use_fake_hardware,
-        " ",
-        "fake_sensor_commands:=",
-        fake_sensor_commands,
-        " ",
-        "slowdown:=",
-        slowdown,
     ]
     robot_description_content = Command(robot_description_content_expr)
     robot_description = {"robot_description": robot_description_content}
@@ -150,22 +93,13 @@ def generate_launch_description():
     rviz_config_file = PathJoinSubstitution(
         [
             FindPackageShare(description_package),
-            "config",
-            "odri_dual_motor_testbed.rviz",
+            "rviz",
+            "display_odri_dual_motor_testbed.rviz",
         ]
     )
 
     control_node = Node(
         package="controller_manager",
-        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
-            "sudo -E env PATH=",
-            EnvironmentVariable("PATH", default_value="${PATH}"),
-            " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
-            " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
-            " HOME=/tmp ",
-        ],
         executable="ros2_control_node",
         parameters=[robot_description, robot_controllers],
         output={
@@ -189,15 +123,6 @@ def generate_launch_description():
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
-        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
-            "sudo -E env PATH=",
-            EnvironmentVariable("PATH", default_value="${PATH}"),
-            " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
-            " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
-            " HOME=/tmp ",
-        ],
         executable="spawner",
         arguments=[
             "joint_state_broadcaster",
@@ -208,15 +133,6 @@ def generate_launch_description():
 
     odri_forward_command_controller_spawner = Node(
         package="controller_manager",
-        prefix=[  # Sudo command cause need to be sudoer when we do this node cause it real time
-            "sudo -E env PATH=",
-            EnvironmentVariable("PATH", default_value="${PATH}"),
-            " LD_LIBRARY_PATH=",
-            EnvironmentVariable("LD_LIBRARY_PATH", default_value="${LD_LIBRARY_PATH}"),
-            " PYTHONPATH=",
-            EnvironmentVariable("PYTHONPATH", default_value="${PYTHONPATH}"),
-            " HOME=/tmp ",
-        ],
         executable="spawner",
         arguments=[
             "odri_forward_command_controller",
@@ -254,11 +170,11 @@ def generate_launch_description():
     )
 
     nodes = [
-        #        control_node,
+        control_node,
         joint_state_broadcaster_spawner,
         delay_odri_forward_command_controller_spawner_after_joint_state_broadcaster_spawner,
-        #        robot_state_pub_node,
-        #        rviz_node,
+        robot_state_pub_node,
+        rviz_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes)
