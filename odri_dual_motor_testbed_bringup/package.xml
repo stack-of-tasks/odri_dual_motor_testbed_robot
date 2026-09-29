@@ -18,6 +18,7 @@
   <exec_depend>ros2launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>launch_param_builder</exec_depend>
+  <exec_depend>odri_dual_motor_testbed_hardware</exec_depend>
 
   <!-- keep-sorted start -->
   <test_depend>ament_cmake_copyright</test_depend>
