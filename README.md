@@ -2,7 +2,7 @@
 
 This repository aims at providing a ros2-control package for the ODRI dual motor testbed robot.
 
-It allows to have bolt displayed through rviz, provides the access to the ros2_controllers. The most notorious is joint_state_broadcaster which provides the topic /joint_states for free. It is then possible the node robot_state_publisher to have the TF-2 tree of the Bolt robot and to display it on rviz.
+It allows to have the bench displayed through rviz, provides the access to the ros2_controllers. The most notorious is joint_state_broadcaster which provides the topic /joint_states for free. It is then possible the node robot_state_publisher to have the TF-2 tree of the Bolt robot and to display it on rviz.
 
 ## Dependencies
 
@@ -16,8 +16,8 @@ It is useful if you just want to use this package in simulation
 ## Simulation
 
 ```
-mkdir -p odri_testbed_ws/src
-cd odri_testbed_ws/src
+mkdir -p odri_dual_motor_testbed_ws/src
+cd odri_dual_motor_testbed_ws/src
 git clone https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
 cd ..
 source /opt/ros/jazzy/setup.bash
@@ -27,5 +27,5 @@ source ./install/setup.bash
 
 Launching a test without the closed loop for the 5 bar linkage:
 ```
-ros2 launch  odri_dual_motor_testbed_gazebo odri_dual_motor_testbed_gazebo.launch.py
+ros2 launch odri_dual_motor_testbed_gazebo odri_dual_motor_testbed_gazebo.launch.py
 ```
