@@ -95,8 +95,8 @@
       <elbow_joint1>passive_1</elbow_joint1>
       <elbow_joint2>passive_2</elbow_joint2>
       <!-- Geometry parameters, re-derived from MOTKINBENCH robot.urdf and
-           verified numerically (worst loop-closure residual 6.6e-07 m over
-           theta in [-0.7, 0.7]^2). The plugin's a_x/a_z/b_x/b_z naming is
+           verified numerically (worst loop-closure residual 2.7e-07 m over
+           theta in [-0.9, 0.9]^2, with the motor yaw offsets set to 0). The plugin's a_x/a_z/b_x/b_z naming is
            historical: for this robot the plane is (x,y) of `case`, so a_z/b_z
            carry the y coordinates. See five_bar_mgd_spec.md section 2. -->
       <a_x>-0.0421006</a_x>
@@ -105,10 +105,10 @@
       <b_z>0.0302628</b_z>
       <l1>0.06</l1>
       <l2>0.1</l2>
-      <phi1>2.2329993267948964</phi1>
-      <phi2>1.5045472267948965</phi2>
-      <psi1>0.8742569999992758</psi1>
-      <psi2>2.4450572629561456</psi2>
+      <phi1>1.5707963267948966</phi1>
+      <phi2>1.5707963267948966</phi2>
+      <psi1>0.21205399999927563</psi1>
+      <psi2>2.511306362956145</psi2>
     </plugin>
   </gazebo>
   </xacro:macro>

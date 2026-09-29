@@ -29,7 +29,7 @@
   </joint>
 
   <xacro:if value="$(arg gz_sim)">
-    <xacro:include filename="$(find odri_dual_motor_testbed_description)/gazebo/gazebo_fivebard_2dof.urdf.xacro" />
+    <xacro:include filename="$(find odri_dual_motor_testbed_description)/gazebo/gazebo_fivebar_2dof.urdf.xacro" />
     <xacro:odri_dual_motor_testbed_gazebo
         name="picodualdrv8316c"
         />
@@ -38,6 +38,7 @@
     <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_pico_dual_drv8316c.ros2_control.xacro" />
     <xacro:pico_dual_drv8316c_ros2_control
         name="picodualdrv8316c"
+        five_bar="true"
         />
   </xacro:unless>
 
