@@ -23,7 +23,6 @@ install(
             ros2_control
             urdf
             gazebo
-            config
             rviz
   DESTINATION share/${PROJECT_NAME})
 
