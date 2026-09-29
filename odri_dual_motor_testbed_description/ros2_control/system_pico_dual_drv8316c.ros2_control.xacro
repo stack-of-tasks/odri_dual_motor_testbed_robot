@@ -11,6 +11,13 @@
 
     serial_port: left empty to auto-detect (/dev/serial/by-id, then
     /dev/ttyACM*, then /dev/ttyUSB*), or set explicitly, e.g. /dev/ttyACM0.
+
+    five_bar: when true (fivebar_2dof), the board plugin is wrapped by
+    odri_dual_motor_testbed_hardware/FiveBarSystem, which also exports the
+    passive joints passive_1/passive_2 as state-only interfaces computed from
+    the motor encoders, so joint_state_broadcaster publishes the whole
+    five-bar. The geometry parameters must match the plugin block of
+    gazebo/gazebo_fivebar_2dof.urdf.xacro (see five_bar_mgd_spec.md).
   -->
   <xacro:macro name="pico_dual_drv8316c_ros2_control"
                params="name
@@ -18,11 +25,32 @@
                        right_joint_name:=motor_2
                        serial_port:=''
                        baud_rate:=115200
-                       timeout_ms:=20">
+                       timeout_ms:=20
+                       five_bar:=false">
 
     <ros2_control name="${name}" type="system">
       <hardware>
-        <plugin>pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</plugin>
+        <xacro:if value="${five_bar}">
+          <plugin>odri_dual_motor_testbed_hardware/FiveBarSystem</plugin>
+          <param name="inner_plugin">pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</param>
+          <param name="motor_joint1">${left_joint_name}</param>
+          <param name="motor_joint2">${right_joint_name}</param>
+          <param name="passive_joint1">passive_1</param>
+          <param name="passive_joint2">passive_2</param>
+          <param name="a_x">-0.0421006</param>
+          <param name="a_y">0.0302628</param>
+          <param name="b_x">0.0578994</param>
+          <param name="b_y">0.0302628</param>
+          <param name="l1">0.06</param>
+          <param name="l2">0.1</param>
+          <param name="phi1">1.5707963267948966</param>
+          <param name="phi2">1.5707963267948966</param>
+          <param name="psi1">0.21205399999927563</param>
+          <param name="psi2">2.511306362956145</param>
+        </xacro:if>
+        <xacro:unless value="${five_bar}">
+          <plugin>pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</plugin>
+        </xacro:unless>
         <param name="serial_port">${serial_port}</param>
         <param name="baud_rate">${baud_rate}</param>
         <param name="timeout_ms">${timeout_ms}</param>
@@ -83,6 +111,19 @@
         <state_interface name="gain_kp"/>
         <state_interface name="gain_kd"/>
       </joint>
+
+      <xacro:if value="${five_bar}">
+        <joint name="passive_1">
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+          <state_interface name="effort"/>
+        </joint>
+        <joint name="passive_2">
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+          <state_interface name="effort"/>
+        </joint>
+      </xacro:if>
     </ros2_control>
 
   </xacro:macro>
