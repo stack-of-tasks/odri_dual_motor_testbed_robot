@@ -58,9 +58,10 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "description_file",
-            default_value="dual_flywheel_robot.urdf.xacro",
-            description="URDF/XACRO description file with the robot.",
+            "robot_model",
+            default_value="fivebar_2dof",
+            choices=["fivebar_2dof", "dual_flywheel"],
+            description="Which robot model to load the description for.",
         )
     )
 
@@ -68,16 +69,17 @@ def generate_launch_description():
     runtime_config_package = LaunchConfiguration("runtime_config_package")
     controllers_file = LaunchConfiguration("controllers_file")
     description_package = LaunchConfiguration("description_package")
-    description_file = LaunchConfiguration("description_file")
+    robot_model = LaunchConfiguration("robot_model")
     robot_controller = LaunchConfiguration("robot_controller")
 
     # Get URDF via xacro
     robot_description_content_expr = [
         PathJoinSubstitution([FindExecutable(name="xacro")]),
         " ",
-        PathJoinSubstitution(
-            [FindPackageShare(description_package), "robots", description_file]
-        ),
+        PathJoinSubstitution([FindPackageShare(description_package), "robots"]),
+        "/",
+        robot_model,
+        "_robot.urdf.xacro",
         " ",
     ]
     robot_description_content = Command(robot_description_content_expr)
