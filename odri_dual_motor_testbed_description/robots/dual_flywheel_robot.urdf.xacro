@@ -9,6 +9,7 @@
        odri_dual_motor_testbed_haptic_pair). Empty by default: unnamespaced,
        single-robot behaviour is unchanged. -->
   <xacro:arg name="robot_namespace" default=""/>
+  <xacro:arg name="gz_sim" default="false"/>
 
   <link name="world"/>
   <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/dual_flywheel.urdf.xacro" />
@@ -18,10 +19,15 @@
     <child link="base_link" />
     <origin xyz="0.0 0.0 0.001" rpy ="0.0 0.0 0.0"/>
   </joint>
-
-  <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_pico_dual_drv8316c.ros2_control.xacro" />
-  <xacro:pico_dual_drv8316c_ros2_control
-      name="picodualdrv8316c"
-      />
+  <xacro:if value="$(arg gz_sim)">
+    <xacro:include filename="$(find odri_dual_motor_testbed_description)/gazebo/gazebo_dual_flywheel.urdf.xacro" />
+    <xacro:odri_dual_motor_testbed_gazebo  name="picodualdrv8316c"/>    
+  </xacro:if>
+  <xacro:unless value="$(arg gz_sim)">
+    <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_pico_dual_drv8316c.ros2_control.xacro" />
+    <xacro:pico_dual_drv8316c_ros2_control
+        name="picodualdrv8316c"
+        />
+  </xacro:unless>
   
 </robot>
