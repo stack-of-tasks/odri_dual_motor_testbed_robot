@@ -24,6 +24,10 @@
   4. collide_bitmask surface tags added on the four moving links, carried over
      from the previous revision of this file, so the arms never self-collide.
   5. ros2_control + Gazebo plugin blocks appended (not part of the export).
+  6. motor_1 / motor_2 origin yaw set to 0 (exported: 0.662203 / -0.0662491),
+     so that theta = 0 matches the encoder zero (both cranks parallel, along
+     +y of `case`). This changes phi1/phi2/psi1/psi2 of the analytical model;
+     see five_bar_mgd_spec.md section 2.
 
   NOTE on orientation: the mechanism plane is the (x,y) plane of `case`, with
   both motor axes along -z. With the base plate flat on the ground this is a
@@ -190,7 +194,7 @@
     </collision>
   </link>
 
-  <!-- Link rotor (left crank: motor rotor + arm_l1) -->
+  <!-- Link rotor (left crank motor rotor + arm_l1) -->
   <link name="rotor">
     <inertial>
       <origin xyz="-0 -0.00341447 -0.0160121" rpy="0 0 0"/>
@@ -313,14 +317,14 @@
 
   <!-- Joint from case to rotor (actuated, theta1) -->
   <joint name="motor_1" type="continuous">
-    <origin xyz="-0.0421006 0.0302628 0.00805311" rpy="-3.14159 0 0.662203"/>
+    <origin xyz="-0.0421006 0.0302628 0.00805311" rpy="-3.14159 0 0.0"/>
     <parent link="case"/>
     <child link="rotor"/>
     <axis xyz="0 0 1"/>
     <limit effort="10" velocity="10"/>
   </joint>
 
-  <!-- Link rotor_2 (right crank: motor rotor + arm_r1) -->
+  <!-- Link rotor_2 (right crank motor rotor + arm_r1) -->
   <link name="rotor_2">
     <inertial>
       <origin xyz="0 -0.00413346 -0.012052" rpy="0 0 0"/>
@@ -443,7 +447,7 @@
 
   <!-- Joint from case to rotor_2 (actuated, theta2) -->
   <joint name="motor_2" type="continuous">
-    <origin xyz="0.0578994 0.0302628 0.00805311" rpy="3.14159 0 -0.0662491"/>
+    <origin xyz="0.0578994 0.0302628 0.00805311" rpy="3.14159 0 -0.0"/>
     <parent link="case"/>
     <child link="rotor_2"/>
     <axis xyz="0 0 1"/>
