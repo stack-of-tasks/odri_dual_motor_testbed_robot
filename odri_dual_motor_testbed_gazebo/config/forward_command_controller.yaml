@@ -5,10 +5,10 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    odri_fcc:
+    odri_forward_command_controller:
       type: odri_forward_command_controller/OdriForwardCommandController
 
-odri_fcc:
+odri_forward_command_controller:
   ros__parameters:
     joints:
       - motor_1

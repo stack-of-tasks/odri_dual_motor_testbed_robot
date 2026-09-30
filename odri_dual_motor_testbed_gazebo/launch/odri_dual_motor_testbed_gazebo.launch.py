@@ -9,6 +9,7 @@ from launch.actions import (
     SetEnvironmentVariable,
     SetLaunchConfiguration,
 )
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.logging import get_logger
 from launch.substitutions import (
@@ -28,11 +29,31 @@ def generate_launch_description():
     packages = ["odri_dual_motor_testbed_description"]
     model_path = get_model_paths(packages)
     gz_model_path_env_var = SetEnvironmentVariable("GZ_SIM_RESOURCE_PATH", model_path)
-    robot_name = "odri_dual_motor_testbed"
+    robot_model = LaunchConfiguration("robot_model")
+    declared_arguments = [
+        DeclareLaunchArgument(
+            "robot_model",
+            default_value="fivebar_2dof",
+            choices=["fivebar_2dof", "dual_flywheel"],
+            description="Which robot model to simulate.",
+        ),
+        DeclareLaunchArgument(
+            "spawn_roll",
+            default_value="0",
+            description="Roll [rad] of the robot when spawned in Gazebo.",
+        ),
+        DeclareLaunchArgument(
+            "gui",
+            default_value="true",
+            description="Start the Gazebo GUI client.",
+        ),
+    ]
 
+    # FiveBarClosurePlugin (this package) and the odri_gz_ros2_control system
+    # plugin live in different install prefixes unless --merge-install is used.
     gz_sim_sys_plugin_path = SetEnvironmentVariable(
         "GZ_SIM_SYSTEM_PLUGIN_PATH",
-        os.path.join(get_package_prefix("odri_dual_motor_testbed_gazebo"), "lib"),
+        get_plugin_paths(["odri_dual_motor_testbed_gazebo", "odri_gz_ros2_control"]),
     )
 
     # Start Gazebo
@@ -47,10 +68,14 @@ def generate_launch_description():
     )
 
     gui_config_path = PathJoinSubstitution(
-        [FindPackageShare("odri_dual_motor_testbed_gazebo"), "config", "gui.config"]
+        [
+            FindPackageShare("odri_dual_motor_testbed_gazebo"),
+            "config",
+            [LaunchConfiguration("robot_model"), ".config"],
+        ]
     )
 
-    logger = get_logger("odri_dual_motor_testbed_description")
+    logger = get_logger("odri_dual_motor_testbed_gazebo")
     logger.info("gui_config_path:" + str(gui_config_path))
 
     gz_sim_client = IncludeLaunchDescription(
@@ -61,6 +86,15 @@ def generate_launch_description():
             ]
         ),
         launch_arguments={"gz_args": ["-g --gui-config ", gui_config_path]}.items(),
+        condition=IfCondition(LaunchConfiguration("gui")),
+    )
+
+    controller_params = PathJoinSubstitution(
+        [
+            FindPackageShare("odri_dual_motor_testbed_gazebo"),
+            "config",
+            "forward_command_controller.yaml",
+        ]
     )
 
     # Get URDF via xacro
@@ -69,14 +103,14 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [
-                    FindPackageShare("odri_dual_motor_testbed_description"),
-                    "robots",
-                    # "odri_dual_motor_testbed.urdf.xacro",
-                    "fivebar_2dof.urdf.xacro",
-                ]
+                [FindPackageShare("odri_dual_motor_testbed_description"), "robots"]
             ),
-            " use_sim:=true",
+            "/",
+            robot_model,
+            "_robot.urdf.xacro",
+            " gz_sim:=true",
+            " controller_params_file:=",
+            controller_params,
         ]
     )
 
@@ -116,7 +150,8 @@ def generate_launch_description():
             ]
         ),
         launch_arguments={
-            "robot_name": robot_name,
+            "robot_name": robot_model,
+            "roll": LaunchConfiguration("spawn_roll"),
             "robot_description": robot_description_content,
         }.items(),
     )
@@ -129,25 +164,22 @@ def generate_launch_description():
         output="screen",
     )
 
-    controller_params = PathJoinSubstitution(
-        [
-            FindPackageShare("odri_dual_motor_testbed_gazebo"),
-            "config",
-            "forward_command_controller.yaml",
-        ]
-    )
-
-    spawn_odri_fcc = Node(
+    spawn_odri_forward_command_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["odri_fcc", "--param-file", controller_params],
+        arguments=[
+            "odri_forward_command_controller",
+            "--param-file",
+            controller_params,
+        ],
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         output="screen",
     )
 
     print("gz_model_path_env_var;" + str(gz_model_path_env_var))
     return LaunchDescription(
-        [
+        declared_arguments
+        + [
             set_sim_time,
             gz_model_path_env_var,
             gz_sim_sys_plugin_path,
@@ -157,7 +189,7 @@ def generate_launch_description():
             node_robot_state_publisher,
             robot_spawn,
             spawn_joint_state_broadcaster,
-            spawn_odri_fcc,
+            spawn_odri_forward_command_controller,
         ]
     )
 
@@ -177,3 +209,13 @@ def get_model_paths(packages_names):
         model_paths += pathsep + environ["GZ_SIM_RESOURCE_PATH"]
 
     return model_paths
+
+
+def get_plugin_paths(packages_names):
+    plugin_paths = [
+        os.path.join(get_package_prefix(package_name), "lib")
+        for package_name in packages_names
+    ]
+    if "GZ_SIM_SYSTEM_PLUGIN_PATH" in environ:
+        plugin_paths.append(environ["GZ_SIM_SYSTEM_PLUGIN_PATH"])
+    return pathsep.join(dict.fromkeys(plugin_paths))

@@ -21,6 +21,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     robot_name = LaunchConfiguration("robot_name", default="fivebar_2dof")
     robot_description = LaunchConfiguration("robot_description", default="")
+    log_level = LaunchConfiguration("log-level")
 
     # Spawn via -string to avoid a timing race with the robot_description topic:
     # ros_gz_sim create -topic would miss a message already published before the
@@ -35,13 +36,17 @@ def generate_launch_description():
             "-string",
             robot_description,
             "-x",
-            "0.1",
+            LaunchConfiguration("x"),
             "-y",
-            "0.0",
+            LaunchConfiguration("y"),
             "-z",
-            "0.05",
+            LaunchConfiguration("z"),
             "-R",
-            "-1.5707963267948966",
+            LaunchConfiguration("roll"),
+            "-P",
+            LaunchConfiguration("pitch"),
+            "-Y",
+            LaunchConfiguration("yaw"),
         ],
     )
 
@@ -49,6 +54,15 @@ def generate_launch_description():
         [
             DeclareLaunchArgument("robot_name", default_value="fivebar_2dof"),
             DeclareLaunchArgument("robot_description", default_value=""),
+            DeclareLaunchArgument("x", default_value="0.1"),
+            DeclareLaunchArgument("y", default_value="0.0"),
+            DeclareLaunchArgument("z", default_value="0.00"),
+            DeclareLaunchArgument("roll", default_value="0.0"),
+            DeclareLaunchArgument("pitch", default_value="0.0"),
+            DeclareLaunchArgument("yaw", default_value="0.0"),
+            DeclareLaunchArgument(
+                "log-level", default_value=["debug"], description="Logging level"
+            ),
             gazebo_spawn_robot,
         ]
     )
