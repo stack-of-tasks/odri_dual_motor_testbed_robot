@@ -111,5 +111,38 @@
       <psi2>2.511306362956145</psi2>
     </plugin>
   </gazebo>
+  <!-- ================================================================ -->
+  <!--      Collision filtering. Contacts only occur between two collisions -->
+  <!--      whose collide_bitmask values share a bit. These must be set here, -->
+  <!--      through <gazebo reference>: a <surface> tag inside a URDF -->
+  <!--      <collision> is dropped by the URDF to SDF conversion. -->
+  <!--      The base is welded to the world: without mask 0 its meshes touch -->
+  <!--      the ground plane and the contact computation slows the simulation -->
+  <!--      down about 50 times. -->
+  <!--      ================================================================ -->
+  <!-- Base, welded to the world: no contact. -->
+  <gazebo reference="case">
+    <collision><surface><contact><collide_bitmask>0x00</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Base, welded to the world: no contact. -->
+  <gazebo reference="top_cover">
+    <collision><surface><contact><collide_bitmask>0x00</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Left crank. -->
+  <gazebo reference="rotor">
+    <collision><surface><contact><collide_bitmask>0x04</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Left coupler. -->
+  <gazebo reference="arm_l2">
+    <collision><surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Right crank. -->
+  <gazebo reference="rotor_2">
+    <collision><surface><contact><collide_bitmask>0x08</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Right coupler: no bit in common with the other moving links, so the arms never collide with each other. -->
+  <gazebo reference="arm_r2">
+    <collision><surface><contact><collide_bitmask>0x02</collide_bitmask></contact></surface></collision>
+  </gazebo>
   </xacro:macro>
 </robot>

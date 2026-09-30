@@ -21,8 +21,10 @@
      [-0.7, 0.7]^2, versus 9.6e-02 m with the exported axis.
   3. The stray empty link c_0402_1005metric (a KiCad footprint that leaked
      into the CAD assembly; 1e-9 mass, no visual, no collision) is dropped.
-  4. collide_bitmask surface tags added on the four moving links, carried over
-     from the previous revision of this file, so the arms never self-collide.
+  4. Collision filtering (collide_bitmask) is set in
+     gazebo/gazebo_fivebar_2dof.urdf.xacro, through <gazebo reference> blocks:
+     a <surface> tag inside a URDF <collision> is dropped by the URDF to SDF
+     conversion.
   5. ros2_control + Gazebo plugin blocks appended (not part of the export).
   6. motor_1 / motor_2 origin yaw set to 0 (exported: 0.662203 / -0.0662491),
      so that theta = 0 matches the encoder zero (both cranks parallel, along
@@ -216,11 +218,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/rotor.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x04</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
     <!-- Part arm_l1 -->
     <visual>
@@ -237,11 +234,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/arm_l1.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x04</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
   </link>
 
@@ -267,11 +259,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/arm_l2.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x01</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
   </link>
 
@@ -346,11 +333,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/arm_r1.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x08</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
     <!-- Part rotor_2 -->
     <visual>
@@ -367,11 +349,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/rotor.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x08</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
   </link>
 
@@ -397,11 +374,6 @@
       <geometry>
         <mesh filename="package://odri_dual_motor_testbed_description/meshes/assets/five_bar/arm_r2.stl"/>
       </geometry>
-      <surface>
-        <contact>
-          <collide_bitmask>0x02</collide_bitmask>
-        </contact>
-      </surface>
     </collision>
   </link>
 
