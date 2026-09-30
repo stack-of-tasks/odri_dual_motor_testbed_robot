@@ -176,8 +176,8 @@ controller_interface::return_type OdriForwardCommandController::update(
   const std::size_t n = joint_names_.size();
   const auto& data = joint_commands_.data;
 
-  RCLCPP_INFO(get_node()->get_logger(), " data.size()= %ld n= %ld", data.size(),
-              n);
+  RCLCPP_DEBUG(get_node()->get_logger(), " data.size()= %ld n= %ld",
+               data.size(), n);
   // Require exactly 5*n values: [pos×n | vel×n | eff×n | gain_kp×n | gain_kd×n]
   if (data.size() != 5 * n) {
     return controller_interface::return_type::OK;
@@ -193,8 +193,8 @@ controller_interface::return_type OdriForwardCommandController::update(
                              "Failed to set command interface '%s'",
                              ifaces[i].get().get_name().c_str());
       }
-      RCLCPP_INFO(get_node()->get_logger(), "%ld %f", local_type,
-                  data[offset + i]);
+      RCLCPP_DEBUG(get_node()->get_logger(), "%ld %f", local_type,
+                   data[offset + i]);
     }
   };
 
