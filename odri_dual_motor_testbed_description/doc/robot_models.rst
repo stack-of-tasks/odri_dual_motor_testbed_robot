@@ -157,8 +157,8 @@ Both top-level files accept the following arguments:
      - Description
    * - ``gz_sim``
      - ``false``
-     - ``true`` includes ``gazebo/gazebo.urdf.xacro`` (Gazebo ros2_control
-       system and plugins). ``false`` includes the real hardware interface
+     - ``true`` includes ``gazebo/gazebo_<robot_model>.urdf.xacro`` (Gazebo
+       ros2_control system and plugins). ``false`` includes the real hardware interface
        (see :doc:`hardware_interfaces`).
    * - ``robot_namespace``
      - ``""``
