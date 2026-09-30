@@ -25,7 +25,7 @@ leaving the hardware value unchanged (partial updates).
 ## Configuration
 
 ```yaml
-odri_fcc:
+odri_forward_command_controller:
   ros__parameters:
     type: odri_forward_command_controller/OdriForwardCommandController
     joints:
@@ -53,7 +53,7 @@ first message arrives.
 
 ## Python example
 
-The snippet below publishes a single command to a controller named `odri_fcc`
+The snippet below publishes a single command to a controller named `odri_forward_command_controller`
 controlling two joints.
 
 ```python
@@ -73,11 +73,11 @@ gains_kd   = [0.1,  0.1]
 
 def main():
     rclpy.init()
-    node = Node("odri_fcc_example")
+    node = Node("odri_command_example")
 
     pub = node.create_publisher(
         Float64MultiArray,
-        "/odri_fcc/commands",
+        "/odri_forward_command_controller/commands",
         10,
     )
 
@@ -101,7 +101,7 @@ if __name__ == "__main__":
 To publish a one-shot command directly from the terminal:
 
 ```bash
-ros2 topic pub --once /odri_fcc/commands std_msgs/msg/Float64MultiArray \
+ros2 topic pub --once /odri_forward_command_controller/commands std_msgs/msg/Float64MultiArray \
   "{data: [0.1, -0.2,   0.0, 0.0,   0.0, 0.0,   5.0, 5.0,   0.1, 0.1]}"
   #        ^pos×2        ^vel×2       ^eff×2       ^kp×2        ^kd×2
 ```
@@ -109,7 +109,7 @@ ros2 topic pub --once /odri_fcc/commands std_msgs/msg/Float64MultiArray \
 To send a partial update (NaN skips that interface — gains unchanged here):
 
 ```bash
-ros2 topic pub --once /odri_fcc/commands std_msgs/msg/Float64MultiArray \
+ros2 topic pub --once /odri_forward_command_controller/commands std_msgs/msg/Float64MultiArray \
   "{data: [0.5, -0.5,   0.0, 0.0,   1.0, -1.0,   .nan, .nan,   .nan, .nan]}"
   #        ^pos×2        ^vel×2       ^eff×2        ^kp skipped    ^kd skipped
 ```
