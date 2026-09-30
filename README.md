@@ -83,13 +83,35 @@ Replace `fivebar_2dof` with `dual_flywheel` for the flywheel model.
 ## Documentation
 
 Each package has a `doc/` directory built with
-[rosdoc2](https://github.com/ros-infrastructure/rosdoc2). Start with the
-meta-package:
+[rosdoc2](https://github.com/ros-infrastructure/rosdoc2). The entry point is
+the documentation of the `odri_dual_motor_testbed_robot` meta-package.
+
+The documentation is built by `colcon build`, like the rest of the
+workspace, when `BUILD_DOCS` is enabled. It is off by default, so a normal
+build does not need rosdoc2.
 
 ```bash
-rosdoc2 build --package-path odri_dual_motor_testbed_robot
-rosdoc2 open docs_output/odri_dual_motor_testbed_robot/index.html
+sudo apt install python3-rosdoc2
+cd odri_dual_motor_testbed_ws
+BUILD_DOCS=ON colcon build
 ```
+
+Each package installs its HTML documentation in
+`install/<package>/share/<package>/doc`. Start with the meta-package:
+
+```bash
+xdg-open install/odri_dual_motor_testbed_robot/share/odri_dual_motor_testbed_robot/doc/index.html
+```
+
+`colcon build --cmake-args -DBUILD_DOCS=ON` has the same effect, and
+`--packages-select <package>` builds a single package. The documentation of a
+package is only rebuilt when its sources change: `doc/`, `README.md`,
+`package.xml`, and its headers or Python modules. Every `.rst` and `.md` file
+placed in a package's `doc/` directory is built automatically.
+
+To build the documentation of a package by hand, without colcon, run
+`rosdoc2 build --package-path <package>` from the directory that contains
+it. The result goes to `docs_output/<package>/index.html`.
 
 ## License
 
