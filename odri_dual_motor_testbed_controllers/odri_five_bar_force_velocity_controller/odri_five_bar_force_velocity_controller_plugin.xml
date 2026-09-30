@@ -1,0 +1,12 @@
+<library path="odri_five_bar_force_velocity_controller">
+  <class
+    name="odri_five_bar_force_velocity_controller/OdriFiveBarForceVelocityController"
+    type="odri_five_bar_force_velocity_controller::OdriFiveBarForceVelocityController"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Endpoint force-to-velocity controller (qdot = J^T f_c) for the
+      odri_dual_motor_testbed five-bar mechanism, using an analytical
+      Jacobian derived from the URDF geometry (no Pinocchio).
+    </description>
+  </class>
+</library>
