@@ -12,22 +12,22 @@ In a ROS 2 Jazzy workspace:
    cd odri_dual_motor_testbed_ws/src
    git clone https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
    cd ..
+   vcs import --skip-existing src < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_robot.repos
    source /opt/ros/jazzy/setup.bash
    rosdep install --from-paths src --ignore-src -y
    colcon build
    source ./install/setup.bash
 
-Two ``.repos`` files, at the root of the repository, fetch the other
-repositories into the workspace. Run ``vcs import`` from the workspace root,
-before ``rosdep`` and ``colcon build``:
+``odri_dual_motor_testbed_robot.repos``, at the root of the repository, lists
+the other repositories the workspace needs:
 
-.. code-block:: bash
+* ``odri_gz_ros2_control``: ``ros2_control`` hardware interface for Gazebo,
+  needed for simulation;
+* ``pico_dual_drv8316c_ros2_hardware_interface``: hardware interface of the
+  motor board, needed for the real robot.
 
-   cd odri_dual_motor_testbed_ws
-   # Simulation: odri_gz_ros2_control
-   vcs import < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_gazebo.repos
-   # Real robot: pico_dual_drv8316c_ros2_hardware_interface and the ODRI stack
-   vcs import < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_robot.repos
+The file also lists this repository, so ``--skip-existing`` keeps the clone
+made above untouched.
 
 Display the robot
 -----------------
