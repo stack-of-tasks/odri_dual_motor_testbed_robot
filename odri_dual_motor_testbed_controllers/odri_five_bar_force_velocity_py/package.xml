@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>odri_five_bar_force_velocity_py</name>
+  <version>0.1.0</version>
+  <description>
+    Python endpoint force-to-velocity controller (qdot = J^T f_c) for the
+    odri_dual_motor_testbed five-bar mechanism. Drives the joints through
+    the odri_forward_command_controller ~/commands topic, using an
+    analytical (closed-form) Jacobian derived from the URDF geometry --
+    no Pinocchio or other rigid-body library involved.
+  </description>
+
+  <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_python</buildtool_depend>
+
+  <depend>rclpy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
