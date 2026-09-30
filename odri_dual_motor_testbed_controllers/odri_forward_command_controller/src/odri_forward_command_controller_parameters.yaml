@@ -1,0 +1,34 @@
+odri_forward_command_controller:
+  joints: {
+    type: string_array,
+    default_value: [],
+    description: "Names of the joints to control",
+    read_only: true,
+  }
+  initial_command:
+    __map_joints:
+      position: {
+        type: double,
+        default_value: 0.0,
+        description: "Initial position command applied to this joint on activation, before any message is received on ~/commands.",
+      }
+      velocity: {
+        type: double,
+        default_value: 0.0,
+        description: "Initial velocity command applied to this joint on activation, before any message is received on ~/commands.",
+      }
+      effort: {
+        type: double,
+        default_value: 0.0,
+        description: "Initial effort command applied to this joint on activation, before any message is received on ~/commands.",
+      }
+      gain_kp: {
+        type: double,
+        default_value: 0.0,
+        description: "Initial gain_kp command applied to this joint on activation, before any message is received on ~/commands.",
+      }
+      gain_kd: {
+        type: double,
+        default_value: 0.0,
+        description: "Initial gain_kd command applied to this joint on activation, before any message is received on ~/commands.",
+      }
