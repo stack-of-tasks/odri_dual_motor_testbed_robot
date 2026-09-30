@@ -34,20 +34,23 @@ mkdir -p odri_dual_motor_testbed_ws/src
 cd odri_dual_motor_testbed_ws/src
 git clone https://github.com/stack-of-tasks/odri_dual_motor_testbed_robot.git
 cd ..
-# Simulation: odri_gz_ros2_control
-vcs import < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_gazebo.repos
-# Real robot: pico_dual_drv8316c_ros2_hardware_interface
-vcs import < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_robot.repos
+vcs import --skip-existing src < src/odri_dual_motor_testbed_robot/odri_dual_motor_testbed_robot.repos
 source /opt/ros/jazzy/setup.bash
 rosdep install --from-paths src --ignore-src -y
 colcon build
 source ./install/setup.bash
 ```
 
-Only the first `vcs import` is needed for simulation, and only the second for
-the real robot. `odri_dual_motor_testbed_robot.repos` also fetches the ODRI
-master board stack (`master-board`, `odri_control_interface`,
-`ros2_hardware_interface_odri`), which the current robot models do not use.
+`odri_dual_motor_testbed_robot.repos` lists the repositories the workspace
+needs, besides this one:
+
+- [`odri_gz_ros2_control`](https://github.com/stack-of-tasks/odri_gz_ros2_control):
+  `ros2_control` hardware interface for Gazebo, needed for simulation;
+- [`pico_dual_drv8316c_ros2_hardware_interface`](https://github.com/Gepetto/pico_dual_drv8316c_ros2_hardware_interface):
+  hardware interface of the motor board, needed for the real robot.
+
+The file also lists this repository, so `--skip-existing` keeps the clone made
+above untouched.
 
 ## Usage
 
