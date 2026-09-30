@@ -305,7 +305,7 @@
     <axis xyz="0 0 0"/>
   </joint>
 
-  <!-- Joint from rotor to arm_l2 (passive, imposed by FiveBarClosurePlugin).
+  <!-- Joint from rotor to arm_l2 (passive, closed by FiveBarClosurePlugin).
        axis flipped to "0 0 -1" vs the CAD export; see header, delta 2. -->
   <joint name="passive_1" type="continuous">
     <origin xyz="0 -0.06 -0.035" rpy="-0 0 -0.212054"/>
@@ -435,7 +435,7 @@
     <axis xyz="0 0 0"/>
   </joint>
 
-  <!-- Joint from rotor_2 to arm_r2 (passive, imposed by FiveBarClosurePlugin).
+  <!-- Joint from rotor_2 to arm_r2 (passive, closed by FiveBarClosurePlugin).
        axis flipped to "0 0 -1" vs the CAD export; see header, delta 2. -->
   <joint name="passive_2" type="continuous">
     <origin xyz="0 -0.06 -0.024" rpy="-0 -0 -1.5708"/>

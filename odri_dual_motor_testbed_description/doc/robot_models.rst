@@ -62,10 +62,14 @@ The fixed frames ``closing_tip_1`` (on ``arm_r2``) and ``closing_tip_2`` (on
   joints, so the loop only closes when the passive sliders are set to match the
   motor sliders.
 * **In Gazebo**, the ``FiveBarClosurePlugin`` (from
-  ``odri_dual_motor_testbed_gazebo``) reads ``motor_1`` and ``motor_2`` at every
-  step and sets ``passive_1`` and ``passive_2`` from the exact direct geometric
-  model. The geometry parameters it needs are in ``gazebo/gazebo.urdf.xacro``.
-  The derivation is in ``five_bar_mgd_spec.md`` at the repository root.
+  ``odri_dual_motor_testbed_gazebo``) joins ``arm_l2`` and ``arm_r2`` at the
+  closure point P with a planar pin constraint. At every step it computes the
+  force transmitted at P (the Lagrange multiplier of the constraint) and
+  applies it to both arms, so ``passive_1`` and ``passive_2`` follow from the
+  simulated dynamics. The exact direct geometric model is only used to
+  assemble the loop at start-up. The parameters are in
+  ``gazebo/gazebo_fivebar_2dof.urdf.xacro``; the derivation is in
+  ``five_bar_mgd_spec.md`` at the repository root.
 
 .. note::
 
