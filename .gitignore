@@ -5,3 +5,6 @@
 docs_output/
 docs_build/
 cross_reference/
+install
+build
+log

@@ -46,11 +46,13 @@ ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 # Documentation ##
 # ##############################################################################
 
-# Built with rosdoc2 and installed in share/${PROJECT_NAME}/doc. Enable with
-# colcon build --cmake-args -DBUILD_DOCS=ON, or BUILD_DOCS=ON colcon build.
-option(BUILD_DOCS "Build the documentation with rosdoc2" OFF)
+set(BUILD_DOCS_DEFAULT OFF)
+find_program(ROSDOC2 rosdoc2 QUIET)
+if(ROSDOC2)
+  set(BUILD_DOCS_DEFAULT ON)
+endif()
+option(BUILD_DOCS "Build the documentation with rosdoc2" ${BUILD_DOCS_DEFAULT})
 if(BUILD_DOCS OR "$ENV{BUILD_DOCS}")
-  find_program(ROSDOC2 rosdoc2 REQUIRED)
   set(DOC_WORK_DIR ${PROJECT_BINARY_DIR}/rosdoc2)
   set(DOC_INDEX ${DOC_WORK_DIR}/output/${PROJECT_NAME}/index.html)
   file(GLOB_RECURSE DOC_SOURCES CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/doc/*
