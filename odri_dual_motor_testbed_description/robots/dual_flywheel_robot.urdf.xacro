@@ -9,6 +9,10 @@
        odri_dual_motor_testbed_haptic_pair). Empty by default: unnamespaced,
        single-robot behaviour is unchanged. -->
   <xacro:arg name="robot_namespace" default=""/>
+  <!-- Serial device of the pico_dual_drv8316c board on the real robot.
+       Empty: auto-detected. Set it when several testbeds are connected to
+       the same computer, e.g. /dev/serial/by-id/usb-...  -->
+  <xacro:arg name="serial_port" default=""/>
   <xacro:arg name="gz_sim" default="false"/>
   <!-- Controller manager parameters loaded by the odri_gz_ros2_control
        plugin when gz_sim is true (see odri_dual_motor_testbed_gazebo). -->
@@ -30,6 +34,7 @@
     <xacro:include filename="$(find odri_dual_motor_testbed_description)/ros2_control/system_pico_dual_drv8316c.ros2_control.xacro" />
     <xacro:pico_dual_drv8316c_ros2_control
         name="picodualdrv8316c"
+        serial_port="$(arg serial_port)"
         />
   </xacro:unless>
 

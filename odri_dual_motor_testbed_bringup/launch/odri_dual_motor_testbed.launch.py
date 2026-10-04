@@ -64,12 +64,29 @@ def generate_launch_description():
             description="Which robot model to load the description for.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "namespace",
+            default_value="",
+            description="ROS namespace of this robot instance. The controller \
+        manager is then <namespace>/controller_manager.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "serial_port",
+            default_value="",
+            description="Serial device of the motor board. Empty: auto-detected.",
+        )
+    )
 
     # Initialize Arguments
     runtime_config_package = LaunchConfiguration("runtime_config_package")
     controllers_file = LaunchConfiguration("controllers_file")
     description_package = LaunchConfiguration("description_package")
     robot_model = LaunchConfiguration("robot_model")
+    namespace = LaunchConfiguration("namespace")
+    serial_port = LaunchConfiguration("serial_port")
     robot_controller = LaunchConfiguration("robot_controller")
 
     # Get URDF via xacro
@@ -81,6 +98,8 @@ def generate_launch_description():
         robot_model,
         "_robot.urdf.xacro",
         " ",
+        "serial_port:=",
+        serial_port,
     ]
 
     robot_description_content = Command(robot_description_content_expr)
@@ -105,6 +124,7 @@ def generate_launch_description():
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
+        namespace=namespace,
         parameters=[robot_description, robot_controllers],
         output={
             "stdout": "screen",
@@ -114,24 +134,36 @@ def generate_launch_description():
     robot_state_pub_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
+        namespace=namespace,
         output="both",
         parameters=[robot_description],
+        # tf2 publishes on the absolute /tf: keep each robot's tree in its
+        # namespace.
+        remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
+        namespace=namespace,
         output="log",
         arguments=["-d", rviz_config_file],
+        # The RViz configuration uses absolute topic names.
+        remappings=[
+            ("/robot_description", "robot_description"),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
+        ],
     )
 
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace=namespace,
         arguments=[
             "joint_state_broadcaster",
             "--controller-manager",
-            "/controller_manager",
+            "controller_manager",
         ],
     )
 

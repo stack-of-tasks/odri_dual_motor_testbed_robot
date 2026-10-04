@@ -39,6 +39,15 @@ Both launch files take the same arguments:
    * - ``controllers_file``
      - ``odri_dual_motor_testbed_controllers.yaml``
      - Controller configuration file.
+   * - ``namespace``
+     - ``""``
+     - ROS namespace of this robot instance. The controller manager is
+       ``/<namespace>/controller_manager`` and the topics, including ``tf``,
+       are under ``/<namespace>``.
+   * - ``serial_port``
+     - ``""``
+     - Serial device of the motor board, passed to the ``serial_port``
+       xacro argument. Empty: auto-detected.
 
 The robot description is built by running xacro on
 ``<description_package>/robots/<robot_model>_robot.urdf.xacro``, with the
@@ -46,15 +55,6 @@ default xacro arguments (``gz_sim:=false``, so the real hardware interface is
 used). To simulate the testbed, use ``odri_dual_motor_testbed_gazebo``
 instead.
 
-Other launch files
-------------------
-
-``odri_dual_motor_testbed_rviz.launch.py``,
-``odri_dual_motor_testbed_pub.launch.py``,
-``odri_dual_motor_testbed_backup.launch.py``,
-``odri_dual_motor_testbed_position_only.launch.py`` and
-``test_forward_position_controller.launch.py`` are older launch files and do
-not work in their current state. The first four refer to
-``odri_dual_motor_testbed.urdf.xacro``, which is no longer in the description
-package; the last one uses a configuration file from
-``ros2_control_bolt_bringup``.
+Because the nodes can be namespaced, the controller YAML puts its entries
+under the ``/**:`` wildcard key. A bare ``controller_manager:`` key only
+matches a node in the root namespace.
