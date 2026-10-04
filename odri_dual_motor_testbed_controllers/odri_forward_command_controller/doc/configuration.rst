@@ -47,24 +47,25 @@ and ``odri_dual_motor_testbed_gazebo/config/forward_command_controller.yaml``):
 
 .. code-block:: yaml
 
-   controller_manager:
-     ros__parameters:
-       update_rate: 100  # Hz
+   /**:
+     controller_manager:
+       ros__parameters:
+         update_rate: 100  # Hz
 
-       joint_state_broadcaster:
-         type: joint_state_broadcaster/JointStateBroadcaster
+         joint_state_broadcaster:
+           type: joint_state_broadcaster/JointStateBroadcaster
 
-       odri_forward_command_controller:
-         type: odri_forward_command_controller/OdriForwardCommandController
+         odri_forward_command_controller:
+           type: odri_forward_command_controller/OdriForwardCommandController
 
-   odri_forward_command_controller:
-     ros__parameters:
-       joints:
-         - motor_1
-         - motor_2
-       initial_command:
-         motor_1: {position: 0.0, velocity: 0.0, effort: 0.0, gain_kp: 0.0, gain_kd: 0.0}
-         motor_2: {position: 0.0, velocity: 0.0, effort: 0.0, gain_kp: 0.0, gain_kd: 0.0}
+     odri_forward_command_controller:
+       ros__parameters:
+         joints:
+           - motor_1
+           - motor_2
+         initial_command:
+           motor_1: {position: 0.0, velocity: 0.0, effort: 0.0, gain_kp: 0.0, gain_kd: 0.0}
+           motor_2: {position: 0.0, velocity: 0.0, effort: 0.0, gain_kp: 0.0, gain_kd: 0.0}
 
 Building and testing
 --------------------
