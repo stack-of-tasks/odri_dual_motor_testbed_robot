@@ -112,11 +112,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791112646,
-        "narHash": "sha256-FYJozm2huasyvw6q3P/dro/fX5V8Vx6qDmNLtWAul2w=",
+        "lastModified": 1791138179,
+        "narHash": "sha256-2s4upZvfEK4oz0vCOl203rt5FHZPeY58GPDy1JhguL4=",
         "owner": "gepetto",
         "repo": "gazebros2nix",
-        "rev": "421191c2d8acba94632a2f1cbf2eb1e563573ac8",
+        "rev": "4a6130e731757915d75ce5eeafd14505f25366a1",
         "type": "github"
       },
       "original": {
@@ -160,11 +160,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791120640,
-        "narHash": "sha256-JqRODGqgV1S6w7wULDYeU5MCgecjaS5aEKyWwye2FTw=",
+        "lastModified": 1791138293,
+        "narHash": "sha256-p1CW4EoAtJTl1NK8Sh6B7gN71QXjifQx9A/R0fO7RZU=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "bb6831b97b0e5478db02ae0492d868311b1799a5",
+        "rev": "71582f0bd82eb48a7892b2c260ede5bc0fb84881",
         "type": "github"
       },
       "original": {
