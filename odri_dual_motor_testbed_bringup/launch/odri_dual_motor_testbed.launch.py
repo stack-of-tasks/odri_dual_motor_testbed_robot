@@ -13,15 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from inspect import Parameter
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, RegisterEventHandler
-from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.substitutions import (
     Command,
-    EnvironmentVariable,
     FindExecutable,
     LaunchConfiguration,
     PathJoinSubstitution,
@@ -87,7 +84,7 @@ def generate_launch_description():
     robot_model = LaunchConfiguration("robot_model")
     namespace = LaunchConfiguration("namespace")
     serial_port = LaunchConfiguration("serial_port")
-    robot_controller = LaunchConfiguration("robot_controller")
+    _robot_controller = LaunchConfiguration("robot_controller")
 
     # Get URDF via xacro
     robot_description_content_expr = [
@@ -174,14 +171,14 @@ def generate_launch_description():
         )
     )
 
-    delay_joint_state_broadcaster_spawner = RegisterEventHandler(
+    _delay_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=control_node,
             on_start=[joint_state_broadcaster_spawner],
         )
     )
 
-    delay_robot_state_pub_node_spawner = RegisterEventHandler(
+    _delay_robot_state_pub_node_spawner = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=joint_state_broadcaster_spawner,
             on_start=[robot_state_pub_node],

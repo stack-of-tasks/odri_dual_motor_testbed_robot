@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- 
+<!--
   Copyright (c) 2023 LAAS/CNRS All rights reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,9 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find odri_dual_motor_testbed_description)/urdf/wheel.urdf.xacro" />
-  
+
   <xacro:macro name="odri_dual_motor_testbed_kin_tree" params="name parent">
-    
+
     <!--************************-->
     <!--   BASE    -->
     <!--************************-->
@@ -54,7 +54,7 @@
       <child link="base_footprint" />
       <origin xyz="0.0 0.0 0.01" rpy ="0.0 0.0 0.0"/>
     </joint>
-    
+
     <joint name="${name}_1_joint" type="fixed">
       <parent link="base_footprint" />
       <child link="${name}_2_link" />
@@ -91,5 +91,5 @@
     <xacro:odri_dual_motor_testbed_wheel name="${name}" parent="${name}_2_link" prefix="right" reflect="-1" />
 
   </xacro:macro>
-  
+
 </robot>

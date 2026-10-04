@@ -18,8 +18,6 @@
 #include <array>
 #include <chrono>
 #include <cmath>
-#include <string>
-
 #include <gz/math/Matrix3.hh>
 #include <gz/math/Pose3.hh>
 #include <gz/math/Vector2.hh>
@@ -34,6 +32,7 @@
 #include <gz/sim/components/Name.hh>
 #include <gz/sim/components/Pose.hh>
 #include <sdf/Element.hh>
+#include <string>
 
 namespace odri_gz {
 

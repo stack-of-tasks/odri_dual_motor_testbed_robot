@@ -64,11 +64,11 @@ from std_msgs.msg import Float64MultiArray
 # Layout: [pos×n | vel×n | eff×n | kp×n | kd×n]
 N_JOINTS = 2
 
-positions  = [0.1, -0.2]   # rad
-velocities = [0.0,  0.0]   # rad/s
-efforts    = [0.0,  0.0]   # N·m
-gains_kp   = [5.0,  5.0]
-gains_kd   = [0.1,  0.1]
+positions = [0.1, -0.2]  # rad
+velocities = [0.0, 0.0]  # rad/s
+efforts = [0.0, 0.0]  # N·m
+gains_kp = [5.0, 5.0]
+gains_kd = [0.1, 0.1]
 
 
 def main():
@@ -86,6 +86,7 @@ def main():
 
     # Give the publisher time to connect before sending
     import time
+
     time.sleep(0.5)
 
     pub.publish(msg)

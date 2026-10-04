@@ -15,9 +15,8 @@
 #ifndef FIVE_BAR_CLOSURE_PLUGIN_HH_
 #define FIVE_BAR_CLOSURE_PLUGIN_HH_
 
-#include <memory>
-
 #include <gz/sim/System.hh>
+#include <memory>
 
 namespace odri_gz {
 

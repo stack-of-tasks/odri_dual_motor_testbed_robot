@@ -16,8 +16,8 @@
 #define ODRI_DUAL_MOTOR_TESTBED_HARDWARE__FIVE_BAR_SYSTEM_HPP_
 
 #include <memory>
-#include <utility>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "hardware_interface/handle.hpp"
