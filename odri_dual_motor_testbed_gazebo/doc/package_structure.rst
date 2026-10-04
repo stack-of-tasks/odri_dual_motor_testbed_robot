@@ -11,8 +11,9 @@ Package structure
    │   └── gui.config                        Generic Gazebo GUI layout
    ├── doc/            This documentation (rosdoc2)
    ├── launch/
-   │   ├── odri_dual_motor_testbed_gazebo.launch.py   Main entry point
-   │   └── robot_spawn.launch.py                      Spawns a robot description
+   │   ├── odri_dual_motor_testbed_gazebo.launch.py   Main entry point (one robot)
+   │   ├── gz_world.launch.py                         Starts Gazebo and the /clock bridge
+   │   └── robot_spawn.launch.py                      Spawns one (namespaced) robot
    └── src/
        ├── FiveBarClosurePlugin.hh   Loop closure plugin (gz-sim 8)
        └── FiveBarClosurePlugin.cc
