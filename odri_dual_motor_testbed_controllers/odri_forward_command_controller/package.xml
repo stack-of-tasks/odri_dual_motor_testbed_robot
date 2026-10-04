@@ -14,7 +14,7 @@
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <build_depend>python3-rosdoc2</build_depend>
+  <buildtool_depend>python3-rosdoc2</buildtool_depend>
 
   <depend>controller_interface</depend>
   <depend>generate_parameter_library</depend>
