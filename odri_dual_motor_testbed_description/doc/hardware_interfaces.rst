@@ -98,4 +98,3 @@ With ``gz_sim:=true``, each robot file includes its own Gazebo file,
 The five-bar file also declares ``passive_1`` and ``passive_2`` as
 state-only joints, and the ``FiveBarClosurePlugin``, which closes the
 five-bar loop (see :doc:`robot_models`).
-

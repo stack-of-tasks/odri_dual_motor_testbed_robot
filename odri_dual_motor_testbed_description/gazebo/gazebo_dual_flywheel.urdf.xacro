@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  
-<!-- 
+
+<!--
   Copyright (c) 2022 LAAS/CNRS All rights reserved.
 
   Licensed under the Apache License, Version 2.0 (the "License");
