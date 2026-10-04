@@ -13,6 +13,7 @@ jobs:
           # - {ROS_DISTRO: kilted}
           # - {ROS_DISTRO: rolling}
     env:
+      ADDITIONAL_DEBS: python3-rosdoc2
       UPSTREAM_WORKSPACE: |
         github:stack-of-tasks/odri_gz_ros2_control#main
         github:Gepetto/pico_dual_drv8316c_ros2_hardware_interface#main
