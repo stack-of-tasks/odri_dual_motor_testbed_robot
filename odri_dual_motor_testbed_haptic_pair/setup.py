@@ -5,7 +5,7 @@ package_name = "odri_dual_motor_testbed_haptic_pair"
 setup(
     name=package_name,
     version="0.1.0",
-    packages=find_packages(),
+    packages=find_packages(exclude=["test"]),
     data_files=[
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
         ("share/" + package_name, ["package.xml"]),
@@ -15,6 +15,7 @@ setup(
             ["config/haptic_pair_controllers.yaml", "config/haptic_pair.config"],
         ),
     ],
+    package_data={"": ["py.typed"]},
     install_requires=["setuptools"],
     zip_safe=True,
     maintainer="Olivier Stasse",
@@ -25,6 +26,11 @@ setup(
         "odri_five_bar_force_velocity_controller on each side."
     ),
     license="Apache License 2.0",
+    extras_require={
+        "test": [
+            "pytest",
+        ],
+    },
     entry_points={
         "console_scripts": [
             "contact_force_relay = "
