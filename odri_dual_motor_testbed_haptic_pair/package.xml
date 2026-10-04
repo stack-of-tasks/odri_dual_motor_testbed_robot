@@ -15,8 +15,6 @@
   <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
   <license>Apache License 2.0</license>
 
-  <buildtool_depend>ament_python</buildtool_depend>
-
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
 
