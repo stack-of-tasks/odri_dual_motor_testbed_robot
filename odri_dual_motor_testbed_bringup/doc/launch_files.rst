@@ -58,16 +58,3 @@ instead.
 Because the nodes can be namespaced, the controller YAML puts its entries
 under the ``/**:`` wildcard key. A bare ``controller_manager:`` key only
 matches a node in the root namespace.
-
-Other launch files
-------------------
-
-``odri_dual_motor_testbed_rviz.launch.py``,
-``odri_dual_motor_testbed_pub.launch.py``,
-``odri_dual_motor_testbed_backup.launch.py``,
-``odri_dual_motor_testbed_position_only.launch.py`` and
-``test_forward_position_controller.launch.py`` are older launch files and do
-not work in their current state. The first four refer to
-``odri_dual_motor_testbed.urdf.xacro``, which is no longer in the description
-package; the last one uses a configuration file from
-``ros2_control_bolt_bringup``.
