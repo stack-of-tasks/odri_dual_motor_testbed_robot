@@ -2,13 +2,7 @@
 <package format="3">
   <name>odri_forward_command_controller</name>
   <version>0.1.0</version>
-  <description>
-    Forward command controller for ODRI joints that sends position, velocity,
-    effort, gain_kp and gain_kd commands together via a single topic using
-    std_msgs/Float64MultiArray. The flat data array is ordered as:
-    [pos×n | vel×n | eff×n | gain_kp×n | gain_kd×n] for n joints.
-    Per-value NaN entries are silently skipped for partial updates.
-  </description>
+  <description>Forward command controller for ODRI joints that sends position, velocity, effort, gain_kp and gain_kd commands together via a single topic using std_msgs/Float64MultiArray. The flat data array is ordered as: [pos×n | vel×n | eff×n | gain_kp×n | gain_kd×n] for n joints. Per-value NaN entries are silently skipped for partial updates.</description>
 
   <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
   <license>Apache License 2.0</license>
