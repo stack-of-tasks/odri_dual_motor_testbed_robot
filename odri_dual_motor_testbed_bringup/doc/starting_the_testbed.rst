@@ -48,6 +48,25 @@ To only read the joint states, without a command controller, use
 
    ros2 launch odri_dual_motor_testbed_bringup odri_dual_motor_testbed.launch.py robot_model:=fivebar_2dof
 
+Several testbeds on one computer
+--------------------------------
+
+Start one launch file per testbed, each with its own ``namespace`` and the
+``serial_port`` of its board (auto-detection would pick the same board
+twice). ``/dev/serial/by-id/`` gives names that do not change when the
+boards are plugged in a different order:
+
+.. code-block:: bash
+
+   ros2 launch odri_dual_motor_testbed_bringup odri_dual_motor_testbed_ctrl.launch.py \
+     namespace:=robot_a serial_port:=/dev/serial/by-id/<board_a>
+   ros2 launch odri_dual_motor_testbed_bringup odri_dual_motor_testbed_ctrl.launch.py \
+     namespace:=robot_b serial_port:=/dev/serial/by-id/<board_b>
+
+The controllers of each testbed are then managed through
+``/robot_a/controller_manager`` and ``/robot_b/controller_manager``, e.g.
+``ros2 control list_controllers -c /robot_a/controller_manager``.
+
 Checking that it runs
 ---------------------
 
