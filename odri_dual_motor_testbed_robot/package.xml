@@ -8,7 +8,7 @@
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>python3-rosdoc2</buildtool_depend>
+  <!-- <buildtool_depend>python3-rosdoc2</buildtool_depend> -->
 
   <!-- We need the xacro package to build the urdf model -->
   <build_depend> xacro </build_depend>
