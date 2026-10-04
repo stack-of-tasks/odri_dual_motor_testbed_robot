@@ -46,7 +46,6 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Tuple
 
 
 @dataclass(frozen=True)
@@ -79,7 +78,7 @@ class SingularConfigurationError(ValueError):
 
 def elbow_positions(
     theta1: float, theta2: float, geom: FiveBarGeometry
-) -> Tuple[Tuple[float, float], Tuple[float, float]]:
+) -> tuple[tuple[float, float], tuple[float, float]]:
     """Direct position of the two elbows E_L(theta1), E_R(theta2)."""
     a1 = geom.phi1 - theta1
     a2 = geom.phi2 - theta2
@@ -90,7 +89,7 @@ def elbow_positions(
 
 def closing_point(
     theta1: float, theta2: float, geom: FiveBarGeometry
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """Direct geometric model: closing point P(theta1, theta2)."""
     e_l, e_r = elbow_positions(theta1, theta2, geom)
     dx, dz = e_r[0] - e_l[0], e_r[1] - e_l[1]
@@ -176,7 +175,7 @@ def gravity_torque(
     coupler_mass_left: float,
     coupler_mass_right: float,
     gravity: float = 9.81,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """Analytical gravity-compensation feed-forward torque for motor_1/motor_2.
 
     DISABLED BY DEFAULT for the MOTKINBENCH five-bar, and kept only for a
@@ -224,7 +223,7 @@ def joint_velocity_from_contact_force(
     fx: float,
     fy: float,
     geom: FiveBarGeometry,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """qdot = J^T @ f_c: transpose-Jacobian force-to-velocity mapping.
 
     f_c = (fx, fy) is the contact force at the closing point P, expressed
