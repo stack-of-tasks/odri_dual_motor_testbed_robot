@@ -11,7 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Simulate two odri_dual_motor_testbed five-bar robots as a haptic pair.
+"""
+Simulate two odri_dual_motor_testbed five-bar robots as a haptic pair.
 
 One Gazebo world is started with odri_dual_motor_testbed_gazebo's
 gz_world.launch.py, then odri_dual_motor_testbed_gazebo's
@@ -37,8 +38,8 @@ shared admittance law, the same motion.
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.launch_description import LaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
