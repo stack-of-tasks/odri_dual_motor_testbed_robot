@@ -8,6 +8,13 @@
     inputs.gepetto.lib.mkFlakoboros inputs (
       { lib, ... }:
       {
+        extraPackages = [
+          "doxygen"
+          "rosdoc2"
+        ];
+        extraRosPackages = [
+          "ament-mypy"
+        ];
         rosDistros = [ "jazzy" ];
         rosShellDistro = "jazzy";
         rosOverrideAttrs = {

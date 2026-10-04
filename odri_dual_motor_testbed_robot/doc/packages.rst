@@ -53,16 +53,11 @@ Building the documentation
 --------------------------
 
 Each package is documented with rosdoc2. ``colcon build`` builds the
-documentation of every package when ``BUILD_DOCS`` is enabled, and installs
+documentation of every package when rosdoc2 is available, and installs
 it in ``install/<package>/share/<package>/doc``:
 
 .. code-block:: bash
 
    sudo apt install python3-rosdoc2
-   BUILD_DOCS=ON colcon build
+   colcon build
    xdg-open install/odri_dual_motor_testbed_robot/share/odri_dual_motor_testbed_robot/doc/index.html
-
-``--cmake-args -DBUILD_DOCS=ON`` has the same effect. ``BUILD_DOCS`` is off by
-default, so rosdoc2 is not needed for a normal build. A package's
-documentation is only rebuilt when its sources change: ``doc/``,
-``README.md``, ``package.xml``, and its headers or Python modules.

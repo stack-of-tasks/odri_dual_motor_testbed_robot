@@ -19,17 +19,13 @@ Package structure
 Building this documentation
 ---------------------------
 
-``colcon build`` builds this documentation with rosdoc2 when ``BUILD_DOCS``
-is enabled, and installs it in ``share/odri_dual_motor_testbed_description/doc``:
+``colcon build`` builds this documentation with rosdoc2 when available,
+and installs it in ``share/odri_dual_motor_testbed_description/doc``:
 
 .. code-block:: bash
 
-   BUILD_DOCS=ON colcon build --packages-select odri_dual_motor_testbed_description
+   colcon build --packages-select odri_dual_motor_testbed_description
    xdg-open install/odri_dual_motor_testbed_description/share/odri_dual_motor_testbed_description/doc/index.html
-
-``--cmake-args -DBUILD_DOCS=ON`` has the same effect. The documentation is
-only rebuilt when its sources change: ``doc/``, ``README.md``,
-``package.xml``, and the headers or Python modules of the package.
 
 To build it by hand instead, run from the directory that contains this
 package:

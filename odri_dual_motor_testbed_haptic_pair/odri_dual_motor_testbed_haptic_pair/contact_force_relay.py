@@ -12,7 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Relay the leader's sensed contact force onto the follower's.
+"""
+Relay the leader's sensed contact force onto the follower's.
 
 Both robots of the haptic pair run the same
 odri_five_bar_force_velocity_controller, which turns a contact force into
