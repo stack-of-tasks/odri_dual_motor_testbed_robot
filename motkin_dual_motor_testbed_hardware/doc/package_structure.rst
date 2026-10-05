@@ -28,7 +28,7 @@ Building and testing
    colcon test-result --verbose
 
 The default wrapped plugin comes from
-``pico_dual_drv8316c_ros2_hardware_interface``. It is only needed at run
+``motkin_ros2_hardware_interface``. It is only needed at run
 time, when the plugin is loaded.
 
 Building this documentation

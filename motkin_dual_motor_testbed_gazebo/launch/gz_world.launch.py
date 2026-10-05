@@ -57,14 +57,17 @@ def generate_launch_description():
 
     # Defining the path where the mesh files can be found
     gz_model_path_env_var = SetEnvironmentVariable(
-        "GZ_SIM_RESOURCE_PATH", get_model_paths(["motkin_dual_motor_testbed_description"])
+        "GZ_SIM_RESOURCE_PATH",
+        get_model_paths(["motkin_dual_motor_testbed_description"]),
     )
 
     # FiveBarClosurePlugin (this package) and the motkin_gz_ros2_control system
     # plugin live in different install prefixes unless --merge-install is used.
     gz_sim_sys_plugin_path = SetEnvironmentVariable(
         "GZ_SIM_SYSTEM_PLUGIN_PATH",
-        get_plugin_paths(["motkin_dual_motor_testbed_gazebo", "motkin_gz_ros2_control"]),
+        get_plugin_paths(
+            ["motkin_dual_motor_testbed_gazebo", "motkin_gz_ros2_control"]
+        ),
     )
 
     gz_sim_launch = os.path.join(

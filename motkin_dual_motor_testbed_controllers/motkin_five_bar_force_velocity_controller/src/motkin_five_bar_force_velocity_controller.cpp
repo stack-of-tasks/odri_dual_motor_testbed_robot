@@ -256,6 +256,6 @@ controller_interface::return_type MotkinFiveBarForceVelocityController::update(
 
 #include "pluginlib/class_list_macros.hpp"
 
-PLUGINLIB_EXPORT_CLASS(
-    motkin_five_bar_force_velocity_controller::MotkinFiveBarForceVelocityController,
-    controller_interface::ControllerInterface)
+PLUGINLIB_EXPORT_CLASS(motkin_five_bar_force_velocity_controller::
+                           MotkinFiveBarForceVelocityController,
+                       controller_interface::ControllerInterface)

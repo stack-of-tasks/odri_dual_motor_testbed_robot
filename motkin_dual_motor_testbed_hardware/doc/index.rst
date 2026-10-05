@@ -12,7 +12,7 @@ five-bar. ``joint_state_broadcaster`` therefore publishes the whole five-bar,
 as it does in simulation.
 
 ``FiveBarSystem`` is selected by the ``five_bar="true"`` argument of the
-``pico_dual_drv8316c_ros2_control`` macro in
+``motkin_ros2_control`` macro in
 ``motkin_dual_motor_testbed_description``. The ``fivebar_2dof`` model sets it;
 the ``dual_flywheel`` model does not, and uses the board plugin directly.
 

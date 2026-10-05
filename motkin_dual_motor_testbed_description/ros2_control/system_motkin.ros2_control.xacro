@@ -6,8 +6,7 @@
     motkin_dual_motor_testbed_description's
     system_dual_motor_testbed.ros2_control.xacro: same joint names and same
     position/velocity/effort/gain_kp/gain_kd interfaces, but backed by a
-    pico_dual_PMSM_BUG79100G_DRV8316C board over USB instead of an MOTKIN
-    master board over Ethernet or Gazebo.
+    motkin board over USB instead of  Gazebo.
 
     serial_port: left empty to auto-detect (/dev/serial/by-id, then
     /dev/ttyACM*, then /dev/ttyUSB*), or set explicitly, e.g. /dev/ttyACM0.
@@ -19,7 +18,7 @@
     five-bar. The geometry parameters must match the plugin block of
     gazebo/gazebo_fivebar_2dof.urdf.xacro (see five_bar_mgd_spec.md).
   -->
-  <xacro:macro name="pico_dual_drv8316c_ros2_control"
+  <xacro:macro name="motkin_ros2_control"
                params="name
                        left_joint_name:=motor_1
                        right_joint_name:=motor_2
@@ -32,7 +31,7 @@
       <hardware>
         <xacro:if value="${five_bar}">
           <plugin>motkin_dual_motor_testbed_hardware/FiveBarSystem</plugin>
-          <param name="inner_plugin">pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</param>
+          <param name="inner_plugin">motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware</param>
           <param name="motor_joint1">${left_joint_name}</param>
           <param name="motor_joint2">${right_joint_name}</param>
           <param name="passive_joint1">passive_1</param>
@@ -49,7 +48,7 @@
           <param name="psi2">2.511306362956145</param>
         </xacro:if>
         <xacro:unless value="${five_bar}">
-          <plugin>pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</plugin>
+          <plugin>motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware</plugin>
         </xacro:unless>
         <param name="serial_port">${serial_port}</param>
         <param name="baud_rate">${baud_rate}</param>

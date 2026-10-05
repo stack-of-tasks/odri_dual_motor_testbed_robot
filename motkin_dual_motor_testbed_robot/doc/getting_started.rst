@@ -23,7 +23,7 @@ the other repositories the workspace needs:
 
 * ``motkin_gz_ros2_control``: ``ros2_control`` hardware interface for Gazebo,
   needed for simulation;
-* ``pico_dual_drv8316c_ros2_hardware_interface``: hardware interface of the
+* ``motkin_ros2_hardware_interface``: hardware interface of the
   motor board, needed for the real robot.
 
 The file also lists this repository, so ``--skip-existing`` keeps the clone

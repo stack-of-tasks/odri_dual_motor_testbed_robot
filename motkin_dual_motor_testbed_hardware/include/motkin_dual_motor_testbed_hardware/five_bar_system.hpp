@@ -36,7 +36,7 @@ namespace motkin_dual_motor_testbed_hardware {
 ///
 /// Only motor_1 / motor_2 have encoders. This plugin loads the hardware
 /// plugin that drives them (hardware parameter `inner_plugin`, by default
-/// the pico_dual_drv8316c board), forwards every lifecycle transition,
+/// the motkin board), forwards every lifecycle transition,
 /// read(), write() and command mode switch to it, and additionally exports
 /// the passive joints as state-only interfaces (position, velocity, effort;
 /// effort is always 0). Their values are recomputed after each inner read()
@@ -46,7 +46,7 @@ namespace motkin_dual_motor_testbed_hardware {
 /// The inner plugin receives the same HardwareInfo minus the passive joints.
 ///
 /// Hardware parameters (all optional, shown with defaults):
-///   inner_plugin    pico_dual_drv8316c_hardware_interface/
+///   inner_plugin    motkin_ros2_hardware_interface/
 ///                   SystemPicoDualDrv8316CHardware
 ///   motor_joint1    motor_1      passive_joint1  passive_1
 ///   motor_joint2    motor_2      passive_joint2  passive_2
@@ -76,7 +76,7 @@ class FiveBarSystem : public hardware_interface::SystemInterface {
       const rclcpp_lifecycle::State& previous_state) override;
 
   // Both export APIs are forwarded, so the inner plugin may use either: the
-  // legacy one (raw pointers, e.g. pico_dual_drv8316c) or the
+  // legacy one (raw pointers, e.g. motkin) or the
   // framework-managed one (e.g. mock_components/GenericSystem).
   std::vector<hardware_interface::StateInterface> export_state_interfaces()
       override;

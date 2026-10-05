@@ -29,7 +29,7 @@ Then:
   always 0.
 
 Both interface export APIs of ``ros2_control`` are supported, so the inner
-plugin may use either the legacy one (like the Pico board plugin) or the
+plugin may use either the legacy one (like the Motkin board plugin) or the
 framework-managed one (like ``mock_components/GenericSystem``).
 
 Passive positions are unwrapped against the previous value, so they stay
@@ -62,7 +62,7 @@ All parameters are optional.
      - Default
      - Description
    * - ``inner_plugin``
-     - ``pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware``
+     - ``motkin_ros2_hardware_interface/SystemMotkinHardware``
      - Plugin that drives the motors.
    * - ``motor_joint1``, ``motor_joint2``
      - ``motor_1``, ``motor_2``
@@ -98,15 +98,15 @@ The other hardware parameters (``serial_port``, ``baud_rate``,
 Example
 -------
 
-This is what the ``pico_dual_drv8316c_ros2_control`` macro generates with
+This is what the ``motkin_ros2_control`` macro generates with
 ``five_bar="true"`` (geometry and interface limits shortened):
 
 .. code-block:: xml
 
-   <ros2_control name="picodualdrv8316c" type="system">
+   <ros2_control name="motkin" type="system">
      <hardware>
        <plugin>motkin_dual_motor_testbed_hardware/FiveBarSystem</plugin>
-       <param name="inner_plugin">pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware</param>
+       <param name="inner_plugin">motkin_ros2_hardware_interface/SystemMotkinHardware</param>
        <param name="motor_joint1">motor_1</param>
        <param name="motor_joint2">motor_2</param>
        <param name="passive_joint1">passive_1</param>

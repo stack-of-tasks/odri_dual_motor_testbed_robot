@@ -29,7 +29,7 @@ At run time the bringup package needs:
   velocity, effort and gain commands to the motors. It lives in
   ``motkin_dual_motor_testbed_controllers/`` in the same repository;
 * the Pico dual DRV8316C hardware interface
-  (``pico_dual_drv8316c_hardware_interface``), loaded by the robot
+  (``motkin_ros2_hardware_interface``), loaded by the robot
   description when running on real hardware;
 * ``motkin_dual_motor_testbed_hardware``: on the five-bar, its
   ``FiveBarSystem`` plugin wraps the Pico plugin and computes the passive
