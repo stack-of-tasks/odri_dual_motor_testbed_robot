@@ -32,7 +32,7 @@ In a ROS 2 Jazzy workspace:
 ```bash
 mkdir -p motkin_dual_motor_testbed_ws/src
 cd motkin_dual_motor_testbed_ws/src
-git clone https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot.git
+wget https://raw.githubusercontent.com/Gepetto/motkin-dual-motor-testbed-robot/main/motkin_dual_motor_testbed_robot.repos
 cd ..
 vcs import --skip-existing src < src/motkin_dual_motor_testbed_robot/motkin_dual_motor_testbed_robot.repos
 source /opt/ros/jazzy/setup.bash
