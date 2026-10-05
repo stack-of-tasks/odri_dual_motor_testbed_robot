@@ -1,5 +1,5 @@
 motkin_forward_command_controller
-===============================
+=================================
 
 A ``ros2_control`` controller that forwards position, velocity, effort,
 ``gain_kp`` and ``gain_kd`` commands to a set of MOTKIN joints through a single

@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_hardware
-================================
+==================================
 
 ``ros2_control`` hardware plugins for the MOTKIN dual motor testbed.
 

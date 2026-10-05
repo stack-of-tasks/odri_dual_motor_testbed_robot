@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_gazebo
-==============================
+================================
 
 Simulation of the MOTKIN dual motor testbed in Gazebo Harmonic (gz-sim 8) with
 ``ros2_control``.

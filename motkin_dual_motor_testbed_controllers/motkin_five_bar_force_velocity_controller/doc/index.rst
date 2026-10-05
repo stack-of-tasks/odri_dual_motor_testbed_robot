@@ -1,5 +1,5 @@
 motkin_five_bar_force_velocity_controller
-=======================================
+=========================================
 
 A ``ros2_control`` controller that moves the five-bar of the MOTKIN dual motor
 testbed in response to a force applied at its end point P, with the control
