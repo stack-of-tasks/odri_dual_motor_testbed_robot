@@ -5,7 +5,7 @@ control law, **qdot = J<sup>T</sup> f_c**, for the five-bar mechanism of the
 `motkin_dual_motor_testbed`.
 
 This is the `ros2_control` counterpart of
-[`motkin_five_bar_force_velocity_py`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py): same
+[`motkin_five_bar_force_velocity_py`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py): same
 control law, same analytical Jacobian, but running as a controller plugin
 loaded by `controller_manager` instead of talking to
 `motkin_forward_command_controller` over a topic. It directly claims the
@@ -14,14 +14,14 @@ loaded by `controller_manager` instead of talking to
 ## Mechanism and Jacobian
 
 See
-[`five_bar_mgd_spec.md`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/five_bar_mgd_spec.md)
+[`five_bar_mgd_spec.md`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/five_bar_mgd_spec.md)
 for the direct geometric model of the five-bar this is built on. In short:
 `motor_1`/`motor_2` (theta1, theta2) each drive a crank of length `L1` down to
 an elbow, itself connected to the common closing point `P` (the mechanism's
 end point) through a coupler of length `L2`. `P` is obtained in closed form
 as the intersection of two circles, without any iterative solver.
 
-[`include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller/include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp)
+[`include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller/include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp)
 reimplements that direct model and derives its 2x2 velocity Jacobian `J`
 (`Pdot = J * thetadot`) **analytically**, by implicit differentiation of the
 two loop-closure constraints `|P - E_L|^2 = L2^2` and `|P - E_R|^2 = L2^2`.
@@ -60,7 +60,7 @@ several configurations, as a sanity check on the closed-form derivation.
 The `effort` command sent every cycle is an **analytical gravity-compensation
 feed-forward torque**, not a fixed zero. See
 `GravityTorque()` in
-[`five_bar_kinematics.hpp`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller/include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp)
+[`five_bar_kinematics.hpp`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller/include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp)
 for the full derivation; in short: the coupler links `arm_l2`/`arm_r2` have their
 center of mass at the elbow per the URDF's own `<inertial>` data, so their
 world height is exactly `E_L(theta1)` / `E_R(theta2)` (no loop-closure

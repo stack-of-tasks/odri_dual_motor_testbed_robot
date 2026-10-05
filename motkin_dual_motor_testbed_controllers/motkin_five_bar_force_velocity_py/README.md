@@ -3,22 +3,22 @@
 A plain Python ROS 2 node implementing the endpoint force-to-velocity
 control law **qdot = J<sup>T</sup> f_c** for the five-bar mechanism of the
 `motkin_dual_motor_testbed`, driven entirely through the
-[`motkin_forward_command_controller`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_forward_command_controller)
+[`motkin_forward_command_controller`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_forward_command_controller)
 topic interface (`~/commands`, `std_msgs/msg/Float64MultiArray`) — no
 `ros2_control` controller plugin here. Its `ros2_control`-native counterpart
-is [`motkin_five_bar_force_velocity_controller`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller).
+is [`motkin_five_bar_force_velocity_controller`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/tree/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller).
 
 ## Mechanism and Jacobian
 
 See
-[`five_bar_mgd_spec.md`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/five_bar_mgd_spec.md)
+[`five_bar_mgd_spec.md`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/five_bar_mgd_spec.md)
 for the direct geometric model of the five-bar this is built on:
 `motor_1`/`motor_2` (theta1, theta2) each drive a crank of length `L1` down to
 an elbow, itself connected to the common closing point `P` (the mechanism's
 end point) through a coupler of length `L2`. `P` is obtained in closed form
 as the intersection of two circles, without any iterative solver.
 
-[`motkin_five_bar_force_velocity_py/five_bar_kinematics.py`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py/motkin_five_bar_force_velocity_py/five_bar_kinematics.py)
+[`motkin_five_bar_force_velocity_py/five_bar_kinematics.py`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py/motkin_five_bar_force_velocity_py/five_bar_kinematics.py)
 reimplements that direct model and derives its 2x2 velocity Jacobian `J`
 (`Pdot = J @ thetadot`) **analytically**, by implicit differentiation of the
 two loop-closure constraints `|P - E_L|^2 = L2^2` and `|P - E_R|^2 = L2^2`.
@@ -53,7 +53,7 @@ applied Cartesian force.
 The `effort` slice of every published command is an **analytical
 gravity-compensation feed-forward torque**, not a fixed zero — see
 `gravity_torque()` in
-[`five_bar_kinematics.py`](https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py/motkin_five_bar_force_velocity_py/five_bar_kinematics.py).
+[`five_bar_kinematics.py`](https://github.com/gepetto/motkin_dual_motor_testbed_robot/blob/main/motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py/motkin_five_bar_force_velocity_py/five_bar_kinematics.py).
 In short: the coupler links `arm_l2`/`arm_r2` have their center of mass at the
 elbow per the URDF's own inertial data, so their world height is exactly
 `E_L(theta1)` / `E_R(theta2)`, and the feed-forward torque is `dV/dtheta`
