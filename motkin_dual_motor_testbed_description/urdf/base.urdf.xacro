@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+  Copyright (c) 2023 LAAS/CNRS All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find motkin_dual_motor_testbed_description)/urdf/wheel.urdf.xacro" />
+
+  <xacro:macro name="motkin_dual_motor_testbed_kin_tree" params="name parent">
+
+    <!--************************-->
+    <!--   BASE    -->
+    <!--************************-->
+    <link name="base_footprint">
+      <inertial>
+        <origin xyz="0.0 0.0 0.011447" rpy="0.00000 0.00000 0.00000"/>
+        <mass value="0.250"/>
+        <inertia ixx="0.000147" ixy="0.0" ixz="0.0"
+                 iyy="0.000948" iyz="0.0"
+                 izz="0.001064"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://motkin_dual_motor_testbed_description/meshes/dual_motor_testbed_base_v2.stl" />
+        </geometry>
+        <material name="white">
+          <color rgba="1.0 1.0 1.0 1.0"/>
+        </material>
+
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://motkin_dual_motor_testbed_description/meshes/dual_motor_testbed_base_v2.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${name}_in_${parent}" type="fixed">
+      <parent link="${parent}" />
+      <child link="base_footprint" />
+      <origin xyz="0.0 0.0 0.01" rpy ="0.0 0.0 0.0"/>
+    </joint>
+
+    <joint name="${name}_1_joint" type="fixed">
+      <parent link="base_footprint" />
+      <child link="${name}_2_link" />
+      <origin xyz="0.0 0.0 0.0" rpy ="0.0 0.0 0.0"/>
+    </joint>
+
+    <link name="${name}_2_link">
+      <inertial>
+        <origin xyz="0.0 0.0 0.029025" rpy="0.00000 0.00000 0.00000"/>
+        <mass value="1.563428"/>
+        <inertia ixx="0.000870" ixy="0.0" ixz="0.0"
+                 iyy="0.005844" iyz="0.0"
+                 izz="0.006705"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://motkin_dual_motor_testbed_description/meshes/dual_motor_testbed_cover_v2.stl" />
+        </geometry>
+        <material name="white">
+          <color rgba="1.0 1.0 1.0 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://motkin_dual_motor_testbed_description/meshes/dual_motor_testbed_cover_v2.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <xacro:motkin_dual_motor_testbed_wheel name="${name}" parent="${name}_2_link" prefix="left" reflect="1" />
+
+    <xacro:motkin_dual_motor_testbed_wheel name="${name}" parent="${name}_2_link" prefix="right" reflect="-1" />
+
+  </xacro:macro>
+
+</robot>

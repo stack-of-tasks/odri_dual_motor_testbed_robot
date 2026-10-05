@@ -1,0 +1,12 @@
+<library path="motkin_dual_motor_testbed_hardware">
+  <class name="motkin_dual_motor_testbed_hardware/FiveBarSystem"
+         type="motkin_dual_motor_testbed_hardware::FiveBarSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Wraps the hardware plugin named by the inner_plugin parameter (driving
+      the two actuated joints) and exports the two passive joints of the
+      five-bar as state-only interfaces, computed each read() from the motor
+      encoders with the exact direct geometric model.
+    </description>
+  </class>
+</library>

@@ -1,0 +1,13 @@
+repositories:
+  motkin_dual_motor_testbed_robot:
+    type: git
+    url: https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot.git
+    version: main
+  motkin_gz_ros2_control:
+    type: git
+    url: https://github.com/stack-of-tasks/motkin_gz_ros2_control.git
+    version: main
+  motkin_pico_DRV8316C/pico_dual_drv8316c_ros2_hardware_interface:
+    type: git
+    url: https://github.com/Gepetto/pico_dual_drv8316c_ros2_hardware_interface.git
+    version: main

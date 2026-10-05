@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!--
+  Copyright (c) 2022 LAAS/CNRS All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ -->
+<!-- Expects the including robot file to declare the xacro args
+     controller_params_file (controller_manager YAML loaded by
+     motkin_gz_ros2_control) and robot_namespace. -->
+<xacro:macro name="motkin_dual_motor_testbed_gazebo">
+  <ros2_control name="GazeboMotkinSimSystem" type="system">
+    <hardware>
+      <plugin>motkin_gz_ros2_control/GazeboMotkinSimSystem</plugin>
+    </hardware>
+    <joint name="motor_1">
+      <command_interface name="position" />
+      <command_interface name="velocity" />
+      <command_interface name="effort" />
+      <command_interface name="gain_kp" />
+      <command_interface name="gain_kd" />
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="motor_2">
+      <command_interface name="position" />
+      <command_interface name="velocity" />
+      <command_interface name="effort" />
+      <command_interface name="gain_kp" />
+      <command_interface name="gain_kd" />
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+
+    <joint name="passive_1">
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+    <joint name="passive_2">
+      <state_interface name="velocity" />
+      <state_interface name="position" />
+      <state_interface name="effort" />
+    </joint>
+
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="motkin_gz_ros2_control-system" name="motkin_gz_ros2_control::GazeboMotkinSimROS2ControlPlugin">
+      <parameters>$(arg controller_params_file)</parameters>
+      <ros>
+        <namespace>$(arg robot_namespace)</namespace>
+      </ros>
+   </plugin>
+  </gazebo>
+
+  <!-- ================================================================ -->
+  <!--      Gazebo Harmonic (gz-sim8) system plugin for five-bar loop closure. -->
+  <!--      The two arms are joined at the closure point P by a planar pin -->
+  <!--      constraint: every step the plugin computes the force transmitted -->
+  <!--      at P (Lagrange multiplier) and applies it to arm_l2 / arm_r2, so -->
+  <!--      passive_1/passive_2 are driven by the physics, not imposed. The -->
+  <!--      direct geometric model is only used to assemble the loop at t=0. -->
+  <!--      See five_bar_mgd_spec.md at the repository root. -->
+  <!--      ================================================================ -->
+  <gazebo>
+    <plugin filename="libFiveBarClosurePlugin.so"
+            name="motkin_gz::FiveBarClosurePlugin">
+      <!-- Actuated joints (inputs, theta1/theta2). -->
+      <motor_joint1>motor_1</motor_joint1>
+      <motor_joint2>motor_2</motor_joint2>
+      <!-- Passive joints; their child links carry the closure point P. -->
+      <elbow_joint1>passive_1</elbow_joint1>
+      <elbow_joint2>passive_2</elbow_joint2>
+      <!-- P in the arm_l2 / arm_r2 link frames: origins of closing_tip_2_frame
+           and closing_tip_1_frame (these frames are not in the ECM). -->
+      <tip_offset1>0.1 0 0</tip_offset1>
+      <tip_offset2>0.0589379 -0.0807857 -0.011</tip_offset2>
+      <!-- Constraint stabilisation and safety clamp on the force at P. -->
+      <baumgarte>0.2</baumgarte>
+      <max_force>100</max_force>
+      <!-- Initial assembly of the loop with the direct geometric model. -->
+      <initialize_with_mgd>true</initialize_with_mgd>
+      <!-- Geometry parameters (initial assembly only), re-derived from MOTKINBENCH robot.urdf and
+           verified numerically (worst loop-closure residual 2.7e-07 m over
+           theta in [-0.9, 0.9]^2, with the motor yaw offsets set to 0). The plugin's a_x/a_z/b_x/b_z naming is
+           historical: for this robot the plane is (x,y) of `case`, so a_z/b_z
+           carry the y coordinates. See five_bar_mgd_spec.md section 2. -->
+      <a_x>-0.0421006</a_x>
+      <a_z>0.0302628</a_z>
+      <b_x>0.0578994</b_x>
+      <b_z>0.0302628</b_z>
+      <l1>0.06</l1>
+      <l2>0.1</l2>
+      <phi1>1.5707963267948966</phi1>
+      <phi2>1.5707963267948966</phi2>
+      <psi1>0.21205399999927563</psi1>
+      <psi2>2.511306362956145</psi2>
+    </plugin>
+  </gazebo>
+  <!-- ================================================================ -->
+  <!--      Collision filtering. Contacts only occur between two collisions -->
+  <!--      whose collide_bitmask values share a bit. These must be set here, -->
+  <!--      through <gazebo reference>: a <surface> tag inside a URDF -->
+  <!--      <collision> is dropped by the URDF to SDF conversion. -->
+  <!--      The base is welded to the world: without mask 0 its meshes touch -->
+  <!--      the ground plane and the contact computation slows the simulation -->
+  <!--      down about 50 times. -->
+  <!--      ================================================================ -->
+  <!-- Base, welded to the world: no contact. -->
+  <gazebo reference="case">
+    <collision><surface><contact><collide_bitmask>0x00</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Base, welded to the world: no contact. -->
+  <gazebo reference="top_cover">
+    <collision><surface><contact><collide_bitmask>0x00</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Left crank. -->
+  <gazebo reference="rotor">
+    <collision><surface><contact><collide_bitmask>0x04</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Left coupler. -->
+  <gazebo reference="arm_l2">
+    <collision><surface><contact><collide_bitmask>0x01</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Right crank. -->
+  <gazebo reference="rotor_2">
+    <collision><surface><contact><collide_bitmask>0x08</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  <!-- Right coupler: no bit in common with the other moving links, so the arms never collide with each other. -->
+  <gazebo reference="arm_r2">
+    <collision><surface><contact><collide_bitmask>0x02</collide_bitmask></contact></surface></collision>
+  </gazebo>
+  </xacro:macro>
+</robot>
