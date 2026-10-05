@@ -34,7 +34,7 @@ mkdir -p motkin_dual_motor_testbed_ws/src
 cd motkin_dual_motor_testbed_ws/src
 wget https://raw.githubusercontent.com/Gepetto/motkin-dual-motor-testbed-robot/main/motkin_dual_motor_testbed_robot.repos
 cd ..
-vcs import --skip-existing src < src/motkin_dual_motor_testbed_robot/motkin_dual_motor_testbed_robot.repos
+vcs import --skip-existing src < src/motkin_dual_motor_testbed_robot.repos
 source /opt/ros/jazzy/setup.bash
 rosdep install --from-paths src --ignore-src -y
 colcon build
