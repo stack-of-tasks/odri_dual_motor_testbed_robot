@@ -163,7 +163,7 @@ Sur le robot réel, seuls `motor_1` / `motor_2` ont des codeurs. Le plugin ros2_
 `passive_2` comme interfaces d'état seules (position, vitesse, effort = 0), recalculées
 après chaque `read()` avec ce modèle ; `joint_state_broadcaster` publie donc tout le
 five-bar, comme en simulation. Il est activé par `five_bar="true"` dans
-`system_pico_dual_drv8316c.ros2_control.xacro`, dont les paramètres géométriques doivent
+`system_motkin.ros2_control.xacro`, dont les paramètres géométriques doivent
 rester identiques à ceux du plugin Gazebo.
 
 Vitesses passives : en dérivant `r_i · (Ṗ - Ė_i) = 0` avec `r_i = P - E_i`, on obtient Ṗ

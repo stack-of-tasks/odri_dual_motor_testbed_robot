@@ -8,9 +8,9 @@ Real hardware: Pico dual DRV8316C board
 ---------------------------------------
 
 With ``gz_sim:=false`` (the default), the robot files include
-``ros2_control/system_pico_dual_drv8316c.ros2_control.xacro`` and call the
-``pico_dual_drv8316c_ros2_control`` macro. The plugin
-``pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware``
+``ros2_control/system_motkin.ros2_control.xacro`` and call the
+``motkin_ros2_control`` macro. The plugin
+``motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware``
 talks to a Pico dual PMSM / DRV8316C board over USB serial.
 
 With ``five_bar="true"`` (set by the ``fivebar_2dof`` model), the macro

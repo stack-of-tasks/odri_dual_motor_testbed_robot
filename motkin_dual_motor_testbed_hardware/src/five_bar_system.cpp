@@ -25,7 +25,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 // The wrapped plugin may still use the legacy export_*_interfaces() API (the
-// pico_dual_drv8316c one does), so this wrapper forwards through it.
+// motkin one does), so this wrapper forwards through it.
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 namespace motkin_dual_motor_testbed_hardware {
@@ -146,9 +146,9 @@ CallbackReturn FiveBarSystem::on_init(
     }
   }
 
-  const std::string inner_plugin = GetParam(
-      info_, "inner_plugin",
-      "pico_dual_drv8316c_hardware_interface/SystemPicoDualDrv8316CHardware");
+  const std::string inner_plugin =
+      GetParam(info_, "inner_plugin",
+               "motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware");
   inner_info_.hardware_plugin_name = inner_plugin;
   inner_info_.name = info_.name + "_inner";
   // The wrapper's own read()/write() drive the inner plugin synchronously.

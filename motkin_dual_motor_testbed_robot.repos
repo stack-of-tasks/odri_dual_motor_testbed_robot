@@ -1,13 +1,13 @@
 repositories:
-  motkin_dual_motor_testbed_robot:
+  motkin-dual-motor-testbed-robot:
     type: git
-    url: https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot.git
+    url: https://github.com/Gepetto/motkin-dual-motor-testbed_robot.git
     version: main
-  motkin_gz_ros2_control:
+  motkin-gz-ros2-control:
     type: git
-    url: https://github.com/stack-of-tasks/motkin_gz_ros2_control.git
+    url: https://github.com/Gepetto/motkin-gz-ros2-control.git
     version: main
-  motkin_pico_DRV8316C/pico_dual_drv8316c_ros2_hardware_interface:
+  motkin-ros2-hardware-interface:
     type: git
-    url: https://github.com/Gepetto/pico_dual_drv8316c_ros2_hardware_interface.git
+    url: https://github.com/Gepetto/motkin-ros2-hardware-interface.git
     version: main

@@ -44,9 +44,9 @@ source ./install/setup.bash
 `motkin_dual_motor_testbed_robot.repos` lists the repositories the workspace
 needs, besides this one:
 
-- [`motkin_gz_ros2_control`](https://github.com/stack-of-tasks/motkin_gz_ros2_control):
+- [`motkin_gz_ros2_control`](https://github.com/Gepetto/motkin-gz-ros2-control):
   `ros2_control` hardware interface for Gazebo, needed for simulation;
-- [`pico_dual_drv8316c_ros2_hardware_interface`](https://github.com/Gepetto/pico_dual_drv8316c_ros2_hardware_interface):
+- [`motkin_ros2_hardware_interface`](https://github.com/Gepetto/motkin-ros2-hardware-interface):
   hardware interface of the motor board, needed for the real robot.
 
 The file also lists this repository, so `--skip-existing` keeps the clone made

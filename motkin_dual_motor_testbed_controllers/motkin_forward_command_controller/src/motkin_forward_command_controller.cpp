@@ -44,7 +44,8 @@ controller_interface::CallbackReturn MotkinForwardCommandController::on_init() {
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
-controller_interface::CallbackReturn MotkinForwardCommandController::on_configure(
+controller_interface::CallbackReturn
+MotkinForwardCommandController::on_configure(
     const rclcpp_lifecycle::State& /*previous_state*/) {
   params_ = param_listener_->get_params();
   joint_names_ = params_.joints;
@@ -102,7 +103,8 @@ MotkinForwardCommandController::state_interface_configuration() const {
       controller_interface::interface_configuration_type::NONE};
 }
 
-controller_interface::CallbackReturn MotkinForwardCommandController::on_activate(
+controller_interface::CallbackReturn
+MotkinForwardCommandController::on_activate(
     const rclcpp_lifecycle::State& /*previous_state*/) {
   const std::size_t n = joint_names_.size();
 

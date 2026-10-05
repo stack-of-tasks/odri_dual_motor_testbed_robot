@@ -53,7 +53,10 @@ pluginlib_export_plugin_description_file(
 )
 
 # --- Install ---
-install(DIRECTORY include/ DESTINATION include/motkin_forward_command_controller)
+install(
+    DIRECTORY include/
+    DESTINATION include/motkin_forward_command_controller
+)
 install(
     TARGETS ${PROJECT_NAME} motkin_forward_command_controller_parameters
     EXPORT export_motkin_forward_command_controller
@@ -73,7 +76,10 @@ if(BUILD_TESTING)
         test_motkin_forward_command_controller
         PRIVATE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     )
-    target_link_libraries(test_motkin_forward_command_controller ${PROJECT_NAME})
+    target_link_libraries(
+        test_motkin_forward_command_controller
+        ${PROJECT_NAME}
+    )
 endif()
 
 ament_export_targets(export_motkin_forward_command_controller HAS_LIBRARY_TARGET)

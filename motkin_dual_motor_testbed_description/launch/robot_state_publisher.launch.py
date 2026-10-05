@@ -38,7 +38,9 @@ def launch_setup(context, *args, **kwargs):
         "robot_description": load_xacro(
             Path(
                 os.path.join(
-                    get_package_share_directory("motkin_dual_motor_testbed_description"),
+                    get_package_share_directory(
+                        "motkin_dual_motor_testbed_description"
+                    ),
                     "robots",
                     xacro_file,
                 )

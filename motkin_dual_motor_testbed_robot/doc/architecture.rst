@@ -58,6 +58,6 @@ four places, whose parameters must stay identical:
 * ``FiveBarClosurePlugin``, to assemble the loop at start-up
   (``motkin_dual_motor_testbed_description/gazebo/gazebo_fivebar_2dof.urdf.xacro``);
 * ``FiveBarSystem``
-  (``motkin_dual_motor_testbed_description/ros2_control/system_pico_dual_drv8316c.ros2_control.xacro``);
+  (``motkin_dual_motor_testbed_description/ros2_control/system_motkin.ros2_control.xacro``);
 * ``motkin_five_bar_force_velocity_controller`` and
   ``motkin_five_bar_force_velocity_py`` (their ``geometry.*`` parameters).
