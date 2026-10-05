@@ -10,8 +10,8 @@ direct geometric model of the five-bar and its 2×2 velocity Jacobian J
 ‖P − E\ :sub:`L`‖² = L\ :sub:`2`\ ² and ‖P − E\ :sub:`R`‖² =
 L\ :sub:`2`\ ². It is the Python version of the model used by
 ``motkin_five_bar_force_velocity_controller``, whose documentation gives the
-details. The derivation of the geometric model is in ``five_bar_mgd_spec.md``
-at the root of the repository.
+details. The derivation of the geometric model is in
+`five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__.
 
 At ``control_rate``, the node computes q̇ = J\ :sup:`T` f\ :sub:`c`, clamps
 each component to ``max_joint_velocity`` and publishes the command. If the

@@ -5,7 +5,8 @@ Passive joint model
 geometric model of the five-bar. It computes the passive joint positions and
 velocities from the motor positions and velocities. It uses the same model as
 the ``FiveBarClosurePlugin`` of ``motkin_dual_motor_testbed_gazebo``; the full
-derivation is in ``five_bar_mgd_spec.md`` at the root of the repository.
+derivation is in
+`five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__.
 
 All coordinates are in the (x, y) plane of ``case``.
 

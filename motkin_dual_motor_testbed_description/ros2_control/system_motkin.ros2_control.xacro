@@ -2,11 +2,11 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!--
-    Drop-in real-hardware alternative to
-    motkin_dual_motor_testbed_description's
-    system_dual_motor_testbed.ros2_control.xacro: same joint names and same
+    Drop-in real-hardware alternative to the Gazebo ros2_control block of
+    gazebo/gazebo_fivebar_2dof.urdf.xacro and
+    gazebo/gazebo_dual_flywheel.urdf.xacro: same joint names and same
     position/velocity/effort/gain_kp/gain_kd interfaces, but backed by a
-    motkin board over USB instead of  Gazebo.
+    motkin board over USB instead of Gazebo.
 
     serial_port: left empty to auto-detect (/dev/serial/by-id, then
     /dev/ttyACM*, then /dev/ttyUSB*), or set explicitly, e.g. /dev/ttyACM0.

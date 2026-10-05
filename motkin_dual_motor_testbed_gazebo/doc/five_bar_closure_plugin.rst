@@ -66,8 +66,8 @@ simulation starts with a closed loop. Set ``initialize_with_mgd`` to false to
 skip this. The loop is then pulled closed by the constraint force, which is
 clamped to ``max_force``.
 
-The derivation of the direct geometric model is in ``five_bar_mgd_spec.md``
-at the root of the repository.
+The derivation of the direct geometric model is in
+`five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__.
 
 Parameters
 ----------

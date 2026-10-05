@@ -6,7 +6,7 @@ Jacobian
 
 ``include/motkin_five_bar_force_velocity_controller/five_bar_kinematics.hpp``
 implements the direct geometric model of the five-bar (see
-``five_bar_mgd_spec.md`` at the root of the repository): each motor θ\ :sub:`i`
+`five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__): each motor θ\ :sub:`i`
 drives a crank of length L\ :sub:`1` to an elbow E\ :sub:`i`, and both elbows
 are connected to the end point P by couplers of length L\ :sub:`2`. P is the
 intersection of two circles, computed in closed form.
