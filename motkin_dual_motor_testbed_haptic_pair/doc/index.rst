@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_haptic_pair
-===================================
+=====================================
 
 Simulates two ``motkin_dual_motor_testbed`` five-bar robots as a haptic pair in
 one Gazebo world: a **leader** that receives an external contact force (its

@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_bringup
-===============================
+=================================
 
 Launch files and controller configuration to start the MOTKIN dual motor
 testbed on real hardware with ``ros2_control``.

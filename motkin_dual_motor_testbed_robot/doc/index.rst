@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_robot
-=============================
+===============================
 
 Meta-package and entry point of the ``ros2_control`` software of the MOTKIN
 dual motor testbed: a base with two MOTKIN motors, driven by a Raspberry Pi Pico

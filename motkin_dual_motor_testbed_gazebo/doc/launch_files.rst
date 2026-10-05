@@ -2,7 +2,7 @@ Launch files
 ============
 
 ``motkin_dual_motor_testbed_gazebo.launch.py``
---------------------------------------------
+----------------------------------------------
 
 Starts the complete simulation of one robot, in the root namespace. It
 includes ``gz_world.launch.py`` (with ``config/<robot_model>.config`` as GUI

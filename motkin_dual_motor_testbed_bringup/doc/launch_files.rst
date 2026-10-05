@@ -2,14 +2,14 @@ Launch files
 ============
 
 ``motkin_dual_motor_testbed_ctrl.launch.py``
-------------------------------------------
+--------------------------------------------
 
 Starts the robot on real hardware with ``joint_state_broadcaster``,
 ``motkin_forward_command_controller``, ``robot_state_publisher`` and RViz (see
 :doc:`starting_the_testbed`).
 
 ``motkin_dual_motor_testbed.launch.py``
--------------------------------------
+---------------------------------------
 
 Same as ``motkin_dual_motor_testbed_ctrl.launch.py`` without
 ``motkin_forward_command_controller``: it only publishes the joint states and

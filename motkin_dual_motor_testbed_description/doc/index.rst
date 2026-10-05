@@ -1,5 +1,5 @@
 motkin_dual_motor_testbed_description
-===================================
+=====================================
 
 URDF/xacro description of the MOTKIN dual motor testbed, with meshes, the
 ``ros2_control`` hardware declarations and launch files to display it in RViz
