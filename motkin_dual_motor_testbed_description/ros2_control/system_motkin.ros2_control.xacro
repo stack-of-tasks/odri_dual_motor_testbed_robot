@@ -31,7 +31,7 @@
       <hardware>
         <xacro:if value="${five_bar}">
           <plugin>motkin_dual_motor_testbed_hardware/FiveBarSystem</plugin>
-          <param name="inner_plugin">motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware</param>
+          <param name="inner_plugin">motkin_ros2_hardware_interface/SystemMotkinHardware</param>
           <param name="motor_joint1">${left_joint_name}</param>
           <param name="motor_joint2">${right_joint_name}</param>
           <param name="passive_joint1">passive_1</param>
@@ -48,7 +48,7 @@
           <param name="psi2">2.511306362956145</param>
         </xacro:if>
         <xacro:unless value="${five_bar}">
-          <plugin>motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware</plugin>
+          <plugin>motkin_ros2_hardware_interface/SystemMotkinHardware</plugin>
         </xacro:unless>
         <param name="serial_port">${serial_port}</param>
         <param name="baud_rate">${baud_rate}</param>

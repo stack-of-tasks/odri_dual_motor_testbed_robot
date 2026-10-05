@@ -159,7 +159,7 @@ testée). Avec un joint `revolute` borné à ±π, l'assemblage initial par `Res
 
 Sur le robot réel, seuls `motor_1` / `motor_2` ont des codeurs. Le plugin ros2_control
 `motkin_dual_motor_testbed_hardware/FiveBarSystem` enveloppe le plugin de la carte
-(`inner_plugin`, par défaut `SystemPicoDualDrv8316CHardware`) et exporte `passive_1` /
+(`inner_plugin`, par défaut `SystemMotkinHardware`) et exporte `passive_1` /
 `passive_2` comme interfaces d'état seules (position, vitesse, effort = 0), recalculées
 après chaque `read()` avec ce modèle ; `joint_state_broadcaster` publie donc tout le
 five-bar, comme en simulation. Il est activé par `five_bar="true"` dans

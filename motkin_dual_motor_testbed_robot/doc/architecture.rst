@@ -15,7 +15,7 @@ selected by the ``gz_sim`` xacro argument of the robot files.
    Real robot (bringup)                                    Gazebo (gazebo)
    ros2_control_node                                       motkin_gz_ros2_control
      FiveBarSystem (five-bar only)                           GazeboMotkinSimSystem
-       └─ SystemPicoDualDrv8316CHardware ── USB ── board     FiveBarClosurePlugin
+       └─ SystemMotkinHardware ── USB ── board     FiveBarClosurePlugin
           │                                                            │
           └──────────────────── controller_manager (100 Hz) ───────────┘
                      │                                   │

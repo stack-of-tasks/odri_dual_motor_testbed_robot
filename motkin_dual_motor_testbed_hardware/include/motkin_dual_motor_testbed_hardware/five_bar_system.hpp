@@ -47,7 +47,7 @@ namespace motkin_dual_motor_testbed_hardware {
 ///
 /// Hardware parameters (all optional, shown with defaults):
 ///   inner_plugin    motkin_ros2_hardware_interface/
-///                   SystemPicoDualDrv8316CHardware
+///                   SystemMotkinHardware
 ///   motor_joint1    motor_1      passive_joint1  passive_1
 ///   motor_joint2    motor_2      passive_joint2  passive_2
 ///   a_x a_y b_x b_y l1 l2 phi1 phi2 psi1 psi2   see FiveBarGeometry

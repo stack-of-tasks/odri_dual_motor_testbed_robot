@@ -148,7 +148,7 @@ CallbackReturn FiveBarSystem::on_init(
 
   const std::string inner_plugin =
       GetParam(info_, "inner_plugin",
-               "motkin_ros2_hardware_interface/SystemPicoDualDrv8316CHardware");
+               "motkin_ros2_hardware_interface/SystemMotkinHardware");
   inner_info_.hardware_plugin_name = inner_plugin;
   inner_info_.name = info_.name + "_inner";
   // The wrapper's own read()/write() drive the inner plugin synchronously.
