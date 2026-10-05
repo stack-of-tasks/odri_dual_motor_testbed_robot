@@ -16,8 +16,8 @@ jobs:
     env:
       ADDITIONAL_DEBS: python3-rosdoc2
       UPSTREAM_WORKSPACE: |
-        github:stack-of-tasks/odri_gz_ros2_control#main
-        github:Gepetto/pico_dual_drv8316c_ros2_hardware_interface#main
+        github:Gepetto/motkin-gz-ros2-control#main
+        github:Gepetto/motkin-ros2-hardware-interface#main
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

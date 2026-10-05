@@ -1,5 +1,5 @@
 {
-  description = "ROS-2 package to handle the ODRI dual motor testbed robot";
+  description = "ROS-2 package to handle the MOTKIN dual motor testbed robot";
 
   inputs.gepetto.url = "github:gepetto/nix";
 
@@ -11,58 +11,58 @@
         rosDistros = [ "jazzy" ];
         rosShellDistro = "jazzy";
         rosOverrideAttrs = {
-          odri-dual-motor-testbed-bringup = {
+          motkin-dual-motor-testbed-bringup = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_bringup;
+              fileset = ./motkin_dual_motor_testbed_bringup;
             };
           };
-          odri-five-bar-force-velocity-controller = {
+          motkin-five-bar-force-velocity-controller = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_controllers/odri_five_bar_force_velocity_controller;
+              fileset = ./motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_controller;
             };
           };
-          odri-five-bar-force-velocity-py = {
+          motkin-five-bar-force-velocity-py = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_controllers/odri_five_bar_force_velocity_py;
+              fileset = ./motkin_dual_motor_testbed_controllers/motkin_five_bar_force_velocity_py;
             };
           };
-          odri-forward-command-controller = {
+          motkin-forward-command-controller = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_controllers/odri_forward_command_controller;
+              fileset = ./motkin_dual_motor_testbed_controllers/motkin_forward_command_controller;
             };
           };
-          odri-dual-motor-testbed-description = {
+          motkin-dual-motor-testbed-description = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_description;
+              fileset = ./motkin_dual_motor_testbed_description;
             };
           };
-          odri-dual-motor-testbed-gazebo = {
+          motkin-dual-motor-testbed-gazebo = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_gazebo;
+              fileset = ./motkin_dual_motor_testbed_gazebo;
             };
           };
-          odri-dual-motor-testbed-haptic-pair = {
+          motkin-dual-motor-testbed-haptic-pair = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_haptic_pair;
+              fileset = ./motkin_dual_motor_testbed_haptic_pair;
             };
           };
-          odri-dual-motor-testbed-hardware = {
+          motkin-dual-motor-testbed-hardware = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_hardware;
+              fileset = ./motkin_dual_motor_testbed_hardware;
             };
           };
-          odri-dual-motor-testbed-robot = {
+          motkin-dual-motor-testbed-robot = {
             src = lib.fileset.toSource {
               root = ./.;
-              fileset = ./odri_dual_motor_testbed_robot;
+              fileset = ./motkin_dual_motor_testbed_robot;
             };
           };
         };
