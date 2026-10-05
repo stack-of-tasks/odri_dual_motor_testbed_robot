@@ -5,6 +5,7 @@ Packages
 
    motkin_dual_motor_testbed_robot/          (repository)
    ├── motkin_dual_motor_testbed_robot/      This meta-package
+   │   └── doc/five_bar_mgd_spec.md          Five-bar geometric model
    ├── motkin_dual_motor_testbed_description/
    ├── motkin_dual_motor_testbed_bringup/
    ├── motkin_dual_motor_testbed_hardware/
@@ -13,8 +14,7 @@ Packages
    │   ├── motkin_forward_command_controller/
    │   ├── motkin_five_bar_force_velocity_controller/
    │   └── motkin_five_bar_force_velocity_py/
-   ├── motkin_dual_motor_testbed_haptic_pair/
-   └── five_bar_mgd_spec.md                Five-bar geometric model
+   └── motkin_dual_motor_testbed_haptic_pair/
 
 .. list-table::
    :header-rows: 1

@@ -50,7 +50,7 @@ In both cases ``joint_state_broadcaster`` publishes the four joints.
 Five-bar geometric model
 ------------------------
 
-``five_bar_mgd_spec.md``, at the root of the repository, derives the exact
+`five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__, in the ``doc/`` directory of this meta-package, derives the exact
 direct geometric model of the five-bar: the position of the end point and of
 the passive joints as a function of the motor angles. It is implemented in
 four places, whose parameters must stay identical:

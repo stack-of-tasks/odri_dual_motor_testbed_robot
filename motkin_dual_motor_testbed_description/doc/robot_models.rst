@@ -69,7 +69,7 @@ The fixed frames ``closing_tip_1`` (on ``arm_r2``) and ``closing_tip_2`` (on
   simulated dynamics. The exact direct geometric model is only used to
   assemble the loop at start-up. The parameters are in
   ``gazebo/gazebo_fivebar_2dof.urdf.xacro``; the derivation is in
-  ``five_bar_mgd_spec.md`` at the repository root.
+  `five_bar_mgd_spec.md <https://github.com/Gepetto/motkin-dual-motor-testbed-robot/blob/main/motkin_dual_motor_testbed_robot/doc/five_bar_mgd_spec.md>`__.
 
 .. note::
 
