@@ -89,9 +89,7 @@ class PositionCoupling(Node):
 
         self.declare_parameter("leader_namespace", "leader")
         self.declare_parameter("follower_namespace", "follower")
-        self.declare_parameter(
-            "controller_name", "motkin_forward_command_controller"
-        )
+        self.declare_parameter("controller_name", "motkin_forward_command_controller")
         self.declare_parameter("joints", ["motor_1", "motor_2"])
         self.declare_parameter("follower_kp", 2.0)
         self.declare_parameter("follower_kd", 0.05)
