@@ -12,37 +12,42 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Simulate two motkin_dual_motor_testbed five-bar robots as a haptic pair.
+Run two real motkin_dual_motor_testbed five-bar kits as a haptic pair.
 
-One Gazebo world is started with motkin_dual_motor_testbed_gazebo's
-gz_world.launch.py, then motkin_dual_motor_testbed_gazebo's
-robot_spawn.launch.py is included twice, once per robot, under the
-"leader" and "follower" namespaces so that their controller_manager,
-joint_states, tf and controller topics never collide. Each instance loads
-the *same*, existing motkin_five_bar_force_velocity_controller (see
-config/haptic_pair_controllers.yaml), which already implements the
-force-to-motion admittance law (qdot = J^T f_c) that makes a five-bar act
-as a haptic device.
+Real-hardware counterpart of haptic_pair_gazebo.launch.py: both kits are
+plugged into the *same* computer, and each one gets its own
+ros2_control_node, robot_state_publisher and controller spawners under the
+"leader" and "follower" namespaces, so that their controller_manager,
+joint_states, tf and controller topics never collide.
 
-The leader is the one meant to receive external forces -- publish a
+Since two motkin boards are connected, the serial port auto-detection of
+the hardware interface would pick the same board twice: the serial device
+of each kit must be given explicitly (leader_serial_port and
+follower_serial_port). Prefer the stable /dev/serial/by-id/usb-... paths
+over /dev/ttyACM*, whose numbering depends on the plug order.
+
+Both instances load the same motkin_five_bar_force_velocity_controller
+(config/haptic_pair_controllers.yaml). Publish a
 geometry_msgs/WrenchStamped on
-"/leader/motkin_five_bar_force_velocity_controller/contact_force" and the
-leader moves accordingly, acting as a haptic sensor.
+"/leader/motkin_five_bar_force_velocity_controller/contact_force" to move
+the leader; contact_force_relay republishes it onto the follower's own
+contact_force topic so that the follower reproduces the same motion.
 
-contact_force_relay republishes the leader's sensed contact force onto the
-follower's own contact_force topic. Since the follower runs the identical
-controller, it reproduces the same force -- and, by construction of the
-shared admittance law, the same motion.
+With rviz:=true, one RViz window is opened per kit, each one showing the
+robot of its own namespace.
 """
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.launch_description import LaunchDescription
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import (
+    Command,
+    FindExecutable,
+    LaunchConfiguration,
+    PathJoinSubstitution,
+)
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
 # Structural constants: everything downstream (the contact_force_relay
@@ -52,12 +57,103 @@ FOLLOWER_NAMESPACE = "follower"
 CONTROLLER = "motkin_five_bar_force_velocity_controller"
 
 
-def generate_launch_description():
-    gazebo_launch_dir = os.path.join(
-        get_package_share_directory("motkin_dual_motor_testbed_gazebo"), "launch"
+def robot_nodes(namespace, serial_port, controller_params, rviz):
+    """Return the nodes driving one real kit under ``namespace``."""
+    robot_description = {
+        "robot_description": ParameterValue(
+            Command(
+                [
+                    PathJoinSubstitution([FindExecutable(name="xacro")]),
+                    " ",
+                    PathJoinSubstitution(
+                        [
+                            FindPackageShare("motkin_dual_motor_testbed_description"),
+                            "robots",
+                            "fivebar_2dof_robot.urdf.xacro",
+                        ]
+                    ),
+                    " serial_port:=",
+                    serial_port,
+                ]
+            ),
+            value_type=str,
+        )
+    }
+
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        namespace=namespace,
+        parameters=[robot_description, controller_params],
+        output="screen",
+    )
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        namespace=namespace,
+        output="screen",
+        parameters=[robot_description],
+        # tf2 publishes on the absolute /tf: keep each robot's tree in its
+        # namespace.
+        remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
+    )
+    spawners = [
+        Node(
+            package="controller_manager",
+            executable="spawner",
+            namespace=namespace,
+            arguments=[
+                controller,
+                "--controller-manager",
+                f"/{namespace}/controller_manager",
+            ],
+            output="screen",
+        )
+        for controller in ["joint_state_broadcaster", CONTROLLER]
+    ]
+
+    rviz_node = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        namespace=namespace,
+        output="log",
+        arguments=[
+            "-d",
+            PathJoinSubstitution(
+                [
+                    FindPackageShare("motkin_dual_motor_testbed_description"),
+                    "rviz",
+                    "display_motkin_dual_motor_testbed.rviz",
+                ]
+            ),
+        ],
+        # The RViz configuration uses absolute topic names.
+        remappings=[
+            ("/robot_description", "robot_description"),
+            ("/tf", "tf"),
+            ("/tf_static", "tf_static"),
+        ],
+        condition=IfCondition(rviz),
     )
 
+    return [control_node, robot_state_publisher, *spawners, rviz_node]
+
+
+def generate_launch_description():
     declared_arguments = [
+        DeclareLaunchArgument(
+            "leader_serial_port",
+            description="Serial device of the leader's motkin board, "
+            "e.g. /dev/serial/by-id/usb-... (required: no auto-detection "
+            "with two boards).",
+        ),
+        DeclareLaunchArgument(
+            "follower_serial_port",
+            description="Serial device of the follower's motkin board, "
+            "e.g. /dev/serial/by-id/usb-... (required: no auto-detection "
+            "with two boards).",
+        ),
         DeclareLaunchArgument(
             "controller_params_file",
             default_value=PathJoinSubstitution(
@@ -70,65 +166,14 @@ def generate_launch_description():
             description="controller_manager YAML loaded by both robot instances.",
         ),
         DeclareLaunchArgument(
-            "leader_x",
-            default_value="-0.15",
-            description="X position (m) of the leader robot.",
-        ),
-        DeclareLaunchArgument(
-            "follower_x",
-            default_value="0.15",
-            description="X position (m) of the follower robot.",
-        ),
-        DeclareLaunchArgument(
-            "spawn_z",
-            default_value="0.01",
-            description="Z position (m) of both robots.",
-        ),
-        DeclareLaunchArgument(
-            "spawn_roll", default_value="0", description="Roll [rad] of both robots."
-        ),
-        DeclareLaunchArgument(
-            "gui", default_value="true", description="Start the Gazebo GUI client."
-        ),
-        DeclareLaunchArgument(
-            "gui_config",
-            default_value=PathJoinSubstitution(
-                [
-                    FindPackageShare("motkin_dual_motor_testbed_haptic_pair"),
-                    "config",
-                    "haptic_pair.config",
-                ]
-            ),
-            description="Gazebo GUI configuration file.",
+            "rviz",
+            default_value="false",
+            description="Open one RViz window per kit.",
         ),
     ]
 
-    gz_world = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(gazebo_launch_dir, "gz_world.launch.py")
-        ),
-        launch_arguments={
-            "gui": LaunchConfiguration("gui"),
-            "gui_config": LaunchConfiguration("gui_config"),
-        }.items(),
-    )
-
-    def robot_spawn(namespace, x):
-        return IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(gazebo_launch_dir, "robot_spawn.launch.py")
-            ),
-            launch_arguments={
-                "namespace": namespace,
-                "robot_model": "fivebar_2dof",
-                "controller_params_file": LaunchConfiguration("controller_params_file"),
-                "controllers": CONTROLLER,
-                "x": x,
-                "y": "0.0",
-                "z": LaunchConfiguration("spawn_z"),
-                "roll": LaunchConfiguration("spawn_roll"),
-            }.items(),
-        )
+    controller_params = LaunchConfiguration("controller_params_file")
+    rviz = LaunchConfiguration("rviz")
 
     contact_force_relay = Node(
         package="motkin_dual_motor_testbed_haptic_pair",
@@ -145,10 +190,17 @@ def generate_launch_description():
 
     return LaunchDescription(
         declared_arguments
-        + [
-            gz_world,
-            robot_spawn(LEADER_NAMESPACE, LaunchConfiguration("leader_x")),
-            robot_spawn(FOLLOWER_NAMESPACE, LaunchConfiguration("follower_x")),
-            contact_force_relay,
-        ]
+        + robot_nodes(
+            LEADER_NAMESPACE,
+            LaunchConfiguration("leader_serial_port"),
+            controller_params,
+            rviz,
+        )
+        + robot_nodes(
+            FOLLOWER_NAMESPACE,
+            LaunchConfiguration("follower_serial_port"),
+            controller_params,
+            rviz,
+        )
+        + [contact_force_relay]
     )

@@ -9,7 +9,8 @@ Package structure
    │   └── haptic_pair.config             Gazebo GUI layout showing both robots
    ├── doc/            This documentation (rosdoc2)
    ├── launch/
-   │   └── haptic_pair.launch.py          Main entry point
+   │   ├── haptic_pair_gazebo.launch.py   Simulation entry point (Gazebo)
+   │   └── haptic_pair.launch.py          Two real kits on the same computer
    ├── motkin_dual_motor_testbed_haptic_pair/
    │   └── contact_force_relay.py         Leader -> follower force relay node
    └── CMakeLists.txt  ament_cmake + ament_cmake_python build
