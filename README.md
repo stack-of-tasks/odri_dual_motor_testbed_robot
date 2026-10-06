@@ -27,21 +27,7 @@ by the hardware plugin, the Gazebo plugin and the controllers.
 
 ## Installation
 
-In a ROS 2 Jazzy workspace:
-
-```bash
-mkdir -p motkin_dual_motor_testbed_ws/src
-cd motkin_dual_motor_testbed_ws/src
-wget https://raw.githubusercontent.com/Gepetto/motkin-dual-motor-testbed-robot/main/motkin_dual_motor_testbed_robot.repos
-cd ..
-vcs import --skip-existing src < src/motkin_dual_motor_testbed_robot.repos
-source /opt/ros/jazzy/setup.bash
-rosdep install --from-paths src --ignore-src -y
-colcon build
-source ./install/setup.bash
-```
-
-`motkin_dual_motor_testbed_robot.repos` lists the repositories the workspace
+`motkin-ws.repos` lists the repositories the workspace
 needs, besides this one:
 
 - [`motkin_gz_ros2_control`](https://github.com/Gepetto/motkin-gz-ros2-control):
@@ -49,8 +35,36 @@ needs, besides this one:
 - [`motkin_ros2_hardware_interface`](https://github.com/Gepetto/motkin-ros2-hardware-interface):
   hardware interface of the motor board, needed for the real robot.
 
-The file also lists this repository, so `--skip-existing` keeps the clone made
-above untouched.
+### ROS native (require ubuntu 24.04 with jazzy)
+
+```bash
+mkdir motkin-ws
+cd motkin-ws
+wget https://raw.githubusercontent.com/Gepetto/motkin-dual-motor-testbed-robot/main/motkin-ws.repos
+vcs import --input motkin-ws.repos
+source /opt/ros/jazzy/setup.bash
+rosdep install --from-paths src --ignore-src -y
+source /opt/ros/jazzy/setup.bash
+colcon build
+source ./install/setup.bash
+```
+
+### Containers
+
+```bash
+docker build -t motkin .
+docker run --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix --device /dev/ttyACM0:/dev/ttyACM0 -it motkin
+```
+
+And inside the container: `source ./install/setup.bash`
+
+### Nix
+
+```
+nix develop
+colcon build
+source ./install/setup.bash
+```
 
 ## Usage
 

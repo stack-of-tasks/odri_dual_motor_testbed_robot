@@ -8,17 +8,17 @@ In a ROS 2 Jazzy workspace:
 
 .. code-block:: bash
 
-   mkdir -p motkin_dual_motor_testbed_ws/src
-   cd motkin_dual_motor_testbed_ws/src
+   mkdir -p motkin-ws
+   cd motkin-ws
    git clone https://github.com/stack-of-tasks/motkin_dual_motor_testbed_robot.git
    cd ..
-   vcs import --skip-existing src < src/motkin_dual_motor_testbed_robot/motkin_dual_motor_testbed_robot.repos
+   vcs import --skip-existing -i src/motkin_dual_motor_testbed_robot/motkin-ws.repos
    source /opt/ros/jazzy/setup.bash
    rosdep install --from-paths src --ignore-src -y
    colcon build
    source ./install/setup.bash
 
-``motkin_dual_motor_testbed_robot.repos``, at the root of the repository, lists
+``motkin-ws.repos``, at the root of the repository, lists
 the other repositories the workspace needs:
 
 * ``motkin_gz_ros2_control``: ``ros2_control`` hardware interface for Gazebo,
