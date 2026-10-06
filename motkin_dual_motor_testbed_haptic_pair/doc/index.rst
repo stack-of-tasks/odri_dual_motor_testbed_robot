@@ -1,9 +1,11 @@
 motkin_dual_motor_testbed_haptic_pair
 =====================================
 
-Simulates two ``motkin_dual_motor_testbed`` five-bar robots as a haptic pair in
-one Gazebo world: a **leader** that receives an external contact force (its
-haptic-sensor input) and a **follower** that reproduces it.
+Runs two ``motkin_dual_motor_testbed`` five-bar robots as a haptic pair, either
+simulated in one Gazebo world or as two real kits on the same computer: a **leader** that receives an external contact force (its
+haptic-sensor input) and a **follower** that reproduces it. On the real kits,
+which have no force sensor, the follower tracks the leader moved by hand and
+the force it meets is fed back on the leader from its measured motor current.
 
 .. figure:: haptic_pair_in_gz_harmonic.png
    :width: 100%
@@ -15,7 +17,13 @@ Quick start:
 
 .. code-block:: bash
 
-   ros2 launch motkin_dual_motor_testbed_haptic_pair haptic_pair.launch.py
+   # Simulation (Gazebo)
+   ros2 launch motkin_dual_motor_testbed_haptic_pair haptic_pair_gazebo.launch.py
+
+   # Two real kits plugged into the same computer
+   ros2 launch motkin_dual_motor_testbed_haptic_pair haptic_pair.launch.py \
+     leader_serial_port:=/dev/serial/by-id/usb-...-leader \
+     follower_serial_port:=/dev/serial/by-id/usb-...-follower
 
 .. toctree::
    :maxdepth: 2

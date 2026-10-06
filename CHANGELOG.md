@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+- added support for lear haptic pair
 - added changelog
 
 ## [1.0.0] - 2026-10-06

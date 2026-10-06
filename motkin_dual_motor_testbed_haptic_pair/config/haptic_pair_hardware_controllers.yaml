@@ -1,0 +1,42 @@
+# controller_manager configuration shared by BOTH real kits of the haptic
+# pair (leader and follower), loaded by launch/haptic_pair.launch.py under
+# each kit's own namespace.
+#
+# The real kits have no force sensor, so the contact-force relay used in
+# simulation (haptic_pair_controllers.yaml) cannot work here: both kits run
+# motkin_forward_command_controller instead, and the position_coupling node
+# sends each one its PD target from the other kit's joint states.
+#
+# Keyed under the "/**" wildcard so that the parameters apply to the
+# namespaced /leader and /follower controller_manager nodes.
+/**:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100  # Hz
+
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+
+      motkin_forward_command_controller:
+        type: motkin_forward_command_controller/MotkinForwardCommandController
+
+  motkin_forward_command_controller:
+    ros__parameters:
+      joints:
+        - motor_1
+        - motor_2
+      # Zero gains until position_coupling sends its first command: both
+      # kits stay limp.
+      initial_command:
+        motor_1:
+          position: 0.0
+          velocity: 0.0
+          effort: 0.0
+          gain_kp: 0.0
+          gain_kd: 0.0
+        motor_2:
+          position: 0.0
+          velocity: 0.0
+          effort: 0.0
+          gain_kp: 0.0
+          gain_kd: 0.0

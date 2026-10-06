@@ -5,13 +5,17 @@ Package structure
 
    motkin_dual_motor_testbed_haptic_pair/
    ├── config/
-   │   ├── haptic_pair_controllers.yaml   controller_manager configuration (both robots)
+   │   ├── haptic_pair_controllers.yaml   controller_manager configuration (simulation)
+   │   ├── haptic_pair_hardware_controllers.yaml  controller_manager configuration (real kits)
+   │   ├── position_coupling.yaml         position_coupling gains (real kits)
    │   └── haptic_pair.config             Gazebo GUI layout showing both robots
    ├── doc/            This documentation (rosdoc2)
    ├── launch/
-   │   └── haptic_pair.launch.py          Main entry point
+   │   ├── haptic_pair_gazebo.launch.py   Simulation entry point (Gazebo)
+   │   └── haptic_pair.launch.py          Two real kits on the same computer
    ├── motkin_dual_motor_testbed_haptic_pair/
-   │   └── contact_force_relay.py         Leader -> follower force relay node
+   │   ├── contact_force_relay.py         Leader -> follower force relay node (simulation)
+   │   └── position_coupling.py           Position forward / current feedback node (real kits)
    └── CMakeLists.txt  ament_cmake + ament_cmake_python build
 
 Building

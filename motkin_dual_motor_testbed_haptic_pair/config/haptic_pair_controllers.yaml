@@ -1,7 +1,7 @@
 # controller_manager configuration shared by BOTH robot instances of the
 # haptic pair (leader and follower). Each instance loads this file under
 # its own ROS namespace (see fivebar_2dof.urdf.xacro's robot_namespace /
-# controller_params_file args and launch/haptic_pair.launch.py), so the
+# controller_params_file args and launch/haptic_pair_gazebo.launch.py), so the
 # same joint names (motor_1/motor_2) and controller name are reused without
 # collision -- each namespace gets its own controller_manager node.
 #
