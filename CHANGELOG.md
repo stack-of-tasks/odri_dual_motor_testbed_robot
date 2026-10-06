@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-06
+
 - added support for lear haptic pair
 - added changelog
 
@@ -13,5 +15,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Initial release
 
-[Unreleased]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/releases/tag/v1.0.0
