@@ -2,7 +2,9 @@
 
 Runs two `motkin_dual_motor_testbed` five-bar robots as a haptic pair, either
 simulated in one Gazebo world or as two real kits on the same computer: a **leader** that receives an external contact force and a
-**follower** that reproduces it.
+**follower** that reproduces it. On the real kits, which have no force
+sensor, the follower tracks the leader moved by hand and the force it meets
+is fed back on the leader from its measured motor current.
 
 Quick start:
 

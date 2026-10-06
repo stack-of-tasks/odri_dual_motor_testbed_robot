@@ -51,8 +51,11 @@ set to show both robots. Use ``gui_config:=<file>`` to load another file, or
 Real-hardware counterpart of ``haptic_pair_gazebo.launch.py``, for two kits
 plugged into the same computer. For each of the leader and the follower, it
 starts a ``ros2_control_node``, a ``robot_state_publisher`` and the
-``joint_state_broadcaster`` and ``motkin_five_bar_force_velocity_controller``
-spawners under the robot's namespace, then starts ``contact_force_relay``.
+``joint_state_broadcaster`` and ``motkin_forward_command_controller``
+spawners under the robot's namespace, then starts ``position_coupling``
+(see :doc:`architecture`). The real kits have no force sensor, so the
+contact-force relay of the simulation is replaced by a position coupling
+with force feedback estimated from the follower's motor current.
 
 With two motkin boards connected, the serial port auto-detection of the
 hardware interface would select the same board twice: the serial device of
@@ -80,8 +83,11 @@ depends on the plug order.
      - (required)
      - Serial device of the follower's motkin board.
    * - ``controller_params_file``
-     - ``config/haptic_pair_controllers.yaml``
+     - ``config/haptic_pair_hardware_controllers.yaml``
      - controller_manager YAML loaded by both robot instances.
+   * - ``coupling_params_file``
+     - ``config/position_coupling.yaml``
+     - Gains and safety limits of ``position_coupling``.
    * - ``rviz``
      - ``false``
      - Open one RViz window per kit, each showing the robot of its namespace.
@@ -89,8 +95,12 @@ depends on the plug order.
 Driving the leader
 ------------------
 
-Publish a force on the leader's ``contact_force`` topic, from a script, a
-joystick bridge, or Gazebo's own apply-force tool bridged to ROS:
+On the real kits, move the leader by hand: the follower tracks it, and
+blocking the follower is felt on the leader.
+
+In simulation, publish a force on the leader's ``contact_force`` topic, from
+a script, a joystick bridge, or Gazebo's own apply-force tool bridged to
+ROS:
 
 .. code-block:: bash
 

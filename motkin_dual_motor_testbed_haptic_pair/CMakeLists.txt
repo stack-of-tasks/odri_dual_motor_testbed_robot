@@ -4,7 +4,8 @@ project(motkin_dual_motor_testbed_haptic_pair)
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
-# Python module motkin_dual_motor_testbed_haptic_pair (contact_force_relay).
+# Python module motkin_dual_motor_testbed_haptic_pair (contact_force_relay,
+# position_coupling).
 ament_python_install_package(${PROJECT_NAME})
 
 # Executable for ros2 run / launch files.
@@ -12,6 +13,11 @@ install(
     PROGRAMS ${PROJECT_NAME}/contact_force_relay.py
     DESTINATION lib/${PROJECT_NAME}
     RENAME contact_force_relay
+)
+install(
+    PROGRAMS ${PROJECT_NAME}/position_coupling.py
+    DESTINATION lib/${PROJECT_NAME}
+    RENAME position_coupling
 )
 
 install(

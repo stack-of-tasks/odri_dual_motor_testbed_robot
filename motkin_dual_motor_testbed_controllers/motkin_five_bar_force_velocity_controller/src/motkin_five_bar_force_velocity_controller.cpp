@@ -256,6 +256,12 @@ controller_interface::return_type MotkinFiveBarForceVelocityController::update(
 
 #include "pluginlib/class_list_macros.hpp"
 
-PLUGINLIB_EXPORT_CLASS(motkin_five_bar_force_velocity_controller::
-                           MotkinFiveBarForceVelocityController,
-                       controller_interface::ControllerInterface)
+// The class name must stay on a single line: PLUGINLIB_EXPORT_CLASS
+// stringifies it, and a line break after "::" registers the plugin as
+// "...:: MotkinFiveBarForceVelocityController" (with a space), which no
+// longer matches the plugin XML ("no factory exists" at load time).
+// clang-format off
+PLUGINLIB_EXPORT_CLASS(
+  motkin_five_bar_force_velocity_controller::MotkinFiveBarForceVelocityController,
+  controller_interface::ControllerInterface)
+// clang-format on

@@ -1,0 +1,29 @@
+# Parameters of the position_coupling node (launch/haptic_pair.launch.py).
+# Gains are those of the firmware PD law, iq = iff + kp * (q_target - q)
+# + kd * (v_target - v), iq and iff in A, q in rad, v in rad/s.
+position_coupling:
+  ros__parameters:
+    joints: [motor_1, motor_2]
+    # Follower tracks the leader.
+    follower_kp: 2.0
+    follower_kd: 0.05
+    # Force feedback on the leader, estimated from the follower's measured
+    # current: iff_leader = -force_feedback_gain * lowpass(i_follower),
+    # clamped to +/- max_feedback_current (A). 0 disables it (the leader is
+    # then free: unilateral teleoperation). Increase progressively: above 1
+    # the leader pushes harder than the follower, and the loop can
+    # oscillate.
+    force_feedback_gain: 0.5
+    force_feedback_cutoff: 10.0  # Hz, low-pass filter on the current
+    max_feedback_current: 0.5  # A
+    # Optional PD of the leader towards the follower (position-error
+    # feedback). Start small: a stiff symmetric coupling can oscillate.
+    leader_kp: 0.0
+    leader_kd: 0.0
+    # Clamp on the position error of each target (rad): bounds the current
+    # at kp * max_position_error when the kits start far apart.
+    max_position_error: 0.3
+    # Both kits are released (zero gains) when their joint states are older
+    # than this (s).
+    state_timeout: 0.1
+    control_rate: 100.0  # Hz

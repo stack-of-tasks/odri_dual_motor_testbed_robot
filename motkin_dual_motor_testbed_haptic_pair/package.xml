@@ -22,6 +22,8 @@
 
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
 
   <exec_depend>motkin_dual_motor_testbed_gazebo</exec_depend>
   <exec_depend>motkin_dual_motor_testbed_description</exec_depend>
@@ -31,6 +33,8 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>xacro</exec_depend>
   <exec_depend>motkin_five_bar_force_velocity_controller</exec_depend>
+  <exec_depend>motkin_forward_command_controller</exec_depend>
+  <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>ros2launch</exec_depend>

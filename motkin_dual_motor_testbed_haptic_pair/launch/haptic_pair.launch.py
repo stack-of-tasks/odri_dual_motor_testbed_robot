@@ -26,12 +26,13 @@ of each kit must be given explicitly (leader_serial_port and
 follower_serial_port). Prefer the stable /dev/serial/by-id/usb-... paths
 over /dev/ttyACM*, whose numbering depends on the plug order.
 
-Both instances load the same motkin_five_bar_force_velocity_controller
-(config/haptic_pair_controllers.yaml). Publish a
-geometry_msgs/WrenchStamped on
-"/leader/motkin_five_bar_force_velocity_controller/contact_force" to move
-the leader; contact_force_relay republishes it onto the follower's own
-contact_force topic so that the follower reproduces the same motion.
+The real kits have no force sensor, so the contact-force relay of the
+simulation cannot be used: both kits run motkin_forward_command_controller
+(config/haptic_pair_hardware_controllers.yaml), and position_coupling
+(config/position_coupling.yaml) makes the follower track the leader's joint
+positions. Move the leader by hand and the follower reproduces its motion;
+the force the follower meets is estimated from its measured motor current
+and fed back on the leader as a feed-forward current, so the user feels it.
 
 With rviz:=true, one RViz window is opened per kit, each one showing the
 robot of its own namespace.
@@ -50,11 +51,11 @@ from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 
-# Structural constants: everything downstream (the contact_force_relay
+# Structural constants: everything downstream (the position_coupling
 # topics) is wired to these two specific roles.
 LEADER_NAMESPACE = "leader"
 FOLLOWER_NAMESPACE = "follower"
-CONTROLLER = "motkin_five_bar_force_velocity_controller"
+CONTROLLER = "motkin_forward_command_controller"
 
 
 def robot_nodes(namespace, serial_port, controller_params, rviz):
@@ -160,10 +161,21 @@ def generate_launch_description():
                 [
                     FindPackageShare("motkin_dual_motor_testbed_haptic_pair"),
                     "config",
-                    "haptic_pair_controllers.yaml",
+                    "haptic_pair_hardware_controllers.yaml",
                 ]
             ),
             description="controller_manager YAML loaded by both robot instances.",
+        ),
+        DeclareLaunchArgument(
+            "coupling_params_file",
+            default_value=PathJoinSubstitution(
+                [
+                    FindPackageShare("motkin_dual_motor_testbed_haptic_pair"),
+                    "config",
+                    "position_coupling.yaml",
+                ]
+            ),
+            description="Parameters (gains, safety limits) of position_coupling.",
         ),
         DeclareLaunchArgument(
             "rviz",
@@ -175,16 +187,18 @@ def generate_launch_description():
     controller_params = LaunchConfiguration("controller_params_file")
     rviz = LaunchConfiguration("rviz")
 
-    contact_force_relay = Node(
+    position_coupling = Node(
         package="motkin_dual_motor_testbed_haptic_pair",
-        executable="contact_force_relay",
-        name="contact_force_relay",
+        executable="position_coupling",
+        name="position_coupling",
         output="screen",
         parameters=[
+            LaunchConfiguration("coupling_params_file"),
             {
-                "input_topic": f"/{LEADER_NAMESPACE}/{CONTROLLER}/contact_force",
-                "output_topic": f"/{FOLLOWER_NAMESPACE}/{CONTROLLER}/contact_force",
-            }
+                "leader_namespace": LEADER_NAMESPACE,
+                "follower_namespace": FOLLOWER_NAMESPACE,
+                "controller_name": CONTROLLER,
+            },
         ],
     )
 
@@ -202,5 +216,5 @@ def generate_launch_description():
             controller_params,
             rviz,
         )
-        + [contact_force_relay]
+        + [position_coupling]
     )
