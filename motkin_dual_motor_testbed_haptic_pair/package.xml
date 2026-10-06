@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>motkin_dual_motor_testbed_haptic_pair</name>
   <version>0.1.0</version>
@@ -11,9 +12,10 @@
     contact force, so it reproduces the force -- and therefore the motion
     -- felt by the leader.
   </description>
-
-  <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
-  <license>Apache License 2.0</license>
+  <maintainer email="guilhem.saurel@laas.fr">Guilhem Saurel</maintainer>
+  <license>Apache-2.0</license>
+  <url type="repository">https://github.com/Gepetto/motkin-dual-motor-testbed-robot</url>
+  <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_python</buildtool_depend>

@@ -1,11 +1,13 @@
 <?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>motkin_dual_motor_testbed_robot</name>
   <version>1.0.0</version>
   <description>Meta package describing the MOTKIN dual motor testbed robot</description>
-  <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
-  <maintainer email="olivier.stasse@laas.fr">Olivier Stasse</maintainer>
+  <maintainer email="guilhem.saurel@laas.fr">Guilhem Saurel</maintainer>
   <license>Apache-2.0</license>
+  <url type="repository">https://github.com/Gepetto/motkin-dual-motor-testbed-robot</url>
+  <author email="olivier.stasse@laas.fr">Olivier Stasse</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <!-- <buildtool_depend>python3-rosdoc2</buildtool_depend> -->
