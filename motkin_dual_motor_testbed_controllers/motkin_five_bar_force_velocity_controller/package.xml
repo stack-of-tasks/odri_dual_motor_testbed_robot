@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>motkin_five_bar_force_velocity_controller</name>
-  <version>0.1.0</version>
+  <version>1.0.0</version>
   <description>
     ros2_control endpoint force-to-velocity controller (qdot = J^T f_c) for
     the motkin_dual_motor_testbed five-bar mechanism. Reads motor_1/motor_2
