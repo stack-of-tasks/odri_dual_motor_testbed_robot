@@ -45,7 +45,18 @@
       <state_interface name="effort" />
     </joint>
 
-
+    <!-- Simulated motkin board status. clock is the simulation time in us,
+         latest_command_index counts physics steps, and flags is set by
+         publishing a gz.msgs.UInt32 (0-255) on flags_topic, which is
+         prefixed by robot_namespace so that each robot gets its own, e.g.
+         gz topic -t /<robot_namespace>/motkin_board/flags -m gz.msgs.UInt32 -p 'data: 4' -->
+    <xacro:property name="flags_ns" value="${'$(arg robot_namespace)'.strip('/')}" />
+    <gpio name="motkin_board">
+      <param name="flags_topic">${'/' + flags_ns if flags_ns else ''}/motkin_board/flags</param>
+      <state_interface name="clock" data_type="uint32" />
+      <state_interface name="latest_command_index" data_type="uint32" />
+      <state_interface name="flags" data_type="uint8" />
+    </gpio>
   </ros2_control>
 
   <gazebo>

@@ -123,6 +123,13 @@
           <state_interface name="effort"/>
         </joint>
       </xacro:if>
+
+      <!-- Board status. data_type must match what the plugin expects. -->
+      <gpio name="motkin_board">
+        <state_interface name="clock" data_type="uint32"/>
+        <state_interface name="latest_command_index" data_type="uint32"/>
+        <state_interface name="flags" data_type="uint8"/>
+      </gpio>
     </ros2_control>
 
   </xacro:macro>
