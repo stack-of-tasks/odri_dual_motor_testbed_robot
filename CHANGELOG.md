@@ -6,8 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-- Add GPIO support to handle other messages from the protocol
-
 ## [1.0.1] - 2026-10-06
 
 - added support for lear haptic pair
