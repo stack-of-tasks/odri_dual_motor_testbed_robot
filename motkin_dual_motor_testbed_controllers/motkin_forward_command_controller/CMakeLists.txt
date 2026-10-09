@@ -65,6 +65,11 @@ install(
     LIBRARY DESTINATION lib
     INCLUDES DESTINATION include
 )
+install(
+    PROGRAMS scripts/send_command.py
+    DESTINATION lib/${PROJECT_NAME}
+    RENAME send_command
+)
 
 if(BUILD_TESTING)
     find_package(ament_cmake_gmock REQUIRED)
