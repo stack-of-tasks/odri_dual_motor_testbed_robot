@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-09
+
 - motkin_forward_command_controller publishes all the robot state interfaces,
   including the gains and the board GPIO status, on `~/board_state`
 - added the motkin_dual_motor_testbed_msgs package with the `BoardState` message
@@ -19,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Initial release
 
-[Unreleased]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/gepetto/motkin-dual-motor-testbed-robot/releases/tag/v1.0.0
