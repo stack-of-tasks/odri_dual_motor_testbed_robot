@@ -59,6 +59,12 @@
               fileset = ./motkin_dual_motor_testbed_hardware;
             };
           };
+          motkin-dual-motor-testbed-msgs = {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = ./motkin_dual_motor_testbed_msgs;
+            };
+          };
           motkin-dual-motor-testbed-robot = {
             src = lib.fileset.toSource {
               root = ./.;

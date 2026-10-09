@@ -22,6 +22,7 @@
 #include "gmock/gmock.h"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/loaned_command_interface.hpp"
+#include "hardware_interface/loaned_state_interface.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
 #include "lifecycle_msgs/msg/state.hpp"
 #include "motkin_forward_command_controller/motkin_forward_command_controller.hpp"
@@ -34,6 +35,8 @@ using controller_interface::configure_succeeds;
 using controller_interface::deactivate_succeeds;
 using hardware_interface::CommandInterface;
 using hardware_interface::LoanedCommandInterface;
+using hardware_interface::LoanedStateInterface;
+using hardware_interface::StateInterface;
 
 static constexpr const char* HW_IF_GAIN_KP = "gain_kp";
 static constexpr const char* HW_IF_GAIN_KD = "gain_kd";
@@ -43,6 +46,8 @@ static constexpr const char* HW_IF_GAIN_KD = "gain_kd";
 class FriendController
     : public motkin_forward_command_controller::MotkinForwardCommandController {
  public:
+  using MotkinForwardCommandController::board_state_msg_;
+  using MotkinForwardCommandController::board_state_publisher_;
   using MotkinForwardCommandController::eff_interfaces_;
   using MotkinForwardCommandController::kd_interfaces_;
   using MotkinForwardCommandController::kp_interfaces_;
@@ -62,7 +67,9 @@ class MotkinForwardCommandControllerTest : public ::testing::Test {
   // Initialise controller and wire up all 5 command interfaces per joint.
   // joints is passed via node_options so generate_parameter_library sees it at
   // init time.
-  void SetUpController(const std::vector<std::string>& joints = {"j1", "j2"}) {
+  void SetUpController(
+      const std::vector<std::string>& joints = {"j1", "j2"},
+      std::vector<StateInterface::ConstSharedPtr> state_ifs = {}) {
     controller_interface::ControllerInterfaceParams params;
     params.controller_name = "motkin_forward_command_controller";
     params.robot_description = "";
@@ -84,7 +91,12 @@ class MotkinForwardCommandControllerTest : public ::testing::Test {
     cmd_ifs.emplace_back(j2_eff_);
     cmd_ifs.emplace_back(j2_kp_);
     cmd_ifs.emplace_back(j2_kd_);
-    controller_->assign_interfaces(std::move(cmd_ifs), {});
+    std::vector<LoanedStateInterface> loaned_state_ifs;
+    for (const auto& state_if : state_ifs) {
+      loaned_state_ifs.emplace_back(state_if);
+    }
+    controller_->assign_interfaces(std::move(cmd_ifs),
+                                   std::move(loaned_state_ifs));
     executor_.add_node(controller_->get_node()->get_node_base_interface());
   }
 
@@ -117,6 +129,16 @@ class MotkinForwardCommandControllerTest : public ::testing::Test {
                            &j2_eff_val_};
   CommandInterface j2_kp_{"j2", HW_IF_GAIN_KP, &j2_kp_val_};
   CommandInterface j2_kd_{"j2", HW_IF_GAIN_KD, &j2_kd_val_};
+
+  static StateInterface::SharedPtr make_state_interface(
+      const std::string& prefix, const std::string& name,
+      const std::string& data_type = "double") {
+    hardware_interface::InterfaceInfo info;
+    info.name = name;
+    info.data_type = data_type;
+    return std::make_shared<StateInterface>(
+        hardware_interface::InterfaceDescription(prefix, info));
+  }
 };
 
 // ---------------------------------------------------------------------------
@@ -242,4 +264,76 @@ TEST_F(MotkinForwardCommandControllerTest, DeactivateClearsInterfaces) {
   EXPECT_TRUE(controller_->eff_interfaces_.empty());
   EXPECT_TRUE(controller_->kp_interfaces_.empty());
   EXPECT_TRUE(controller_->kd_interfaces_.empty());
+}
+
+TEST_F(MotkinForwardCommandControllerTest, BoardStatePublished) {
+  // Hardware exports, in this order: a passive joint, j2 without gains, j1
+  // with all the joint interfaces, and the board GPIO.
+  std::vector<StateInterface::SharedPtr> ifs;
+  auto add = [&](const std::string& prefix, const std::string& name,
+                 const std::string& data_type = "double") {
+    ifs.push_back(make_state_interface(prefix, name, data_type));
+    return ifs.back();
+  };
+  auto p_pos = add("passive", hardware_interface::HW_IF_POSITION);
+  auto j2_pos = add("j2", hardware_interface::HW_IF_POSITION);
+  auto j2_vel = add("j2", hardware_interface::HW_IF_VELOCITY);
+  auto j2_eff = add("j2", hardware_interface::HW_IF_EFFORT);
+  auto j1_pos = add("j1", hardware_interface::HW_IF_POSITION);
+  auto j1_vel = add("j1", hardware_interface::HW_IF_VELOCITY);
+  auto j1_eff = add("j1", hardware_interface::HW_IF_EFFORT);
+  auto j1_kp = add("j1", HW_IF_GAIN_KP);
+  auto j1_kd = add("j1", HW_IF_GAIN_KD);
+  auto clock = add("motkin_board", "clock", "uint32");
+  auto index = add("motkin_board", "latest_command_index", "uint32");
+  auto flags = add("motkin_board", "flags", "uint8");
+
+  ASSERT_TRUE(p_pos->set_value(-1.0));
+  ASSERT_TRUE(j2_pos->set_value(2.0));
+  ASSERT_TRUE(j2_vel->set_value(0.2));
+  ASSERT_TRUE(j2_eff->set_value(20.0));
+  ASSERT_TRUE(j1_pos->set_value(1.0));
+  ASSERT_TRUE(j1_vel->set_value(0.1));
+  ASSERT_TRUE(j1_eff->set_value(10.0));
+  ASSERT_TRUE(j1_kp->set_value(5.0));
+  ASSERT_TRUE(j1_kd->set_value(0.5));
+  ASSERT_TRUE(clock->set_value(uint32_t{123456}));
+  ASSERT_TRUE(index->set_value(uint32_t{42}));
+  ASSERT_TRUE(flags->set_value(uint8_t{3}));
+
+  SetUpController({"j1", "j2"}, {ifs.begin(), ifs.end()});
+  ASSERT_TRUE(configure_succeeds(controller_));
+  ASSERT_TRUE(activate_succeeds(controller_));
+  EXPECT_STREQ(controller_->board_state_publisher_->get_topic_name(),
+               "/motkin_forward_command_controller/board_state");
+
+  const rclcpp::Time stamp(7, 0);
+  controller_->update(stamp, rclcpp::Duration::from_seconds(0.01));
+
+  const auto& msg = controller_->board_state_msg_;
+  EXPECT_EQ(msg.header.stamp.sec, 7);
+  // Controlled joints first, then the others.
+  EXPECT_THAT(msg.name, ::testing::ElementsAre("j1", "j2", "passive"));
+  EXPECT_THAT(msg.position, ::testing::ElementsAre(1.0, 2.0, -1.0));
+  EXPECT_DOUBLE_EQ(msg.velocity[0], 0.1);
+  EXPECT_DOUBLE_EQ(msg.velocity[1], 0.2);
+  EXPECT_TRUE(std::isnan(msg.velocity[2]));
+  EXPECT_DOUBLE_EQ(msg.effort[0], 10.0);
+  EXPECT_DOUBLE_EQ(msg.effort[1], 20.0);
+  EXPECT_DOUBLE_EQ(msg.gain_kp[0], 5.0);
+  EXPECT_DOUBLE_EQ(msg.gain_kd[0], 0.5);
+  for (std::size_t i : {1, 2}) {
+    EXPECT_TRUE(std::isnan(msg.gain_kp[i]));
+    EXPECT_TRUE(std::isnan(msg.gain_kd[i]));
+  }
+  EXPECT_EQ(msg.clock, 123456u);
+  EXPECT_EQ(msg.latest_command_index, 42u);
+  EXPECT_EQ(msg.flags, 3u);
+
+  // Values are refreshed at each update.
+  ASSERT_TRUE(j1_pos->set_value(1.5));
+  ASSERT_TRUE(flags->set_value(uint8_t{0}));
+  controller_->update(stamp, rclcpp::Duration::from_seconds(0.01));
+  EXPECT_DOUBLE_EQ(msg.position[0], 1.5);
+  EXPECT_EQ(msg.flags, 0u);
 }

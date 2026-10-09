@@ -32,3 +32,9 @@ motkin_forward_command_controller:
         default_value: 0.0,
         description: "Initial gain_kd command applied to this joint on activation, before any message is received on ~/commands.",
       }
+  gpio_name: {
+    type: string,
+    default_value: "motkin_board",
+    description: "Name of the GPIO whose clock, latest_command_index and flags state interfaces are published on ~/board_state.",
+    read_only: true,
+  }

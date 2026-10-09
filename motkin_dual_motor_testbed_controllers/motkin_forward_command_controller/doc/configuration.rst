@@ -17,6 +17,11 @@ The parameters are declared with ``generate_parameter_library`` in
    * - ``joints``
      - ``[]``
      - Names of the joints to control. Read-only.
+   * - ``gpio_name``
+     - ``motkin_board``
+     - Name of the GPIO whose ``clock``, ``latest_command_index`` and
+       ``flags`` state interfaces are published on ``~/board_state``.
+       Read-only.
    * - ``initial_command.<joint>.position``
      - ``0.0``
      - Position command applied on activation.
@@ -78,8 +83,8 @@ Building and testing
 
 The tests in ``test/test_motkin_forward_command_controller.cpp`` cover
 configuration and activation, command forwarding, ``NaN`` skipping,
-rejection of messages of the wrong size and the release of the interfaces on
-deactivation.
+rejection of messages of the wrong size, the release of the interfaces on
+deactivation and the content of ``~/board_state``.
 
 Building this documentation
 ---------------------------
