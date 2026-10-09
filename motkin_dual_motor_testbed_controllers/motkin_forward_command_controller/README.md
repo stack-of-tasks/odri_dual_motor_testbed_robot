@@ -22,6 +22,20 @@ A message whose `data` size differs from `5 * n_joints` is silently ignored.
 Individual `NaN` values within a valid message are skipped for that interface only,
 leaving the hardware value unchanged (partial updates).
 
+## Board state
+
+The controller also reads all the state interfaces of the robot and publishes
+them on `~/board_state` (`motkin_dual_motor_testbed_msgs/msg/BoardState`): a
+`sensor_msgs/JointState`-like message with the `position`, `velocity`,
+`effort`, `gain_kp` and `gain_kd` of each joint (`NaN` when the joint does not
+export the interface), plus the `clock`, `latest_command_index` and `flags`
+state interfaces of the board GPIO (named by the `gpio_name` parameter,
+`motkin_board` by default).
+
+```bash
+ros2 topic echo /motkin_forward_command_controller/board_state
+```
+
 ## Configuration
 
 ```yaml

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+- motkin_forward_command_controller publishes all the robot state interfaces,
+  including the gains and the board GPIO status, on `~/board_state`
+- added the motkin_dual_motor_testbed_msgs package with the `BoardState` message
+
 ## [1.0.1] - 2026-10-06
 
 - added support for lear haptic pair

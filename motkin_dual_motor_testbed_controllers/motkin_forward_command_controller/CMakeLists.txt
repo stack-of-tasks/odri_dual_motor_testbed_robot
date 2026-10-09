@@ -9,6 +9,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
     controller_interface
     generate_parameter_library
     hardware_interface
+    motkin_dual_motor_testbed_msgs
     pluginlib
     rclcpp
     rclcpp_lifecycle
@@ -45,6 +46,7 @@ target_link_libraries(
         rclcpp::rclcpp
         rclcpp_lifecycle::rclcpp_lifecycle
         realtime_tools::realtime_tools
+        ${motkin_dual_motor_testbed_msgs_TARGETS}
         ${std_msgs_TARGETS}
 )
 

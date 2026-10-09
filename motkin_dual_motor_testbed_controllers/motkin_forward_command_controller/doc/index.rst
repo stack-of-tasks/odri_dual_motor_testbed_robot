@@ -29,4 +29,5 @@ Quick start, with the testbed running:
    :caption: Contents
 
    command_interface
+   board_state
    configuration

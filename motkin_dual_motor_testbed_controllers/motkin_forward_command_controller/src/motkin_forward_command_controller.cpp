@@ -14,9 +14,14 @@
 
 #include "motkin_forward_command_controller/motkin_forward_command_controller.hpp"
 
+#include <algorithm>
+#include <array>
 #include <cmath>
+#include <iterator>
+#include <limits>
 #include <memory>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 #include "controller_interface/helpers.hpp"
@@ -28,6 +33,15 @@ namespace motkin_forward_command_controller {
 
 static constexpr const char* HW_IF_GAIN_KP = "gain_kp";
 static constexpr const char* HW_IF_GAIN_KD = "gain_kd";
+static constexpr const char* HW_IF_CLOCK = "clock";
+static constexpr const char* HW_IF_INDEX = "latest_command_index";
+static constexpr const char* HW_IF_FLAGS = "flags";
+
+// Joint state interfaces published on ~/board_state, in the order of
+// JointStateRefs.
+static const std::array<std::string, kNumJointStateFields> JOINT_STATE_FIELDS{
+    hardware_interface::HW_IF_POSITION, hardware_interface::HW_IF_VELOCITY,
+    hardware_interface::HW_IF_EFFORT, HW_IF_GAIN_KP, HW_IF_GAIN_KD};
 
 MotkinForwardCommandController::MotkinForwardCommandController()
     : controller_interface::ControllerInterface(),
@@ -76,6 +90,12 @@ MotkinForwardCommandController::on_configure(
       "~/commands", rclcpp::SystemDefaultsQoS(),
       [this](const CmdType::SharedPtr msg) { rt_command_.set(*msg); });
 
+  board_state_publisher_ = get_node()->create_publisher<BoardStateMsg>(
+      "~/board_state", rclcpp::SystemDefaultsQoS());
+  rt_board_state_publisher_ =
+      std::make_unique<realtime_tools::RealtimePublisher<BoardStateMsg>>(
+          board_state_publisher_);
+
   RCLCPP_INFO(get_node()->get_logger(), "configure successful");
   return controller_interface::CallbackReturn::SUCCESS;
 }
@@ -99,8 +119,10 @@ MotkinForwardCommandController::command_interface_configuration() const {
 
 controller_interface::InterfaceConfiguration
 MotkinForwardCommandController::state_interface_configuration() const {
+  // Read all the state interfaces of the robot to publish them on
+  // ~/board_state.
   return controller_interface::InterfaceConfiguration{
-      controller_interface::interface_configuration_type::NONE};
+      controller_interface::interface_configuration_type::ALL};
 }
 
 controller_interface::CallbackReturn
@@ -153,6 +175,75 @@ MotkinForwardCommandController::on_activate(
   }
   rt_command_.set(joint_commands_);
 
+  // Sort the state interfaces into the BoardState fields. Controlled joints
+  // come first, in the order of the joints parameter, then the other joints in
+  // the order the hardware exports them.
+  std::vector<std::string> state_joint_names = joint_names_;
+  joint_state_interfaces_.assign(n, JointStateRefs{});
+  gpio_clock_ = gpio_index_ = gpio_flags_ = nullptr;
+
+  auto expect_type = [&](const hardware_interface::LoanedStateInterface& iface,
+                         hardware_interface::HandleDataType type) {
+    if (iface.get_data_type() == type) {
+      return &iface;
+    }
+    RCLCPP_WARN(get_node()->get_logger(),
+                "State interface '%s' has data type '%s', expected '%s': it "
+                "will not be published",
+                iface.get_name().c_str(),
+                iface.get_data_type().to_string().c_str(),
+                type.to_string().c_str());
+    return static_cast<const hardware_interface::LoanedStateInterface*>(
+        nullptr);
+  };
+
+  for (const auto& iface : state_interfaces_) {
+    const auto& prefix = iface.get_prefix_name();
+    const auto& name = iface.get_interface_name();
+
+    if (prefix == params_.gpio_name) {
+      if (name == HW_IF_CLOCK) {
+        gpio_clock_ =
+            expect_type(iface, hardware_interface::HandleDataType::UINT32);
+      } else if (name == HW_IF_INDEX) {
+        gpio_index_ =
+            expect_type(iface, hardware_interface::HandleDataType::UINT32);
+      } else if (name == HW_IF_FLAGS) {
+        gpio_flags_ =
+            expect_type(iface, hardware_interface::HandleDataType::UINT8);
+      }
+      continue;
+    }
+
+    const auto field =
+        std::find(JOINT_STATE_FIELDS.begin(), JOINT_STATE_FIELDS.end(), name);
+    if (field == JOINT_STATE_FIELDS.end()) {
+      continue;
+    }
+    auto joint =
+        std::find(state_joint_names.begin(), state_joint_names.end(), prefix);
+    if (joint == state_joint_names.end()) {
+      state_joint_names.push_back(prefix);
+      joint_state_interfaces_.emplace_back();
+      joint = std::prev(state_joint_names.end());
+    }
+    joint_state_interfaces_[joint - state_joint_names.begin()]
+                           [field - JOINT_STATE_FIELDS.begin()] = expect_type(
+                               iface,
+                               hardware_interface::HandleDataType::DOUBLE);
+  }
+
+  // Preallocate the message so that update() does not allocate.
+  const std::size_t n_state = state_joint_names.size();
+  const double nan = std::numeric_limits<double>::quiet_NaN();
+  board_state_msg_ = BoardStateMsg{};
+  board_state_msg_.name = state_joint_names;
+  board_state_msg_.position.assign(n_state, nan);
+  board_state_msg_.velocity.assign(n_state, nan);
+  board_state_msg_.effort.assign(n_state, nan);
+  board_state_msg_.gain_kp.assign(n_state, nan);
+  board_state_msg_.gain_kd.assign(n_state, nan);
+
   RCLCPP_INFO(get_node()->get_logger(), "activate successful");
   return controller_interface::CallbackReturn::SUCCESS;
 }
@@ -165,11 +256,45 @@ MotkinForwardCommandController::on_deactivate(
   eff_interfaces_.clear();
   kp_interfaces_.clear();
   kd_interfaces_.clear();
+  joint_state_interfaces_.clear();
+  gpio_clock_ = gpio_index_ = gpio_flags_ = nullptr;
   return controller_interface::CallbackReturn::SUCCESS;
 }
 
+void MotkinForwardCommandController::publish_board_state(
+    const rclcpp::Time& time) {
+  // A value that cannot be read this cycle keeps its previous value.
+  auto read = [](const hardware_interface::LoanedStateInterface* iface,
+                 auto& out) {
+    using T = std::decay_t<decltype(out)>;
+    if (iface != nullptr) {
+      if (const auto value = iface->get_optional<T>(); value.has_value()) {
+        out = *value;
+      }
+    }
+  };
+
+  board_state_msg_.header.stamp = time;
+  std::array<std::vector<double>*, kNumJointStateFields> fields{
+      &board_state_msg_.position, &board_state_msg_.velocity,
+      &board_state_msg_.effort, &board_state_msg_.gain_kp,
+      &board_state_msg_.gain_kd};
+  for (std::size_t i = 0; i < joint_state_interfaces_.size(); ++i) {
+    for (std::size_t f = 0; f < kNumJointStateFields; ++f) {
+      read(joint_state_interfaces_[i][f], (*fields[f])[i]);
+    }
+  }
+  read(gpio_clock_, board_state_msg_.clock);
+  read(gpio_index_, board_state_msg_.latest_command_index);
+  read(gpio_flags_, board_state_msg_.flags);
+
+  rt_board_state_publisher_->try_publish(board_state_msg_);
+}
+
 controller_interface::return_type MotkinForwardCommandController::update(
-    const rclcpp::Time& /*time*/, const rclcpp::Duration& /*period*/) {
+    const rclcpp::Time& time, const rclcpp::Duration& /*period*/) {
+  publish_board_state(time);
+
   auto cmd_op = rt_command_.try_get();
   if (cmd_op.has_value()) {
     joint_commands_ = cmd_op.value();
