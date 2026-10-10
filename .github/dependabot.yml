@@ -4,3 +4,13 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    labels:
+      - "no changelog"
+  - package-ecosystem: "nix"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "no changelog"
+    cooldown:
+      default-days: 0
